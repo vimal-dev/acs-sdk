@@ -22,6 +22,7 @@ class RequestSigner:
         api_key (str): The CloudStack API key for authentication.
         api_secret (str): The CloudStack API secret used for HMAC signature generation.
     """
+
     def __init__(self, api_key: str, api_secret: str):
         self.api_key = api_key
         self.api_secret = api_secret
@@ -55,15 +56,10 @@ class RequestSigner:
         sorted_params = sorted(params.items(), key=lambda x: x[0].lower())
 
         query_string = "&".join(
-            f"{k}={urllib.parse.quote_plus(str(v))}"
-            for k, v in sorted_params
+            f"{k}={urllib.parse.quote_plus(str(v))}" for k, v in sorted_params
         ).lower()
 
-        digest = hmac.new(
-            self.api_secret.encode(),
-            query_string.encode(),
-            hashlib.sha1
-        ).digest()
+        digest = hmac.new(self.api_secret.encode(), query_string.encode(), hashlib.sha1).digest()
 
         signature = base64.b64encode(digest).decode()
 

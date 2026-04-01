@@ -12,13 +12,14 @@ def config():
         api_endpoint="https://api.cloudstack.example.com/client/api",
         api_key="testkey",
         api_secret="testsecret",
-        timeout=30
+        timeout=30,
     )
 
 
 # 🔹 Helper: mock transport
 def mock_transport(handler):
     return httpx.MockTransport(handler)
+
 
 SUCCESS_JSON_RESPONSE = {"Status": "OK", "CommandResponse": {"TestResult": "Success"}}
 
@@ -34,7 +35,7 @@ def test_call_success(config):
 
         # ensure params were attached
         assert request.url.params["command"] == "test.command"
-        #assert request.url.params["ApiUser"] == "testuser"
+        # assert request.url.params["ApiUser"] == "testuser"
 
         return httpx.Response(200, json=SUCCESS_JSON_RESPONSE)
 
@@ -53,6 +54,7 @@ def test_call_success(config):
 # HTTP ERROR
 # ---------------------------------------------------
 
+
 def test_http_error(config):
     def handler(request: httpx.Request):
         return httpx.Response(500, text="Server Error")
@@ -69,6 +71,7 @@ def test_http_error(config):
 # ---------------------------------------------------
 # PARAM MERGING
 # ---------------------------------------------------
+
 
 def test_params_merging(config):
     def handler(request: httpx.Request):
@@ -93,6 +96,7 @@ def test_params_merging(config):
 # ---------------------------------------------------
 # EMPTY PARAMS
 # ---------------------------------------------------
+
 
 def test_call_without_params(config):
     def handler(request: httpx.Request):

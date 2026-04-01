@@ -1,4 +1,3 @@
-from acs_sdk.client.client import ApacheCloudStackClient
 from acs_sdk.acs import ApacheCloudStack, ApacheCloudStackClient
 
 

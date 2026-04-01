@@ -1,6 +1,6 @@
-# Apache Cloud Stack Python SDK
+# Apache CloudStack Python SDK
 
-A Python SDK for the Apache Cloudstack API that provides a simple and type-safe interface to manage resources.
+A Python SDK for the Apache CloudStack API that provides a simple and type-safe interface to manage resources.
 
 ## Features
 
@@ -8,6 +8,8 @@ A Python SDK for the Apache Cloudstack API that provides a simple and type-safe 
 - 🚀 **Async Support** - Built on httpx for modern async HTTP requests
 - 📦 **Easy Configuration** - Simple configuration management
 - 🧪 **Well Tested** - Comprehensive test suite with pytest
+- 🔄 **Automatic Retry** - Built-in retry logic with exponential backoff
+- 🔑 **Request Signing** - Automatic HMAC-SHA1 request signing
 
 ## Requirements
 
@@ -24,53 +26,40 @@ pip install acs-sdk
 ### Basic Setup
 
 ```python
-from acs_sdk import Namecheap, NamecheapConfig
+from acs_sdk import ApacheCloudStackClient, ApacheCloudStackConfig
 
 # Create a configuration
-config = NamecheapConfig(
-    api_user="your_api_user",
+config = ApacheCloudStackConfig(
+    endpoint="https://your-cloudstack-endpoint/api",
     api_key="your_api_key",
-    username="your_username",
-    client_ip="your_client_ip"
+    api_secret="your_api_secret"
 )
 
-# Initialize the Namecheap client
-namecheap = Namecheap(config)
+# Initialize the CloudStack client
+client = ApacheCloudStackClient(config)
 ```
 
-### SSL Certificate Operations
+### Making API Calls
 
 ```python
-from namecheap_sdk.schemas.request.ssl import CreateSSLRequest, ListSSLRequest
+# List users
+response = client.call('listUsers')
 
-# Create an SSL certificate
-create_request = CreateSSLRequest(
-    domain="example.com",
-    years=1
-)
-response = namecheap.ssl.create(create_request)
+# Get user with parameters
+user_response = client.call('getUser', {'userid': '123'})
 
-# List SSL certificates
-list_request = ListSSLRequest()
-certificates = namecheap.ssl.list(list_request)
-
-# Get SSL certificate information
-from namecheap_sdk.schemas.request.ssl import GetSSLInfoRequest
-info_request = GetSSLInfoRequest(certificate_id="12345")
-cert_info = namecheap.ssl.get_info(info_request)
+# Don't forget to close the client
+client.close()
 ```
 
 ## Project Structure
 
 ```
 src/
-├── app/                    # CLI application examples
-├── namecheap_sdk/
+├── acs_sdk/
 │   ├── client/            # HTTP client implementation
-│   ├── schemas/           # Request/response schemas
-│   │   ├── request/       # Request models
-│   │   └── response/      # Response models
-│   ├── services/          # Service implementations
+│   ├── core/              # Retry logic and request signing
+│   ├── schemas/           # Configuration schemas
 │   └── exceptions/        # Custom exceptions
 tests/
 ├── unit/                  # Unit tests
@@ -97,17 +86,17 @@ pip install -e ".[dev]"
 pytest
 
 # Run specific test file
-pytest tests/unit/test_namecheap.py
+pytest tests/unit/test_client.py
 
 # Run with coverage report
-pytest --cov=namecheap_sdk --cov-report=html
+pytest --cov=acs_sdk --cov-report=html
 ```
 
 ### Code Structure
 
-- **Client** - Handles HTTP requests to Namecheap API
-- **Services** - High-level API for specific operations (SSL, etc.)
-- **Schemas** - Pydantic models for request/response validation
+- **Client** - Handles HTTP requests to Apache CloudStack API
+- **Core** - Retry logic and request signing utilities
+- **Schemas** - Pydantic models for configuration validation
 
 ## Dependencies
 

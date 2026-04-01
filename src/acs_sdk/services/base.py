@@ -23,6 +23,7 @@ class BaseService:
         ...     def get_user(self, user_id):
         ...         return self.client.call('getUser', {'id': user_id})
     """
+
     def __init__(self, client: ClientContract):
         """Initialize the service with a CloudStack client.
 

@@ -6,7 +6,6 @@ from ..schemas.response.base import APIResponse
 
 
 class RegionsService(BaseService):
-    
     def list(self) -> APIResponse[Dict]:
         data = self.client.call("listRegions")
         return APIResponse[Dict](**data)

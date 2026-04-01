@@ -30,6 +30,7 @@ class ApacheCloudStack:
         >>> acs = ApacheCloudStack(config)
         >>> response = acs.client.call('listUsers')
     """
+
     def __init__(self, config: ApacheCloudStackConfig):
         """Initialize the ApacheCloudStack SDK.
 

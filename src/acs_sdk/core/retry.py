@@ -18,6 +18,7 @@ class RetryConfig:
         retries (int): Maximum number of retry attempts (default: 3).
         backoff (float): Initial backoff multiplier in seconds (default: 0.5).
     """
+
     def __init__(self, retries=3, backoff=0.5):
         """Initialize retry configuration.
 
@@ -56,6 +57,7 @@ def with_retry(func):
         ...         # Request logic here
         ...         pass
     """
+
     def wrapper(*args, **kwargs):
         self = args[0]
         for attempt in range(self.retry.retries):
@@ -64,5 +66,6 @@ def with_retry(func):
             except Exception:
                 if attempt == self.retry.retries - 1:
                     raise
-                time.sleep(self.retry.backoff * (2 ** attempt))
+                time.sleep(self.retry.backoff * (2**attempt))
+
     return wrapper

@@ -32,12 +32,24 @@ class ApacheCloudStackConfig(BaseModel):
         ...     timeout=60
         ... )
     """
+
     api_endpoint: str = Field(..., min_length=1)
     api_key: str = Field(..., min_length=1)
     api_secret: str = Field(..., min_length=1)
     timeout: Optional[int] = Field(default=30, gt=0)
 
-    model_config = ConfigDict(json_schema_extra={'examples': [{'api_endpoint': 'https://api.cloudstack.example.com/client/api', 'api_key': 'key', 'api_secret': 'secret', 'timeout': 30}]})
+    model_config = ConfigDict(
+        json_schema_extra={
+            "examples": [
+                {
+                    "api_endpoint": "https://api.cloudstack.example.com/client/api",
+                    "api_key": "key",
+                    "api_secret": "secret",
+                    "timeout": 30,
+                }
+            ]
+        }
+    )
 
     @computed_field
     @property

@@ -15,7 +15,7 @@ def test_config_defaults():
         api_endpoint="https://api.cloudstack.example.com/client/api",
         api_key="k",
         api_secret="k",
-        timeout=30 
+        timeout=30,
     )
     assert cfg.timeout == 30
 
@@ -25,7 +25,7 @@ def test_config_api_endpoint():
         api_endpoint="https://api.cloudstack.example.com/client/api",
         api_key="k",
         api_secret="k",
-        timeout=30
+        timeout=30,
     )
     assert cfg.endpoint == "https://api.cloudstack.example.com/client/api"
 
@@ -62,7 +62,6 @@ def test_config_serialization(config):
     assert data["endpoint"].startswith("https://")
 
 
-
 @pytest.mark.parametrize(
     "field,value",
     [
@@ -85,11 +84,7 @@ def test_invalid_types(field, value):
 
 @pytest.mark.parametrize(
     "field",
-    [
-        "api_endpoint",
-        "api_key",
-        "api_secret"
-    ],
+    ["api_endpoint", "api_key", "api_secret"],
 )
 def test_missing_required_fields(field):
     data = {

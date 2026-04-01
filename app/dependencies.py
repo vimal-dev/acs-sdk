@@ -2,7 +2,7 @@ import os
 
 from dotenv import load_dotenv
 
-from acs_sdk.schemas.config import ApacheCloudStackConfig  
+from acs_sdk.schemas.config import ApacheCloudStackConfig
 from acs_sdk.acs import ApacheCloudStack
 
 load_dotenv()  # Load environment variables from .env file

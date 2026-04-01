@@ -59,6 +59,3 @@ class APIResponse(BaseModel, Generic[T]):
             return [e.text for e in err]
 
         return [err.text]
-
-
-

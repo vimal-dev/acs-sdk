@@ -27,7 +27,6 @@ class ApacheCloudStackClient(ClientContract):
             base_url=config.endpoint,
             timeout=config.timeout,
         )
-        
 
     # 🔹 Public API call
     @with_retry
@@ -79,10 +78,7 @@ class ApacheCloudStackClient(ClientContract):
             Dict[str, Any]: The complete, signed parameter dictionary ready
                 for HTTP transmission.
         """
-        base_params = {
-            "command": command,
-            "response": "json"
-        }
+        base_params = {"command": command, "response": "json"}
 
         if params:
             base_params.update(params)
