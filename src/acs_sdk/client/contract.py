@@ -9,7 +9,14 @@ class ClientContract(ABC):
     def call(self, command: str, params: Optional[Dict[str, Any]] = None) -> Dict[str, Any]:
         """
         Execute Apache CloudStack API command and optionally map response
-        to a Pydantic model.
+        to a Pydantic model. (Synchronous version)
+        """
+
+    @abstractmethod
+    async def call_async(self, command: str, params: Optional[Dict[str, Any]] = None) -> Dict[str, Any]:
+        """
+        Execute Apache CloudStack API command and optionally map response
+        to a Pydantic model. (Asynchronous version)
         """
 
     @abstractmethod

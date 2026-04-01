@@ -2,7 +2,7 @@
 
 This module provides the main client for executing API commands against
 an Apache CloudStack endpoint with automatic request signing, retries,
-and response parsing.
+and response parsing. Supports both sync and async operations.
 """
 
 from typing import Any, Dict, Optional
@@ -18,7 +18,7 @@ class ApacheCloudStackClient(ClientContract):
     def __init__(
         self,
         config: ApacheCloudStackConfig,
-        client: Optional[httpx.AsyncClient] = None,
+        client: Optional[httpx.Client] = None,
     ):
         self.config = config
         self.signer = RequestSigner(config.api_key, config.api_secret)
@@ -31,7 +31,7 @@ class ApacheCloudStackClient(ClientContract):
     # 🔹 Public API call
     @with_retry
     def call(self, command: str, params: Optional[Dict[str, Any]] = None) -> Dict[str, Any]:
-        """Execute an Apache CloudStack API command.
+        """Execute an Apache CloudStack API command (sync).
 
         This is the main entry point for making API requests. The method builds
         the complete request parameters (including signing), sends the HTTP GET
@@ -61,6 +61,32 @@ class ApacheCloudStackClient(ClientContract):
         payload = self._build_params(command, params)
         return self._request(payload)
 
+    # 🔹 Async API call
+    @with_retry
+    async def call_async(self, command: str, params: Optional[Dict[str, Any]] = None) -> Dict[str, Any]:
+        """Execute an Apache CloudStack API command (async).
+
+        Async version of the call method for use with asyncio. Provides the same
+        functionality with non-blocking I/O operations.
+
+        Args:
+            command (str): The CloudStack API command to execute.
+            params (Optional[Dict[str, Any]]): Optional command-specific parameters.
+
+        Returns:
+            Dict[str, Any]: The parsed JSON response from the API as a dictionary.
+
+        Raises:
+            httpx.HTTPStatusError: If the HTTP request returns an error status code.
+
+        Example:
+            >>> async with ApacheCloudStackAsyncClient(config) as client:
+            ...     response = await client.call_async('listUsers')
+            ...     user = await client.call_async('getUser', {'userid': '123'})
+        """
+        payload = self._build_params(command, params)
+        return await self._request_async(payload)
+
     # 🔹 Build params (isolated logic)
     def _build_params(self, command: str, params: Optional[Dict[str, Any]]) -> Dict[str, Any]:
         """Build and sign request parameters.
@@ -85,9 +111,9 @@ class ApacheCloudStackClient(ClientContract):
         signed_params = self.signer.sign(base_params)
         return signed_params
 
-    # 🔹 HTTP layer
+    # 🔹 HTTP layer (sync)
     def _request(self, params: Dict[str, Any]) -> Dict[str, Any]:
-        """Send signed HTTP GET request to CloudStack endpoint.
+        """Send signed HTTP GET request to CloudStack endpoint (sync).
 
         This internal method handles the low-level HTTP communication,
         enforces successful status codes, and parses the JSON response.
@@ -103,9 +129,30 @@ class ApacheCloudStackClient(ClientContract):
         """
         response = self.client.get("", params=params)
         response.raise_for_status()
-        # print(f"Request params: {params}")  # Debug log
-        # print(f"Raw response: {response.text}")  # Debug log
         return response.json()
+
+    # 🔹 HTTP layer (async)
+    async def _request_async(self, params: Dict[str, Any]) -> Dict[str, Any]:
+        """Send signed HTTP GET request to CloudStack endpoint (async).
+
+        Async version of _request for non-blocking I/O operations.
+
+        Args:
+            params (Dict[str, Any]): The complete signed parameter dictionary.
+
+        Returns:
+            Dict[str, Any]: The parsed JSON response from the API.
+
+        Raises:
+            httpx.HTTPStatusError: If the HTTP response has a non-success status code.
+        """
+        async with httpx.AsyncClient(
+            base_url=self.config.endpoint,
+            timeout=self.config.timeout,
+        ) as async_client:
+            response = await async_client.get("", params=params)
+            response.raise_for_status()
+            return response.json()
 
     def close(self):
         """Close the HTTP client connection.
@@ -120,3 +167,66 @@ class ApacheCloudStackClient(ClientContract):
             ...     client.close()
         """
         self.client.close()
+
+
+class ApacheCloudStackAsyncClient(ClientContract):
+    """Async-only CloudStack API client for modern async/await patterns."""
+
+    def __init__(
+        self,
+        config: ApacheCloudStackConfig,
+        client: Optional[httpx.AsyncClient] = None,
+    ):
+        self.config = config
+        self.signer = RequestSigner(config.api_key, config.api_secret)
+        self.retry = RetryConfig()
+        self.client = client
+
+    async def __aenter__(self):
+        """Async context manager entry."""
+        if self.client is None:
+            self.client = httpx.AsyncClient(
+                base_url=self.config.endpoint,
+                timeout=self.config.timeout,
+            )
+        return self
+
+    async def __aexit__(self, exc_type, exc_val, exc_tb):
+        """Async context manager exit."""
+        await self.close()
+
+    @with_retry
+    async def call_async(self, command: str, params: Optional[Dict[str, Any]] = None) -> Dict[str, Any]:
+        """Execute an Apache CloudStack API command asynchronously.
+
+        Args:
+            command (str): The CloudStack API command to execute.
+            params (Optional[Dict[str, Any]]): Optional command-specific parameters.
+
+        Returns:
+            Dict[str, Any]: The parsed JSON response from the API.
+
+        Example:
+            >>> async with ApacheCloudStackAsyncClient(config) as client:
+            ...     response = await client.call_async('listUsers')
+        """
+        payload = self._build_params(command, params)
+        return await self._request_async(payload)
+
+    def _build_params(self, command: str, params: Optional[Dict[str, Any]]) -> Dict[str, Any]:
+        """Build and sign request parameters."""
+        base_params = {"command": command, "response": "json"}
+        if params:
+            base_params.update(params)
+        return self.signer.sign(base_params)
+
+    async def _request_async(self, params: Dict[str, Any]) -> Dict[str, Any]:
+        """Send signed HTTP GET request asynchronously."""
+        response = await self.client.get("", params=params)
+        response.raise_for_status()
+        return response.json()
+
+    async def close(self):
+        """Close the async HTTP client connection."""
+        if self.client:
+            await self.client.aclose()

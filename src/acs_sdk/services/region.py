@@ -10,6 +10,6 @@ class RegionsService(BaseService):
         data = self.client.call("listRegions")
         return APIResponse[Dict](**data)
 
-    # async def list_async(self) -> RegionListResponse:
-    #     data = await self.client.async_call("listRegions")
-    #     return RegionListResponse(**data["listregionsresponse"])
+    async def list_async(self) -> APIResponse[Dict]:
+        data = await self.client.async_call("listRegions")
+        return APIResponse[Dict](**data)
