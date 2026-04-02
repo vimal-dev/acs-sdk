@@ -1,5 +1,5 @@
-from pydantic import BaseModel
+from pydantic import BaseModel, ConfigDict
 
 
 class APIRequest(BaseModel):
-    pass
+    model_config = ConfigDict(populate_by_name=True, use_enum_values=True)

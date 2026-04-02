@@ -8,14 +8,13 @@ from acs_sdk.acs import ApacheCloudStack
 load_dotenv()  # Load environment variables from .env file
 
 
-def get_acs_client():
+def get_acs_client() -> ApacheCloudStack:
 
     config = ApacheCloudStackConfig(
-        api_user=os.getenv("API_USER", "demo"),
-        api_key=os.getenv("API_KEY", "demo"),
-        username=os.getenv("API_USERNAME", "demo"),
-        client_ip=os.getenv("CLIENT_IP", "127.0.0.1"),
-        sandbox=os.getenv("SANDBOX", "false").lower() == "true",  # Set to False for production
+        api_endpoint=os.getenv("API_ENDPOINT", "https://api.cloudstack.com/client/api"),
+        api_key=os.getenv("API_KEY", "your-api-key"),
+        api_secret=os.getenv("API_SECRET", "your-api-secret"),
+        timeout=int(os.getenv("TIMEOUT", "30")),
     )
     acs_client = ApacheCloudStack(config)
     return acs_client

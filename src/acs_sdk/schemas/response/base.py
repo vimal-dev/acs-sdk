@@ -7,12 +7,8 @@ T = TypeVar("T")
 
 
 class APIError(BaseModel):
-    number: str = Field(..., alias="Number")
-    text: str = Field(...)
-
-
-class ErrorsWrapper(BaseModel):
-    error: Union[List[APIError], APIError] = Field(..., alias="Error")
+    number: str = Field(..., alias="Number", description="The error code number returned by the API.")
+    text: str = Field(..., alias="Text", description="The error message returned by the API.")
 
 
 class APIResponse(BaseModel, Generic[T]):
@@ -20,19 +16,13 @@ class APIResponse(BaseModel, Generic[T]):
 
     status: str = Field(
         ...,
-        alias="Status",
         description="The status of the API response, typically 'OK' or 'ERROR'.",
     )
-    errors: Optional[ErrorsWrapper] | None = Field(
+    errors: Optional[Union[List[APIError], APIError]] = Field(
         None,
-        alias="Errors",
         description="A list of error messages if the API call was not successful.",
     )
-    warnings: list[dict] | None = Field(
-        None,
-        alias="Warnings",
-        description="A list of warning messages if there are any issues with the API call.",
-    )
+    data: Optional[T] = Field(None, description="The data returned from the API call, if any.")
 
     @property
     def is_ok(self) -> bool:
@@ -53,7 +43,7 @@ class APIResponse(BaseModel, Generic[T]):
         if not self.errors:
             return []
 
-        err = self.errors.error
+        err = self.errors
 
         if isinstance(err, list):
             return [e.text for e in err]

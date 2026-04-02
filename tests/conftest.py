@@ -10,14 +10,3 @@ def config():
         api_key="testkey",
         api_secret="testsecret",
     )
-
-
-@pytest.fixture
-def mock_success_xml():
-    return """
-    <ApiResponse Status="OK">
-        <CommandResponse>
-            <Test>Success</Test>
-        </CommandResponse>
-    </ApiResponse>
-    """
