@@ -6,8 +6,8 @@ from the command line, offering a convenient alternative to programmatic usage.
 
 import click
 
-from acs_sdk.client.client import ApacheCloudStackClient
 from acs_sdk.schemas.config import ApacheCloudStackConfig
+#from acs_sdk.commands.region import list_regions
 
 
 @click.group()
@@ -37,31 +37,7 @@ def console(ctx, endpoint, api_key, api_secret):
     )
 
 
-@console.command()
-@click.pass_context
-def list_regions(ctx):
-    """List all regions available in CloudStack."""
-    try:
-        config = ctx.obj['config']
-        client = ApacheCloudStackClient(config)
-        try:
-            response = client.call('listRegions')
-            
-            if 'region' in response and response['region']:
-                regions = response['region']
-                click.echo(click.style("\n📍 Available Regions:\n", fg="green", bold=True))
-                
-                for i, region in enumerate(regions, 1):
-                    click.echo(f"{i}. {region.get('name')} (ID: {region.get('id')})")
-                    click.echo(f"   Endpoint: {region.get('endpoint')}")
-                    click.echo()
-            else:
-                click.echo(click.style("No regions found.", fg="yellow"))
-        finally:
-            client.close()
-    except Exception as e:
-        click.echo(click.style(f"❌ Error: {str(e)}", fg="red"), err=True)
-        #raise click.Exit(1)
+#console.add_command(list_regions)
 
 
 if __name__ == '__main__':
