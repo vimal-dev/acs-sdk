@@ -1,6 +1,3 @@
-
-from pprint import pprint
-
 from acs_sdk.client.client import ApacheCloudStackClient
 import click
 
@@ -13,7 +10,7 @@ def list_regions(ctx):
         client = ApacheCloudStackClient(config)
         try:
             response = client.call('listRegions')
-            pprint(response)
+            
             if 'listregionsresponse' in response:
                 response = response['listregionsresponse']
             if 'region' in response and response['region']:
