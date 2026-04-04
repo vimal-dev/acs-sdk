@@ -8,6 +8,8 @@ from acs_sdk.schemas.config import ApacheCloudStackConfig
 from acs_sdk.client.client import ApacheCloudStackClient
 from acs_sdk.services.job import Job
 from acs_sdk.services.region import Region
+from acs_sdk.services.virtual_machine import VirtualMachine
+from acs_sdk.services.zone import Zone
 
 
 class ApacheCloudStack:
@@ -34,8 +36,10 @@ class ApacheCloudStack:
     """
 
     _service_map = {
-        "region": Region,
         "job": Job,
+        "region": Region,
+        "vm": VirtualMachine,
+        "zone": Zone,
     }
 
     def __init__(self, config: ApacheCloudStackConfig):

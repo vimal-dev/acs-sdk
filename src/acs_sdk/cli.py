@@ -6,8 +6,10 @@ from the command line, offering a convenient alternative to programmatic usage.
 
 import click
 
+from acs_sdk.commands.vm import list_vms
+from acs_sdk.commands.zone import list_zones
 from acs_sdk.schemas.config import ApacheCloudStackConfig
-#from acs_sdk.commands.region import list_regions
+from acs_sdk.commands.region import list_regions
 
 
 @click.group()
@@ -37,7 +39,9 @@ def console(ctx, endpoint, api_key, api_secret):
     )
 
 
-#console.add_command(list_regions)
+console.add_command(list_regions)
+console.add_command(list_zones)
+console.add_command(list_vms)
 
 
 if __name__ == '__main__':
