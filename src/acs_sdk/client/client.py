@@ -9,6 +9,7 @@ import logging
 from typing import Any, Dict, Optional
 import httpx
 from opentelemetry import trace
+from opentelemetry.trace import SpanKind, Status, StatusCode
 
 from acs_sdk.client.contract import ClientContract
 from acs_sdk.core.retry import RetryConfig, with_retry
@@ -64,8 +65,16 @@ class ApacheCloudStackClient(ClientContract):
             >>> response = client.call('listUsers')
             >>> user_response = client.call('getUser', {'userid': '123'})
         """
-        payload = self._build_params(command, params)
-        return self._request(payload)
+        with self.tracer.start_as_current_span(
+            f"CloudStack {command}", kind=SpanKind.CLIENT
+        ) as span:
+            span.set_attribute("cloudstack.command", command)
+            span.set_attribute("cloudstack.endpoint", self.config.endpoint)
+            # if params:
+            #     span.set_attribute("cloudstack.params_keys", ",".join(sorted(params.keys())))
+            self.logger.debug("Executing CloudStack command: %s", command)
+            payload = self._build_params(command, params)
+            return self._request(payload)
 
     # 🔹 Async API call
     @with_retry
@@ -90,8 +99,16 @@ class ApacheCloudStackClient(ClientContract):
             ...     response = await client.call_async('listUsers')
             ...     user = await client.call_async('getUser', {'userid': '123'})
         """
-        payload = self._build_params(command, params)
-        return await self._request_async(payload)
+        with self.tracer.start_as_current_span(
+            f"CloudStack {command}", kind=SpanKind.CLIENT
+        ) as span:
+            span.set_attribute("cloudstack.command", command)
+            span.set_attribute("cloudstack.endpoint", self.config.endpoint)
+            # if params:
+            #     span.set_attribute("cloudstack.params_keys", ",".join(sorted(params.keys())))
+            self.logger.debug("Executing CloudStack async command: %s", command)
+            payload = self._build_params(command, params)
+            return await self._request_async(payload)
 
     # 🔹 Build params (isolated logic)
     def _build_params(self, command: str, params: Optional[Dict[str, Any]]) -> Dict[str, Any]:
@@ -133,9 +150,22 @@ class ApacheCloudStackClient(ClientContract):
         Raises:
             httpx.HTTPStatusError: If the HTTP response has a non-success status code.
         """
-        response = self.client.get("", params=params)
-        response.raise_for_status()
-        return response.json()
+        try:
+            response = self.client.get("", params=params)
+            response.raise_for_status()
+            span = trace.get_current_span()
+            span.set_attribute("http.status_code", response.status_code)
+            span.set_attribute("http.url", str(response.url))
+            self.logger.debug(
+                "CloudStack request completed: %s %s", response.status_code, response.url
+            )
+            return response.json()
+        except Exception as exc:
+            span = trace.get_current_span()
+            span.record_exception(exc)
+            span.set_status(Status(StatusCode.ERROR))
+            self.logger.error("CloudStack request failed: %s", exc, exc_info=True)
+            raise
 
     # 🔹 HTTP layer (async)
     async def _request_async(self, params: Dict[str, Any]) -> Dict[str, Any]:
@@ -152,13 +182,28 @@ class ApacheCloudStackClient(ClientContract):
         Raises:
             httpx.HTTPStatusError: If the HTTP response has a non-success status code.
         """
-        async with httpx.AsyncClient(
-            base_url=self.config.endpoint,
-            timeout=self.config.timeout,
-        ) as async_client:
-            response = await async_client.get("", params=params)
-            response.raise_for_status()
-            return response.json()
+        try:
+            async with httpx.AsyncClient(
+                base_url=self.config.endpoint,
+                timeout=self.config.timeout,
+            ) as async_client:
+                response = await async_client.get("", params=params)
+                response.raise_for_status()
+                span = trace.get_current_span()
+                span.set_attribute("http.status_code", response.status_code)
+                span.set_attribute("http.url", str(response.url))
+                self.logger.debug(
+                    "CloudStack async request completed: %s %s",
+                    response.status_code,
+                    response.url,
+                )
+                return response.json()
+        except Exception as exc:
+            span = trace.get_current_span()
+            span.record_exception(exc)
+            span.set_status(Status(StatusCode.ERROR))
+            self.logger.error("CloudStack async request failed: %s", exc, exc_info=True)
+            raise
 
     def close(self):
         """Close the HTTP client connection.
@@ -182,10 +227,14 @@ class ApacheCloudStackAsyncClient(ClientContract):
         self,
         config: ApacheCloudStackConfig,
         client: Optional[httpx.AsyncClient] = None,
+        tracer: trace.Tracer = None,
+        logger: logging.Logger = None,
     ):
         self.config = config
         self.signer = RequestSigner(config.api_key, config.api_secret)
         self.retry = RetryConfig()
+        self.tracer = tracer or trace.get_tracer(__name__)
+        self.logger = logger or logging.getLogger("cloudstack")
         self.client = client
 
     async def __aenter__(self):

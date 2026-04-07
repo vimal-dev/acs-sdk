@@ -1,5 +1,8 @@
 import pytest
 import httpx
+from unittest.mock import MagicMock
+
+from opentelemetry.trace import SpanKind
 
 from acs_sdk.client.client import ApacheCloudStackClient
 from acs_sdk.schemas.config import ApacheCloudStackConfig
@@ -48,6 +51,26 @@ def test_call_success(config):
 
     assert response["Status"] == "OK"
     assert response["CommandResponse"]["TestResult"] == "Success"
+
+
+def test_call_tracing(config):
+    def handler(request: httpx.Request):
+        return httpx.Response(200, json=SUCCESS_JSON_RESPONSE)
+
+    client = httpx.Client(
+        base_url=config.endpoint, timeout=config.timeout, transport=mock_transport(handler)
+    )
+    tracer = MagicMock()
+    span = MagicMock()
+    tracer.start_as_current_span.return_value.__enter__.return_value = span
+
+    nc = ApacheCloudStackClient(config, client=client, tracer=tracer)
+
+    response = nc.call("test.command")
+
+    tracer.start_as_current_span.assert_called_once_with("CloudStack test.command", kind=SpanKind.CLIENT)
+    span.set_attribute.assert_any_call("cloudstack.command", "test.command")
+    assert response["Status"] == "OK"
 
 
 # ---------------------------------------------------
