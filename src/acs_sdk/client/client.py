@@ -5,8 +5,10 @@ an Apache CloudStack endpoint with automatic request signing, retries,
 and response parsing. Supports both sync and async operations.
 """
 
+import logging
 from typing import Any, Dict, Optional
 import httpx
+from opentelemetry import trace
 
 from acs_sdk.client.contract import ClientContract
 from acs_sdk.core.retry import RetryConfig, with_retry
@@ -19,10 +21,14 @@ class ApacheCloudStackClient(ClientContract):
         self,
         config: ApacheCloudStackConfig,
         client: Optional[httpx.Client] = None,
+        tracer: trace.Tracer = None, 
+        logger: logging.Logger = None
     ):
         self.config = config
         self.signer = RequestSigner(config.api_key, config.api_secret)
         self.retry = RetryConfig()
+        self.tracer = tracer or trace.get_tracer(__name__)
+        self.logger = logger or logging.getLogger("cloudstack")
         self.client = client or httpx.Client(
             base_url=config.endpoint,
             timeout=config.timeout,

@@ -4,6 +4,9 @@ This module provides the top-level ApacheCloudStack class that serves as
 the primary interface for interacting with Apache CloudStack environments.
 """
 
+import logging
+from opentelemetry import trace
+
 from acs_sdk.schemas.config import ApacheCloudStackConfig
 from acs_sdk.client.client import ApacheCloudStackClient
 from acs_sdk.services.job import Job
@@ -42,14 +45,24 @@ class ApacheCloudStack:
         "zone": Zone,
     }
 
-    def __init__(self, config: ApacheCloudStackConfig):
+    def __init__(
+        self,
+        config: ApacheCloudStackConfig,
+        tracer: trace.Tracer = None,
+        logger: logging.Logger = None,
+    ):
         """Initialize the ApacheCloudStack SDK.
 
         Args:
             config (ApacheCloudStackConfig): Configuration object containing
                 CloudStack endpoint URL and API credentials.
+            tracer (trace.Tracer, optional): Tracer for API call tracing.
+            logger (logging.Logger, optional): Logger for API call logging.
+
         """
-        self.client = ApacheCloudStackClient(config)
+        tracer = tracer or trace.get_tracer(__name__)
+        logger = logger or logging.getLogger("cloudstack")
+        self.client = ApacheCloudStackClient(config, tracer=tracer, logger=logger)
         self._cache = {}
 
     def __getattr__(self, name):
