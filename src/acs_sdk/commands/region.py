@@ -1,4 +1,3 @@
-
 from acs_sdk.client.client import ApacheCloudStackClient
 import click
 
@@ -12,6 +11,8 @@ def list_regions(ctx):
         try:
             response = client.call('listRegions')
             
+            if 'listregionsresponse' in response:
+                response = response['listregionsresponse']
             if 'region' in response and response['region']:
                 regions = response['region']
                 click.echo(click.style("\n📍 Available Regions:\n", fg="green", bold=True))
