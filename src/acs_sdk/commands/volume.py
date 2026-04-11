@@ -1,6 +1,8 @@
 from acs_sdk import ApacheCloudStack
 import click
 
+from acs_sdk.schemas.request.virtual_machine import ListVirtualMachinesRequest
+
 @click.command("list:volumes", help="List all volumes available in CloudStack")
 @click.pass_context
 def list_volumes(ctx):
@@ -9,12 +11,11 @@ def list_volumes(ctx):
         config = ctx.obj['config']
         acs = ApacheCloudStack(config)
         try:
-            response = acs.client.call('listVolumes')
+            payload = ListVirtualMachinesRequest(listall=True, pagesize=100)
+            response = acs.volume.list(payload)
             
-            if 'listvolumesresponse' in response:
-                response = response['listvolumesresponse']
-            if 'volume' in response and response['volume']:
-                volumes = response['volume']
+            if len(response.data) > 0:
+                volumes = response.data
                 click.echo(click.style("\n📍 Available Volumes:\n", fg="green", bold=True))
                 
                 for i, volume in enumerate(volumes, 1):

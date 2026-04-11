@@ -1,5 +1,9 @@
+import pprint
+
 from acs_sdk import ApacheCloudStack
 import click
+
+from acs_sdk.schemas.request.virtual_machine import ListVirtualMachinesRequest
 
 @click.command("list:vm", help="List all virtual machines available in CloudStack")
 @click.pass_context
@@ -9,12 +13,11 @@ def list_vms(ctx):
         config = ctx.obj['config']
         acs = ApacheCloudStack(config)
         try:
-            response = acs.client.call("listVirtualMachines")
+            payload = ListVirtualMachinesRequest(listall=True, pagesize=100)
+            response = acs.vm.list(payload)
             
-            if 'listvirtualmachinesresponse' in response:
-                response = response['listvirtualmachinesresponse']
-            if 'virtualmachine' in response and response['virtualmachine']:
-                vms = response['virtualmachine']
+            if len(response.data) > 0:
+                vms = response.data
                 click.echo(click.style("\n📍 Available Virtual Machines:\n", fg="green", bold=True))
                 
                 for i, vm in enumerate(vms, 1):

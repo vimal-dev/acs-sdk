@@ -155,7 +155,7 @@ class ApacheCloudStackClient(ClientContract):
             response.raise_for_status()
             span = trace.get_current_span()
             span.set_attribute("http.status_code", response.status_code)
-            span.set_attribute("http.url", str(response.url))
+            span.set_status(Status(StatusCode.OK))
             self.logger.debug(
                 "CloudStack request completed: %s %s", response.status_code, response.url
             )
@@ -191,7 +191,7 @@ class ApacheCloudStackClient(ClientContract):
                 response.raise_for_status()
                 span = trace.get_current_span()
                 span.set_attribute("http.status_code", response.status_code)
-                span.set_attribute("http.url", str(response.url))
+                span.set_status(Status(StatusCode.OK))
                 self.logger.debug(
                     "CloudStack async request completed: %s %s",
                     response.status_code,

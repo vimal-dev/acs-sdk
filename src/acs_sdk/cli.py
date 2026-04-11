@@ -6,7 +6,9 @@ from the command line, offering a convenient alternative to programmatic usage.
 
 import click
 
+from acs_sdk.commands.service_offering import list_service_offerings
 from acs_sdk.commands.vm import list_vms
+from acs_sdk.commands.volume import list_volumes
 from acs_sdk.commands.zone import list_zones
 from acs_sdk.schemas.config import ApacheCloudStackConfig
 from acs_sdk.commands.region import list_regions
@@ -38,10 +40,11 @@ def console(ctx, endpoint, api_key, api_secret):
         timeout=10
     )
 
-
+console.add_command(list_service_offerings)
 console.add_command(list_regions)
 console.add_command(list_zones)
 console.add_command(list_vms)
+console.add_command(list_volumes)
 
 
 if __name__ == '__main__':

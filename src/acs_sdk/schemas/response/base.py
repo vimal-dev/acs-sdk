@@ -14,14 +14,15 @@ class APIError(BaseModel):
 class APIResponse(BaseModel, Generic[T]):
     model_config = ConfigDict(populate_by_name=True, use_enum_values=True)
 
-    status: str = Field(
-        ...,
+    status: Optional[str] = Field(
+        "OK",
         description="The status of the API response, typically 'OK' or 'ERROR'.",
     )
-    errors: Optional[Union[List[APIError], APIError]] = Field(
+    errors: Optional[Union[List[APIError], APIError, None]] = Field(
         None,
         description="A list of error messages if the API call was not successful.",
     )
+    count: Optional[int] = Field(None, description="The count of items returned in the data, if applicable.")
     data: Optional[T] = Field(None, description="The data returned from the API call, if any.")
 
     @property
@@ -32,7 +33,7 @@ class APIResponse(BaseModel, Generic[T]):
         return self.status.upper() == "OK"
 
     @property
-    def is_error(self) -> bool:
+    def has_errors(self) -> bool:
         """
         Check if the API response indicates an error.
         """
@@ -40,7 +41,7 @@ class APIResponse(BaseModel, Generic[T]):
 
     def error_messages(self) -> list[str]:
         """Extract error messages from the API response, if any."""
-        if not self.errors:
+        if not self.has_errors:
             return []
 
         err = self.errors

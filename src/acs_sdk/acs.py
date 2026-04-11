@@ -5,13 +5,19 @@ the primary interface for interacting with Apache CloudStack environments.
 """
 
 import logging
+from typing import Dict, Type
 from opentelemetry import trace
 
 from acs_sdk.schemas.config import ApacheCloudStackConfig
 from acs_sdk.client.client import ApacheCloudStackClient
+from acs_sdk.services.account import Account
+from acs_sdk.services.base import BaseService
 from acs_sdk.services.job import Job
 from acs_sdk.services.region import Region
+from acs_sdk.services.security_group import SecurityGroup
+from acs_sdk.services.service_offering import ServiceOffering
 from acs_sdk.services.virtual_machine import VirtualMachine
+from acs_sdk.services.volume import Volume
 from acs_sdk.services.zone import Zone
 
 
@@ -38,10 +44,23 @@ class ApacheCloudStack:
         >>> response = acs.client.call('listUsers')
     """
 
-    _service_map = {
+    account: "Account"
+    job: "Job"
+    region: "Region"
+    securitygroup: "SecurityGroup"
+    serviceoffering: "ServiceOffering"
+    vm: "VirtualMachine"
+    volume: "Volume"
+    zone: "Zone"
+
+    _service_map: Dict[str, Type["BaseService"]] = {
+        "account": Account,
         "job": Job,
         "region": Region,
+        "securitygroup": SecurityGroup,
+        "serviceoffering": ServiceOffering,
         "vm": VirtualMachine,
+        "volume": Volume,
         "zone": Zone,
     }
 
@@ -60,9 +79,9 @@ class ApacheCloudStack:
             logger (logging.Logger, optional): Logger for API call logging.
 
         """
-        tracer = tracer or trace.get_tracer(__name__)
-        logger = logger or logging.getLogger("cloudstack")
-        self.client = ApacheCloudStackClient(config, tracer=tracer, logger=logger)
+        self.tracer = tracer or trace.get_tracer(__name__)
+        self.logger = logger or logging.getLogger("cloudstack")
+        self.client = ApacheCloudStackClient(config, tracer=self.tracer, logger=self.logger)
         self._cache = {}
 
     def __getattr__(self, name):

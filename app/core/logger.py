@@ -29,6 +29,7 @@ def setup_logger():
         "trace_id=%(trace_id)s "
         "request_id=%(request_id)s "
         "user=%(user_id)s tenant=%(tenant_id)s "
+        "%(funcName)s:%(lineno)d - "
         "%(message)s"
     )
 

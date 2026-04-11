@@ -1,8 +1,10 @@
 
-from pydantic import BaseModel, Field
+from pydantic import Field
 from typing import Optional
 
-class CreateAccountRequest(BaseModel):
+from acs_sdk.schemas.request.base import APIRequest
+
+class CreateAccountRequest(APIRequest):
     username: str = Field(..., description="unique username for the account")
     email: str = Field(..., description="Email of the account")
     password: str = Field(..., description="Clear text password for the account")
@@ -14,7 +16,7 @@ class CreateAccountRequest(BaseModel):
     accounttype: Optional[int] = Field(
         0, description="Type of the account. Valid account types are 1 (admin), 2 (domain-admin), and 0 (user)."
     )
-    account = Optional[str] = Field(
+    account:Optional[str] = Field(
         None, description="Name of the account to be created. The user will be added to this newly created account. If no account is specified, the username will be used as the account name."
     )
     networkdomain: Optional[str] = Field(
@@ -37,7 +39,7 @@ class CreateAccountRequest(BaseModel):
     )
 
 
-class ListAccountsRequest(BaseModel):
+class ListAccountsRequest(APIRequest):
     id: Optional[str] = Field(
         None, description="List accounts by ID"
     )
@@ -76,11 +78,11 @@ class ListAccountsRequest(BaseModel):
     state: Optional[str] = Field(
         None, description="List accounts by state. Valid states are enabled, disabled, and locked."
     )
-    tag=Optional[str] = Field(
+    tag: Optional[str] = Field(
         None, description="List accounts by tag (key/value pairs)"
     )
 
-class EnableAccountRequest(BaseModel):
+class EnableAccountRequest(APIRequest):
     id: str = Field(..., description="ID of the account to enable")
     account: Optional[str] = Field(
         None, description="Enables specified account. If account parameter is used, domainId must also be used."
@@ -89,7 +91,7 @@ class EnableAccountRequest(BaseModel):
         None, alias="domainId", description="Enables specified account in this domain."
     )
 
-class DisableAccountRequest(BaseModel):
+class DisableAccountRequest(APIRequest):
     id: str = Field(..., description="ID of the account to disable")
     lock: Optional[bool] = Field(
         False, description="If true, only lock the account; else disable the account"
@@ -101,13 +103,13 @@ class DisableAccountRequest(BaseModel):
         None, alias="domainId", description="Disables specified account in this domain."
     )
 
-class MarkDefaultZoneForAccountRequest(BaseModel):
+class MarkDefaultZoneForAccountRequest(APIRequest):
     account: str = Field(..., description="Account for which to mark default zone")
     domainid: str = Field(..., alias="domainId", description="Domain ID of the account")
     zoneid: str = Field(..., alias="zoneId", description="Zone ID to mark as default for the account")
 
 
-class UpdateAccountRequest(BaseModel):
+class UpdateAccountRequest(APIRequest):
     
     id: Optional[str] = Field(
         None, alias="accountId", description="Account UUID"
@@ -118,7 +120,7 @@ class UpdateAccountRequest(BaseModel):
     accountdetails: Optional[str] = Field(
         None, alias="accountDetails", description="details for account used to store specific parameters."
     )
-    account = Optional[str] = Field(
+    account: Optional[str] = Field(
         None, description="Current name of the account."
     )
     networkdomain: Optional[str] = Field(

@@ -1,10 +1,12 @@
 
-from pydantic import BaseModel, Field, model_validator
+from pydantic import Field, model_validator
 from typing import Optional
 from datetime import datetime
 
+from acs_sdk.schemas.request.base import APIRequest
 
-class ListAsyncJobsRequest(BaseModel):
+
+class ListAsyncJobsRequest(APIRequest):
     account: Optional[str] = Field(
         None, description="List resources by account (requires domainid)"
     )
@@ -44,8 +46,8 @@ class ListAsyncJobsRequest(BaseModel):
         return self
 
 
-class QueryAsyncJobRequest(BaseModel):
-    jobid: int = Field(
+class QueryAsyncJobRequest(APIRequest):
+    jobid: str = Field(
         ...,
         alias="jobId",
         description="The ID of the asynchronous job to query.",

@@ -1,8 +1,10 @@
-from pydantic import BaseModel, Field, model_validator
-from typing import Optional
+from pydantic import Field, model_validator
+from typing import List, Optional
+
+from acs_sdk.schemas.request.base import APIRequest
 
 
-class AssignVolumeRequest(BaseModel):
+class AssignVolumeRequest(APIRequest):
     volumeid: str = Field(
         ..., alias="id", description="ID of the volume to be reassigned"
     )
@@ -30,7 +32,7 @@ class AssignVolumeRequest(BaseModel):
         return self
 
 
-class AttachVolumeRequest(BaseModel):
+class AttachVolumeRequest(APIRequest):
     id: str = Field(
         ..., description="ID of the volume to be attached"
     )
@@ -48,7 +50,7 @@ class AttachVolumeRequest(BaseModel):
     )
 
 
-class ChangeOfferingForVolumeRequest(BaseModel):
+class ChangeOfferingForVolumeRequest(APIRequest):
     id: str = Field(
         ..., description="ID of the volume for which to change the offering"
     )
@@ -85,7 +87,7 @@ class ChangeOfferingForVolumeRequest(BaseModel):
         description="New volume size in GB for the custom disk offering"
     )
 
-class CheckVolumeRequest(BaseModel):
+class CheckVolumeRequest(APIRequest):
     id: str = Field(
         ..., description="ID of the volume to be checked"
     )
@@ -95,7 +97,7 @@ class CheckVolumeRequest(BaseModel):
         description="Flag to indicate if the volume should be repaired if any issues are found during the check"
     )
 
-class CreateVolumeRequest(BaseModel):
+class CreateVolumeRequest(APIRequest):
     name: str = Field(
         ..., description="Name of the volume to be created"
     )
@@ -187,17 +189,17 @@ class CreateVolumeRequest(BaseModel):
         return self
     
 
-class DestroyVolumeRequest(BaseModel):
+class DestroyVolumeRequest(APIRequest):
     id: str = Field(
         ..., description="ID of the volume"
     )
 
     repair: Optional[bool] = Field(
-        None
-        expunge="If true is passed, the volume is expunged immediately."
+        None,
+        description="If true is passed, the volume is expunged immediately."
     )
 
-class DetachVolumeRequest(BaseModel):
+class DetachVolumeRequest(APIRequest):
     id: str = Field(
         ..., description="ID of the volume to be detached"
     )
@@ -215,7 +217,7 @@ class DetachVolumeRequest(BaseModel):
     )
 
 
-class ExtractVolumeRequest(BaseModel):
+class ExtractVolumeRequest(APIRequest):
     id: str = Field(
         ..., description="ID of the volume to be extracted"
     )
@@ -235,3 +237,95 @@ class ExtractVolumeRequest(BaseModel):
         None,
         description="The URL of the secondary storage where the volume will be extracted to. This parameter is required when mode is FTP_UPLOAD."
     )
+
+
+class ListVolumesRequest(APIRequest):
+    command: str = Field(default="listVolumes", frozen=True)
+
+    # 🔍 Basic filters
+    id: Optional[str] = Field(None, description="ID of the disk volume")
+    ids: Optional[List[str]] = Field(
+        None,
+        description="List of volume IDs (mutually exclusive with id)"
+    )
+    name: Optional[str] = Field(None, description="Name of the volume")
+    keyword: Optional[str] = Field(None, description="Search keyword")
+
+    # 👤 Account / Domain / Project
+    account: Optional[str] = Field(
+        None,
+        description="List resources by account (requires domainid)"
+    )
+    domainid: Optional[str] = Field(None, description="Domain ID")
+    isrecursive: Optional[bool] = Field(
+        None,
+        description="Include subdomains"
+    )
+    projectid: Optional[str] = Field(None, description="Project ID")
+
+    # 📦 Resource filters
+    virtualmachineid: Optional[str] = Field(
+        None,
+        description="Filter volumes attached to VM"
+    )
+    diskofferingid: Optional[str] = Field(
+        None,
+        description="Filter by disk offering"
+    )
+    serviceofferingid: Optional[str] = Field(
+        None,
+        description="Filter by service offering disk offering"
+    )
+
+    storageid: Optional[str] = Field(
+        None,
+        description="Storage pool ID (admin only)"
+    )
+    clusterid: Optional[str] = Field(None, description="Cluster ID")
+    podid: Optional[str] = Field(None, description="Pod ID")
+    hostid: Optional[str] = Field(None, description="Host ID")
+    zoneid: Optional[str] = Field(None, description="Zone ID")
+
+    # 🔐 State / type filters
+    type: Optional[str] = Field(
+        None,
+        description="Volume type (ROOT or DATADISK)"
+    )
+    state: Optional[str] = Field(
+        None,
+        description="Volume state (Ready, Allocated, Destroy, Expunging, Expunged)"
+    )
+    isencrypted: Optional[bool] = Field(
+        None,
+        description="Filter encrypted volumes"
+    )
+
+    # 👁️ Visibility / admin flags
+    listall: Optional[bool] = Field(
+        None,
+        description="List all accessible resources"
+    )
+    displayvolume: Optional[bool] = Field(
+        None,
+        description="Filter by display flag (admin only)"
+    )
+    listsystemvms: Optional[bool] = Field(
+        None,
+        description="List system VM volumes (admin only)"
+    )
+
+    # 🏷️ Tags
+    tags: Optional[str] = Field(
+        None,
+        description="Filter by tags (key/value pairs)"
+    )
+
+    # 📊 Special flags
+    retrieveonlyresourcecount: Optional[bool] = Field(
+        None,
+        description="Return only resource count"
+    )
+
+    # 📄 Pagination
+    page: Optional[int] = Field(None, ge=1)
+    pagesize: Optional[int] = Field(None, ge=1)
