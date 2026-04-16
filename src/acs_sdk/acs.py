@@ -11,8 +11,11 @@ from opentelemetry import trace
 from acs_sdk.schemas.config import ApacheCloudStackConfig
 from acs_sdk.client.client import ApacheCloudStackClient
 from acs_sdk.services.account import Account
+from acs_sdk.services.address import Address
 from acs_sdk.services.base import BaseService
+from acs_sdk.services.firewall import Firewall
 from acs_sdk.services.job import Job
+from acs_sdk.services.nat import NAT
 from acs_sdk.services.region import Region
 from acs_sdk.services.security_group import SecurityGroup
 from acs_sdk.services.service_offering import ServiceOffering
@@ -46,7 +49,10 @@ class ApacheCloudStack:
     """
 
     account: "Account"
+    address: "Address"
+    firewall: "Firewall"
     job: "Job"
+    nat: "NAT"
     region: "Region"
     securitygroup: "SecurityGroup"
     serviceoffering: "ServiceOffering"
@@ -57,7 +63,10 @@ class ApacheCloudStack:
 
     _service_map: Dict[str, Type["BaseService"]] = {
         "account": Account,
+        "address": Address,
+        "firewall": Firewall,
         "job": Job,
+        "nat": NAT,
         "region": Region,
         "securitygroup": SecurityGroup,
         "serviceoffering": ServiceOffering,
