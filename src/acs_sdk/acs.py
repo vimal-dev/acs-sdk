@@ -19,6 +19,7 @@ from acs_sdk.services.nat import NAT
 from acs_sdk.services.region import Region
 from acs_sdk.services.security_group import SecurityGroup
 from acs_sdk.services.service_offering import ServiceOffering
+from acs_sdk.services.ssh import SSH
 from acs_sdk.services.virtual_machine import VirtualMachine
 from acs_sdk.services.volume import Volume
 from acs_sdk.services.vpc import VPC
@@ -56,6 +57,7 @@ class ApacheCloudStack:
     region: "Region"
     securitygroup: "SecurityGroup"
     serviceoffering: "ServiceOffering"
+    ssh: "SSH"
     vm: "VirtualMachine"
     volume: "Volume"
     vpc: "VPC"
@@ -70,6 +72,7 @@ class ApacheCloudStack:
         "region": Region,
         "securitygroup": SecurityGroup,
         "serviceoffering": ServiceOffering,
+        "ssh": SSH,
         "vm": VirtualMachine,
         "volume": Volume,
         "vpc": VPC,
