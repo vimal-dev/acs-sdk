@@ -18,6 +18,7 @@ from acs_sdk.services.security_group import SecurityGroup
 from acs_sdk.services.service_offering import ServiceOffering
 from acs_sdk.services.virtual_machine import VirtualMachine
 from acs_sdk.services.volume import Volume
+from acs_sdk.services.vpc import VPC
 from acs_sdk.services.zone import Zone
 
 
@@ -51,6 +52,7 @@ class ApacheCloudStack:
     serviceoffering: "ServiceOffering"
     vm: "VirtualMachine"
     volume: "Volume"
+    vpc: "VPC"
     zone: "Zone"
 
     _service_map: Dict[str, Type["BaseService"]] = {
@@ -61,6 +63,7 @@ class ApacheCloudStack:
         "serviceoffering": ServiceOffering,
         "vm": VirtualMachine,
         "volume": Volume,
+        "vpc": VPC,
         "zone": Zone,
     }
 
