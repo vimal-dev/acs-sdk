@@ -1,5 +1,5 @@
 
-from pydantic import Field
+from pydantic import Field, model_validator
 from typing import Optional
 
 from acs_sdk.schemas.request.base import APIRequest
@@ -135,3 +135,17 @@ class UpdateAccountRequest(APIRequest):
     apiaccesskey: Optional[str] = Field(
         None, alias="apiAccessKey", description="Determines if Api key access for this user is enabled, disabled or inherits the value from its parent, the domain level setting api.key.access"
     )
+
+class LockAccountRequest(APIRequest):
+    account: Optional[str] = Field(
+        None, description="Locks specified account. If account parameter is used, domainId must also be used."
+    )
+    domainid: Optional[str] = Field(
+        None, alias="domainId", description="Locks specified account in this domain."
+    )
+
+    @model_validator(mode="after")
+    def validate_model_dependency(self):        
+        if self.account and not self.domainid:
+            raise ValueError("domainid is required when account is provided")
+        return self
