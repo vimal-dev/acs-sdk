@@ -1,7 +1,7 @@
 # services/job.py
 from typing import Dict, List
 
-from acs_sdk.schemas.request.account import CreateAccountRequest, EnableAccountRequest, DisableAccountRequest, ListAccountsRequest, MarkDefaultZoneForAccountRequest, UpdateAccountRequest
+from acs_sdk.schemas.request.account import CreateAccountRequest, EnableAccountRequest, DisableAccountRequest, ListAccountsRequest, LockAccountRequest, MarkDefaultZoneForAccountRequest, UpdateAccountRequest
 
 from .base import BaseService
 from ..schemas.response.base import APIResponse
@@ -143,4 +143,20 @@ class Account(BaseService):
         data = {}
         if 'updateaccountresponse' in response:
             data = response['updateaccountresponse']
+        return APIResponse[Dict](**{"data": data})
+    
+    def lock_account(self, payload: LockAccountRequest) -> APIResponse[Dict]:
+        """Locks an account."""
+        response = self.client.call("lockAccount", payload.model_dump(exclude_none=True))
+        data = {}
+        if 'lockaccountresponse' in response:
+            data = response['lockaccountresponse']
+        return APIResponse[Dict](**{"data": data})
+
+    async def lock_account_async(self, payload: LockAccountRequest) -> APIResponse[Dict]:
+        """Locks an account."""
+        response = await self.client.call_async("lockAccount", payload.model_dump(exclude_none=True))
+        data = {}
+        if 'lockaccountresponse' in response:
+            data = response['lockaccountresponse']
         return APIResponse[Dict](**{"data": data})
