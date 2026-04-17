@@ -13,12 +13,14 @@ from acs_sdk.client.client import ApacheCloudStackClient
 from acs_sdk.services.account import Account
 from acs_sdk.services.address import Address
 from acs_sdk.services.base import BaseService
+from acs_sdk.services.backup_and_recovery import BackupAndRecovery
 from acs_sdk.services.firewall import Firewall
 from acs_sdk.services.job import Job
 from acs_sdk.services.nat import NAT
 from acs_sdk.services.region import Region
 from acs_sdk.services.security_group import SecurityGroup
 from acs_sdk.services.service_offering import ServiceOffering
+from acs_sdk.services.snapshot import Snapshot
 from acs_sdk.services.ssh import SSH
 from acs_sdk.services.virtual_machine import VirtualMachine
 from acs_sdk.services.volume import Volume
@@ -51,12 +53,14 @@ class ApacheCloudStack:
 
     account: "Account"
     address: "Address"
+    backupandrecovery: "BackupAndRecovery"
     firewall: "Firewall"
     job: "Job"
     nat: "NAT"
     region: "Region"
     securitygroup: "SecurityGroup"
     serviceoffering: "ServiceOffering"
+    snapshot: "Snapshot"
     ssh: "SSH"
     vm: "VirtualMachine"
     volume: "Volume"
@@ -66,12 +70,14 @@ class ApacheCloudStack:
     _service_map: Dict[str, Type["BaseService"]] = {
         "account": Account,
         "address": Address,
+        "backupandrecovery": BackupAndRecovery,
         "firewall": Firewall,
         "job": Job,
         "nat": NAT,
         "region": Region,
         "securitygroup": SecurityGroup,
         "serviceoffering": ServiceOffering,
+        "snapshot": Snapshot,
         "ssh": SSH,
         "vm": VirtualMachine,
         "volume": Volume,
