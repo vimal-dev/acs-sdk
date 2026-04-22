@@ -11,7 +11,7 @@ format:
 	ruff format .
 
 build:
-	poetry build --format sdist
+	poetry build --clean
 
 build-wheel:
 	poetry build --format wheel
