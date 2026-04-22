@@ -1,9 +1,7 @@
 
 
-from dataclasses import Field
 from typing import Optional
-
-from pydantic import BaseModel
+from pydantic import Field
 from acs_sdk.schemas.request.base import APIRequest, PaginationMixin
 
 
