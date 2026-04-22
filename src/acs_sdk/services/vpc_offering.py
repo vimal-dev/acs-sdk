@@ -1,4 +1,5 @@
 # services/vpc_offering.py
+import pprint
 from typing import Dict, List
 
 from acs_sdk.schemas.request.vpc_offering import ListVPCOfferingRequest
@@ -17,8 +18,8 @@ class VPCOffering(BaseService):
         data = []
         if 'listvpcofferingsresponse' in response:
             response = response['listvpcofferingsresponse']
-        if 'vpc' in response and response['vpc']:
-            data = response['vpc']
+        if 'vpcoffering' in response and response['vpcoffering']:
+            data = response['vpcoffering']
             count = response['count']
         return APIResponse[List[Dict]](**{"data": data, "count": count})
 
@@ -29,7 +30,7 @@ class VPCOffering(BaseService):
         data = []
         if 'listvpcofferingsresponse' in response:
             response = response['listvpcofferingsresponse']
-        if 'vpc' in response and response['vpc']:
-            data = response['vpc']
+        if 'vpcoffering' in response and response['vpcoffering']:
+            data = response['vpcoffering']
             count = response['count']
         return APIResponse[List[Dict]](**{"data": data, "count": count})

@@ -1,21 +1,21 @@
 import click
 
-from acs_sdk.schemas.request.region import ListRegionsRequest
+from acs_sdk.schemas.request.disk_offering import ListDiskOfferingRequest
 
 from .dependencies import get_acs_client
 
 if __name__ == "__main__":
     
     acs_client = get_acs_client()
-    payload = ListRegionsRequest()
-    response = acs_client.region.list(payload)
+    payload = ListDiskOfferingRequest()
+    response = acs_client.diskoffering.list(payload)
     if response.is_ok:
-        regions = response.data
-        click.echo(click.style("\n📍 Available Regions:\n", fg="green", bold=True))
+        disk_offerings = response.data
+        click.echo(click.style("\n� Available Disk Offerings:\n", fg="green", bold=True))
         
-        for i, region in enumerate(regions, 1):
-            click.echo(f"{i}. {region.get('name')} (ID: {region.get('id')})")
-            click.echo(f"   Endpoint: {region.get('endpoint')}")
+        for i, disk_offering in enumerate(disk_offerings, 1):
+            click.echo(f"{i}. {disk_offering.get('name')} (ID: {disk_offering.get('id')})")
+            click.echo(f"   Endpoint: {disk_offering.get('endpoint')}")
             click.echo()
     else:
         acs_client.logger.error(f"Error initiating cleanup: {response.error}")
