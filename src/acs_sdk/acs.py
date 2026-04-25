@@ -18,6 +18,8 @@ from acs_sdk.services.disk_offering import DiskOffering
 from acs_sdk.services.firewall import Firewall
 from acs_sdk.services.job import Job
 from acs_sdk.services.nat import NAT
+from acs_sdk.services.network import Network
+from acs_sdk.services.network_acl import NetworkACL
 from acs_sdk.services.network_offering import NetworkOffering
 from acs_sdk.services.region import Region
 from acs_sdk.services.security_group import SecurityGroup
@@ -61,6 +63,8 @@ class ApacheCloudStack:
     firewall: "Firewall"
     job: "Job"
     nat: "NAT"
+    network: "Network"
+    networkacl: "NetworkACL"
     networkoffering: "NetworkOffering"
     region: "Region"
     securitygroup: "SecurityGroup"
@@ -81,6 +85,8 @@ class ApacheCloudStack:
         "firewall": Firewall,
         "job": Job,
         "nat": NAT,
+        "network": Network,
+        "networkacl": NetworkACL,
         "networkoffering": NetworkOffering,
         "region": Region,
         "securitygroup": SecurityGroup,

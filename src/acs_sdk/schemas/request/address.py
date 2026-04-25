@@ -2,10 +2,10 @@ from typing import Optional
 
 from pydantic import Field
 
-from acs_sdk.schemas.request.base import APIRequest
+from acs_sdk.schemas.request.base import APIRequest, PaginationMixin
 
 
-class ListPublicIpAddressesRequest(APIRequest):
+class ListPublicIpAddressesRequest(APIRequest, PaginationMixin):
     id: Optional[str] = Field(
         None, description="List IP address by ID"
     )
@@ -47,26 +47,41 @@ class ListPublicIpAddressesRequest(APIRequest):
     zoneid: Optional[str] = Field(
         None, alias="zoneId", description="List IP addresses by zone ID"
     )
-    page: Optional[int] = Field(
-        1, ge=1, description="Page number"
-    )
-    pagesize: Optional[int] = Field(
-        50, ge=1, le=500, description="Number of results per page"
-    )
 
 
 class AssociateIpAddressRequest(APIRequest):
-    networkid: Optional[str] = Field(
-        None, alias="networkId", description="The ID of the network to associate the IP address with"
+    """Request to associate an IP address to a network."""
+    
+    networkid: str = Field(
+        ..., alias="networkId", description="The network ID"
     )
+    
     zoneid: Optional[str] = Field(
-        None, alias="zoneId", description="The ID of the zone to associate the IP address with"
+        None, alias="zoneId", description="The zone ID"
+    )
+    
+    vpcid: Optional[str] = Field(
+        None, alias="vpcId", description="The VPC ID"
+    )
+    
+    domainid: Optional[str] = Field(
+        None, alias="domainId", description="The domain ID"
+    )
+    
+    account: Optional[str] = Field(
+        None, description="The account that will own the IP"
+    )
+    
+    projectid: Optional[str] = Field(
+        None, alias="projectId", description="The project ID"
     )
 
 
 class DisassociateIpAddressRequest(APIRequest):
+    """Request to disassociate an IP address."""
+    
     id: str = Field(
-        ..., description="The ID of the public IP address"
+        ..., description="The IP address ID"
     )
 
 
