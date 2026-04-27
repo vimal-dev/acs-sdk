@@ -72,6 +72,7 @@ class Job(BaseService):
                     "entity": response.data.get('jobinstancetype'),
                     "entity_id": response.data.get('jobinstanceid'),
                     "result": response.data.get('jobresult'),
+                    "error": None,
                     "elapsed_seconds": elapsed,
                     "attempts": attempts
                 }})
@@ -85,6 +86,7 @@ class Job(BaseService):
                     "entity": response.data.get('jobinstancetype'),
                     "entity_id": response.data.get('jobinstanceid'),
                     "result": {},
+                    "error": response.data.get("errortext") or "Job failed",
                     "elapsed_seconds": elapsed,
                     "attempts": attempts
                 }})
