@@ -25,186 +25,186 @@ class NetworkACL(BaseService):
 
     def create(self, payload: CreateNetworkACLRequest) -> APIResponse[Dict]:
         """Create a network ACL rule."""
-        response = self.client.call("createNetworkACL", payload.model_dump(exclude_none=True))
-        data = {}
-        if 'createnetworkaclresponse' in response:
-            data = response['createnetworkaclresponse']
-        return APIResponse[Dict](**{"data": data})
+        return self._execute(
+            "createNetworkACL",
+            payload,
+            envelope="createnetworkaclresponse",
+        )
 
     async def create_async(self, payload: CreateNetworkACLRequest) -> APIResponse[Dict]:
         """Asynchronously create a network ACL rule."""
-        response = await self.client.call_async("createNetworkACL", payload.model_dump(exclude_none=True))
-        data = {}
-        if 'createnetworkaclresponse' in response:
-            data = response['createnetworkaclresponse']
-        return APIResponse[Dict](**{"data": data})
+        return await self._execute_async(
+            "createNetworkACL",
+            payload,
+            envelope="createnetworkaclresponse",
+        )
 
     def create_acl_list(self, payload: CreateNetworkACLListRequest) -> APIResponse[Dict]:
         """Create a network ACL list."""
-        response = self.client.call("createNetworkACLList", payload.model_dump(exclude_none=True))
-        data = {}
-        if 'createnetworkacllistresponse' in response:
-            data = response['createnetworkacllistresponse']
-        return APIResponse[Dict](**{"data": data})
+        return self._execute(
+            "createNetworkACLList",
+            payload,
+            envelope="createnetworkacllistresponse",
+        )
 
-    async def create_acl_list_async(self, payload: CreateNetworkACLListRequest) -> APIResponse[Dict]:
+    async def create_acl_list_async(
+        self, payload: CreateNetworkACLListRequest
+    ) -> APIResponse[Dict]:
         """Asynchronously create a network ACL list."""
-        response = await self.client.call_async("createNetworkACLList", payload.model_dump(exclude_none=True))
-        data = {}
-        if 'createnetworkacllistresponse' in response:
-            data = response['createnetworkacllistresponse']
-        return APIResponse[Dict](**{"data": data})
+        return await self._execute_async(
+            "createNetworkACLList",
+            payload,
+            envelope="createnetworkacllistresponse",
+        )
 
     # Delete operations
 
     def delete(self, payload: DeleteNetworkACLRequest) -> APIResponse[Dict]:
         """Delete a network ACL rule."""
-        response = self.client.call("deleteNetworkACL", payload.model_dump(exclude_none=True))
-        data = {}
-        if 'deletenetworkaclresponse' in response:
-            data = response['deletenetworkaclresponse']
-        return APIResponse[Dict](**{"data": data})
+        return self._execute(
+            "deleteNetworkACL",
+            payload,
+            envelope="deletenetworkaclresponse",
+        )
 
     async def delete_async(self, payload: DeleteNetworkACLRequest) -> APIResponse[Dict]:
         """Asynchronously delete a network ACL rule."""
-        response = await self.client.call_async("deleteNetworkACL", payload.model_dump(exclude_none=True))
-        data = {}
-        if 'deletenetworkaclresponse' in response:
-            data = response['deletenetworkaclresponse']
-        return APIResponse[Dict](**{"data": data})
+        return await self._execute_async(
+            "deleteNetworkACL",
+            payload,
+            envelope="deletenetworkaclresponse",
+        )
 
     def delete_acl_list(self, payload: DeleteNetworkACLListRequest) -> APIResponse[Dict]:
         """Delete a network ACL list."""
-        response = self.client.call("deleteNetworkACLList", payload.model_dump(exclude_none=True))
-        data = {}
-        if 'deletenetworkacllistresponse' in response:
-            data = response['deletenetworkacllistresponse']
-        return APIResponse[Dict](**{"data": data})
+        return self._execute(
+            "deleteNetworkACLList",
+            payload,
+            envelope="deletenetworkacllistresponse",
+        )
 
-    async def delete_acl_list_async(self, payload: DeleteNetworkACLListRequest) -> APIResponse[Dict]:
+    async def delete_acl_list_async(
+        self, payload: DeleteNetworkACLListRequest
+    ) -> APIResponse[Dict]:
         """Asynchronously delete a network ACL list."""
-        response = await self.client.call_async("deleteNetworkACLList", payload.model_dump(exclude_none=True))
-        data = {}
-        if 'deletenetworkacllistresponse' in response:
-            data = response['deletenetworkacllistresponse']
-        return APIResponse[Dict](**{"data": data})
+        return await self._execute_async(
+            "deleteNetworkACLList",
+            payload,
+            envelope="deletenetworkacllistresponse",
+        )
 
     # List operations
 
     def list_acl_lists(self, payload: ListNetworkACLListsRequest) -> APIResponse[List[Dict]]:
         """List network ACL lists."""
-        response = self.client.call("listNetworkACLLists", payload.model_dump(exclude_none=True))
-        count = 0
-        data = []
-        if 'listnetworkacllistsresponse' in response:
-            response = response['listnetworkacllistsresponse']
-        if 'networkacllist' in response and response['networkacllist']:
-            data = response['networkacllist']
-            count = response.get('count', 0)
-        return APIResponse[List[Dict]](**{"data": data, "count": count})
+        return self._execute(
+            "listNetworkACLLists",
+            payload,
+            envelope="listnetworkacllistsresponse",
+            entity="networkacllist",
+        )
 
-    async def list_acl_lists_async(self, payload: ListNetworkACLListsRequest) -> APIResponse[List[Dict]]:
+    async def list_acl_lists_async(
+        self, payload: ListNetworkACLListsRequest
+    ) -> APIResponse[List[Dict]]:
         """Asynchronously list network ACL lists."""
-        response = await self.client.call_async("listNetworkACLLists", payload.model_dump(exclude_none=True))
-        count = 0
-        data = []
-        if 'listnetworkacllistsresponse' in response:
-            response = response['listnetworkacllistsresponse']
-        if 'networkacllist' in response and response['networkacllist']:
-            data = response['networkacllist']
-            count = response.get('count', 0)
-        return APIResponse[List[Dict]](**{"data": data, "count": count})
+        return await self._execute_async(
+            "listNetworkACLLists",
+            payload,
+            envelope="listnetworkacllistsresponse",
+            entity="networkacllist",
+        )
 
     def list(self, payload: ListNetworkACLsRequest) -> APIResponse[List[Dict]]:
         """List network ACL items."""
-        response = self.client.call("listNetworkACLs", payload.model_dump(exclude_none=True))
-        count = 0
-        data = []
-        if 'listnetworkaclsresponse' in response:
-            response = response['listnetworkaclsresponse']
-        if 'networkacl' in response and response['networkacl']:
-            data = response['networkacl']
-            count = response.get('count', 0)
-        return APIResponse[List[Dict]](**{"data": data, "count": count})
+        return self._execute(
+            "listNetworkACLs",
+            payload,
+            envelope="listnetworkaclsresponse",
+            entity="networkacl",
+        )
 
     async def list_async(self, payload: ListNetworkACLsRequest) -> APIResponse[List[Dict]]:
         """Asynchronously list network ACL items."""
-        response = await self.client.call_async("listNetworkACLs", payload.model_dump(exclude_none=True))
-        count = 0
-        data = []
-        if 'listnetworkaclsresponse' in response:
-            response = response['listnetworkaclsresponse']
-        if 'networkacl' in response and response['networkacl']:
-            data = response['networkacl']
-            count = response.get('count', 0)
-        return APIResponse[List[Dict]](**{"data": data, "count": count})
+        return await self._execute_async(
+            "listNetworkACLs",
+            payload,
+            envelope="listnetworkaclsresponse",
+            entity="networkacl",
+        )
 
     # Move operation
 
     def move_acl_item(self, payload: MoveNetworkAclItemRequest) -> APIResponse[Dict]:
         """Move a network ACL item to a new position."""
-        response = self.client.call("moveNetworkAclItem", payload.model_dump(exclude_none=True))
-        data = {}
-        if 'movenetworkaclitemresponse' in response:
-            data = response['movenetworkaclitemresponse']
-        return APIResponse[Dict](**{"data": data})
+        return self._execute(
+            "moveNetworkAclItem",
+            payload,
+            envelope="movenetworkaclitemresponse",
+        )
 
     async def move_acl_item_async(self, payload: MoveNetworkAclItemRequest) -> APIResponse[Dict]:
         """Asynchronously move a network ACL item to a new position."""
-        response = await self.client.call_async("moveNetworkAclItem", payload.model_dump(exclude_none=True))
-        data = {}
-        if 'movenetworkaclitemresponse' in response:
-            data = response['movenetworkaclitemresponse']
-        return APIResponse[Dict](**{"data": data})
+        return await self._execute_async(
+            "moveNetworkAclItem",
+            payload,
+            envelope="movenetworkaclitemresponse",
+        )
 
     # Replace operation
 
     def replace_acl_list(self, payload: ReplaceNetworkACLListRequest) -> APIResponse[Dict]:
         """Replace ACL associated with a network or private gateway."""
-        response = self.client.call("replaceNetworkACLList", payload.model_dump(exclude_none=True))
-        data = {}
-        if 'replacenetworkacllistresponse' in response:
-            data = response['replacenetworkacllistresponse']
-        return APIResponse[Dict](**{"data": data})
+        return self._execute(
+            "replaceNetworkACLList",
+            payload,
+            envelope="replacenetworkacllistresponse",
+        )
 
-    async def replace_acl_list_async(self, payload: ReplaceNetworkACLListRequest) -> APIResponse[Dict]:
+    async def replace_acl_list_async(
+        self, payload: ReplaceNetworkACLListRequest
+    ) -> APIResponse[Dict]:
         """Asynchronously replace ACL associated with a network or private gateway."""
-        response = await self.client.call_async("replaceNetworkACLList", payload.model_dump(exclude_none=True))
-        data = {}
-        if 'replacenetworkacllistresponse' in response:
-            data = response['replacenetworkacllistresponse']
-        return APIResponse[Dict](**{"data": data})
+        return await self._execute_async(
+            "replaceNetworkACLList",
+            payload,
+            envelope="replacenetworkacllistresponse",
+        )
 
     # Update operations
 
     def update_acl_item(self, payload: UpdateNetworkACLItemRequest) -> APIResponse[Dict]:
         """Update a network ACL item."""
-        response = self.client.call("updateNetworkACLItem", payload.model_dump(exclude_none=True))
-        data = {}
-        if 'updatenetworkaclitemresponse' in response:
-            data = response['updatenetworkaclitemresponse']
-        return APIResponse[Dict](**{"data": data})
+        return self._execute(
+            "updateNetworkACLItem",
+            payload,
+            envelope="updatenetworkaclitemresponse",
+        )
 
-    async def update_acl_item_async(self, payload: UpdateNetworkACLItemRequest) -> APIResponse[Dict]:
+    async def update_acl_item_async(
+        self, payload: UpdateNetworkACLItemRequest
+    ) -> APIResponse[Dict]:
         """Asynchronously update a network ACL item."""
-        response = await self.client.call_async("updateNetworkACLItem", payload.model_dump(exclude_none=True))
-        data = {}
-        if 'updatenetworkaclitemresponse' in response:
-            data = response['updatenetworkaclitemresponse']
-        return APIResponse[Dict](**{"data": data})
+        return await self._execute_async(
+            "updateNetworkACLItem",
+            payload,
+            envelope="updatenetworkaclitemresponse",
+        )
 
     def update_acl_list(self, payload: UpdateNetworkACLListRequest) -> APIResponse[Dict]:
         """Update a network ACL list."""
-        response = self.client.call("updateNetworkACLList", payload.model_dump(exclude_none=True))
-        data = {}
-        if 'updatenetworkacllistresponse' in response:
-            data = response['updatenetworkacllistresponse']
-        return APIResponse[Dict](**{"data": data})
+        return self._execute(
+            "updateNetworkACLList",
+            payload,
+            envelope="updatenetworkacllistresponse",
+        )
 
-    async def update_acl_list_async(self, payload: UpdateNetworkACLListRequest) -> APIResponse[Dict]:
+    async def update_acl_list_async(
+        self, payload: UpdateNetworkACLListRequest
+    ) -> APIResponse[Dict]:
         """Asynchronously update a network ACL list."""
-        response = await self.client.call_async("updateNetworkACLList", payload.model_dump(exclude_none=True))
-        data = {}
-        if 'updatenetworkacllistresponse' in response:
-            data = response['updatenetworkacllistresponse']
-        return APIResponse[Dict](**{"data": data})
+        return await self._execute_async(
+            "updateNetworkACLList",
+            payload,
+            envelope="updatenetworkacllistresponse",
+        )

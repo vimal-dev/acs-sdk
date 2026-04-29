@@ -2,6 +2,7 @@ from pydantic import ValidationError
 import pytest
 
 from acs_sdk.acs import ApacheCloudStack, ApacheCloudStackClient
+from acs_sdk.schemas.config import ApacheCloudStackConfig
 
 
 def test_import():
@@ -47,3 +48,14 @@ def test_invalid_service_raises_attribute_error(config):
     with pytest.raises(AttributeError) as exc_info:
         acs.invalid_service
     assert "invalid_service not found" in str(exc_info.value)
+
+
+def test_invalid_conifg():
+    with pytest.raises(ValidationError):
+        config = ApacheCloudStackConfig(
+            api_endpoint="https://api.cloudstack.example.com/client/api",
+            api_key="key",
+            api_secret="secret",
+            timeout="asd",
+        )
+        ApacheCloudStack(config)

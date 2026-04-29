@@ -8,28 +8,20 @@ from ..schemas.response.base import APIResponse
 
 
 class NetworkOffering(BaseService):
-    
-    
     def list(self, payload: ListNetworkOfferingRequest) -> APIResponse[List[Dict]]:
         """Lists all available network offerings."""
-        response = self.client.call("listNetworkOfferings", payload.model_dump(exclude_none=True))
-        count = 0
-        data = []
-        if 'listnetworkofferingsresponse' in response:
-            response = response['listnetworkofferingsresponse']
-        if 'networkoffering' in response and response['networkoffering']:
-            data = response['networkoffering']
-            count = response['count']
-        return APIResponse[List[Dict]](**{"data": data, "count": count})
+        return self._execute(
+            "listNetworkOfferings",
+            payload,
+            envelope="listnetworkofferingsresponse",
+            entity="networkoffering",
+        )
 
     async def list_async(self, payload: ListNetworkOfferingRequest) -> APIResponse[List[Dict]]:
         """Asynchronously Lists network offerings."""
-        response = await self.client.call_async("listNetworkOfferings", payload.model_dump(exclude_none=True))
-        count = 0
-        data = []
-        if 'listnetworkofferingsresponse' in response:
-            response = response['listnetworkofferingsresponse']
-        if 'networkoffering' in response and response['networkoffering']:
-            data = response['networkoffering']
-            count = response['count']
-        return APIResponse[List[Dict]](**{"data": data, "count": count})
+        return await self._execute_async(
+            "listNetworkOfferings",
+            payload,
+            envelope="listnetworkofferingsresponse",
+            entity="networkoffering",
+        )

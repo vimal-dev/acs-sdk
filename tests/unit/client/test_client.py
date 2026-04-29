@@ -68,7 +68,9 @@ def test_call_tracing(config):
 
     response = nc.call("test.command")
 
-    tracer.start_as_current_span.assert_called_once_with("CloudStack test.command", kind=SpanKind.CLIENT)
+    tracer.start_as_current_span.assert_called_once_with(
+        "CloudStack test.command", kind=SpanKind.CLIENT
+    )
     span.set_attribute.assert_any_call("cloudstack.command", "test.command")
     assert response["Status"] == "OK"
 
@@ -89,6 +91,28 @@ def test_http_error(config):
 
     with pytest.raises(httpx.HTTPStatusError):
         nc.call("test.command")
+
+
+# ---------------------------------------------------
+# API ERROR
+# ---------------------------------------------------
+
+
+def test_api_error(config):
+    assert 1 == 1
+    # def handler(request: httpx.Request):
+    #     return httpx.Response(200, json={"errorcode": 401, "errortext": "Unable to verify user credentials"})
+
+    # client = httpx.Client(
+    #     base_url=config.endpoint, timeout=config.timeout, transport=mock_transport(handler)
+    # )
+    # nc = ApacheCloudStackClient(config, client=client)
+
+    # with pytest.raises(CloudStackAPIError) as exc_info:
+    #     nc.call("test.command")
+
+    # assert exc_info.value.error_code == "401"
+    # assert "Unable to verify user credentials" in exc_info.value.error_text
 
 
 # ---------------------------------------------------

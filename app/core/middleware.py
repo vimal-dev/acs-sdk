@@ -13,7 +13,6 @@ tracer = trace.get_tracer(__name__)
 
 
 class ObservabilityMiddleware(BaseHTTPMiddleware):
-
     async def dispatch(self, request, call_next):
         start_time = time.time()
 
@@ -28,10 +27,7 @@ class ObservabilityMiddleware(BaseHTTPMiddleware):
         set_request_context(request_id, user_id, tenant_id)
 
         # 🔥 Start trace span
-        with tracer.start_as_current_span(
-            f"{request.method} {request.url.path}"
-        ) as span:
-
+        with tracer.start_as_current_span(f"{request.method} {request.url.path}") as span:
             span.set_attribute("http.method", request.method)
             span.set_attribute("http.route", request.url.path)
             span.set_attribute("user.id", user_id)
@@ -50,9 +46,7 @@ class ObservabilityMiddleware(BaseHTTPMiddleware):
                 span.set_attribute("http.duration_ms", int(duration * 1000))
 
                 # 📤 Log response
-                logger.info(
-                    f"Response {response.status_code} in {duration:.3f}s"
-                )
+                logger.info(f"Response {response.status_code} in {duration:.3f}s")
 
                 # attach request id to response
                 response.headers["X-Request-ID"] = request_id

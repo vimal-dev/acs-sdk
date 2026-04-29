@@ -7,19 +7,16 @@ from acs_sdk.acs import ApacheCloudStack
 from app.core.logger import setup_logger
 from app.core.request_context import set_request_context
 
-load_dotenv()  # Load environment variables from .env file
-
-
 from opentelemetry import trace
 from opentelemetry.sdk.resources import Resource
 from opentelemetry.sdk.trace import TracerProvider
 from opentelemetry.sdk.trace.export import BatchSpanProcessor, ConsoleSpanExporter
 
+load_dotenv()  # Load environment variables from .env file
+
 
 def setup_tracing():
-    resource = Resource.create({
-        "service.name": "cloudstack-gateway"
-    })
+    resource = Resource.create({"service.name": "cloudstack-gateway"})
 
     provider = TracerProvider(resource=resource)
     trace.set_tracer_provider(provider)
@@ -40,7 +37,9 @@ def get_acs_client() -> ApacheCloudStack:
         api_secret=os.getenv("CLOUDSTACK_API_SECRET", "your-api-secret"),
         timeout=int(os.getenv("CLOUDSTACK_TIMEOUT", "30")),
     )
-    set_request_context(request_id="static-request-id", user_id="static-user-id", tenant_id="static-tenant-id")
+    set_request_context(
+        request_id="static-request-id", user_id="static-user-id", tenant_id="static-tenant-id"
+    )
     setup_tracing()
     tracer = get_tracer(__name__)
     logger = setup_logger()

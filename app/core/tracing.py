@@ -6,15 +6,11 @@ from opentelemetry.sdk.trace.export import BatchSpanProcessor, ConsoleSpanExport
 
 
 def setup_tracing():
-    resource = Resource.create({
-        "service.name": "cloudstack.app"
-    })
+    resource = Resource.create({"service.name": "cloudstack.app"})
 
     provider = TracerProvider(resource=resource)
     trace.set_tracer_provider(provider)
 
     exporter = ConsoleSpanExporter()
 
-    provider.add_span_processor(
-        BatchSpanProcessor(exporter)
-    )
+    provider.add_span_processor(BatchSpanProcessor(exporter))

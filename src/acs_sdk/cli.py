@@ -16,9 +16,11 @@ from acs_sdk.commands.region import list_regions
 
 @click.group()
 @click.version_option(version="0.1.0")
-@click.option('--endpoint', envvar='CLOUDSTACK_ENDPOINT', required=True, help='CloudStack API endpoint')
-@click.option('--api-key', envvar='CLOUDSTACK_API_KEY', required=True, help='API key')
-@click.option('--api-secret', envvar='CLOUDSTACK_API_SECRET', required=True, help='API secret')
+@click.option(
+    "--endpoint", envvar="CLOUDSTACK_ENDPOINT", required=True, help="CloudStack API endpoint"
+)
+@click.option("--api-key", envvar="CLOUDSTACK_API_KEY", required=True, help="API key")
+@click.option("--api-secret", envvar="CLOUDSTACK_API_SECRET", required=True, help="API secret")
 @click.pass_context
 def console(ctx, endpoint, api_key, api_secret):
     """Main entry point for the CloudStack CLI.
@@ -33,12 +35,10 @@ def console(ctx, endpoint, api_key, api_secret):
     """
     # Store config in context for child commands
     ctx.ensure_object(dict)
-    ctx.obj['config'] = ApacheCloudStackConfig(
-        api_endpoint=endpoint,
-        api_key=api_key,
-        api_secret=api_secret,
-        timeout=10
+    ctx.obj["config"] = ApacheCloudStackConfig(
+        api_endpoint=endpoint, api_key=api_key, api_secret=api_secret, timeout=10
     )
+
 
 console.add_command(list_service_offerings)
 console.add_command(list_regions)
@@ -47,5 +47,5 @@ console.add_command(list_vms)
 console.add_command(list_volumes)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     console()
