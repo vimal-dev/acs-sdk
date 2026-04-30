@@ -7,9 +7,11 @@ from acs_sdk.schemas.request.volume import (
     ChangeOfferingForVolumeRequest,
     CheckVolumeRequest,
     CreateVolumeRequest,
+    DeleteVolumeRequest,
     DestroyVolumeRequest,
     DetachVolumeRequest,
     ExtractVolumeRequest,
+    GetVolumeRequest,
     ListVolumesRequest,
 )
 
@@ -100,19 +102,19 @@ class Volume(BaseService):
             envelope="createvolumeresponse",
         )
 
-    def delete_volume(self, id: str) -> APIResponse[Dict]:
+    def delete_volume(self, payload: DeleteVolumeRequest) -> APIResponse[Dict]:
         """Deletes a detached disk volume."""
         return self._execute(
             "deleteVolume",
-            {"id": id},
+            payload,
             envelope="deletevolumeresponse",
         )
 
-    async def delete_volume_async(self, id: str) -> APIResponse[Dict]:
+    async def delete_volume_async(self, payload: DeleteVolumeRequest) -> APIResponse[Dict]:
         """Deletes a detached disk volume."""
         return await self._execute_async(
             "deleteVolume",
-            {"id": id},
+            payload,
             envelope="deletevolumeresponse",
         )
 
@@ -164,19 +166,19 @@ class Volume(BaseService):
             envelope="extractvolumeresponse",
         )
 
-    def get_volume_path(self, id: str) -> APIResponse[Dict]:
+    def get_volume_path(self, payload: GetVolumeRequest) -> APIResponse[Dict]:
         """Gets the path of a volume."""
         return self._execute(
             "getPathForVolume",
-            {"id": id},
+            payload,
             envelope="getpathforvolumeresponse",
         )
 
-    async def get_volume_path_async(self, id: str) -> APIResponse[Dict]:
+    async def get_volume_path_async(self, payload: GetVolumeRequest) -> APIResponse[Dict]:
         """Gets the path of a volume."""
         return await self._execute_async(
             "getPathForVolume",
-            {"id": id},
+            payload,
             envelope="getpathforvolumeresponse",
         )
 

@@ -4,6 +4,9 @@ from typing import Dict, List
 from acs_sdk.schemas.request.vpc import (
     CreatePrivateGatewayRequest,
     CreateStaticRouteRequest,
+    DeletePrivateGatewayRequest,
+    DeleteStaticRouteRequest,
+    DeleteVPCRequest,
     ListPrivateGatewayRequest,
     ListStaticRouteRequest,
     ListVPCRequest,
@@ -69,51 +72,55 @@ class VPC(BaseService):
             envelope="createvpcresponse",
         )
 
-    def delete_private_gateway(self, id: str) -> APIResponse[Dict]:
+    def delete_private_gateway(self, payload: DeletePrivateGatewayRequest) -> APIResponse[Dict]:
         """Deletes a Private gateway."""
         return self._execute(
             "deletePrivateGateway",
-            {"id": id},
+            payload,
             envelope="deleteprivategatewayresponse",
         )
 
-    async def delete_private_gateway_async(self, id: str) -> APIResponse[Dict]:
+    async def delete_private_gateway_async(
+        self, payload: DeletePrivateGatewayRequest
+    ) -> APIResponse[Dict]:
         """Asynchronously deletes a private gateway."""
         return await self._execute_async(
             "deletePrivateGateway",
-            {"id": id},
+            payload,
             envelope="deleteprivategatewayresponse",
         )
 
-    def delete_static_route(self, id: str) -> APIResponse[Dict]:
+    def delete_static_route(self, payload: DeleteStaticRouteRequest) -> APIResponse[Dict]:
         """Deletes a Static route."""
         return self._execute(
             "deleteStaticRoute",
-            {"id": id},
+            payload,
             envelope="deletestaticrouteresponse",
         )
 
-    async def delete_static_route_async(self, id: str) -> APIResponse[Dict]:
+    async def delete_static_route_async(
+        self, payload: DeleteStaticRouteRequest
+    ) -> APIResponse[Dict]:
         """Asynchronously deletes a static route."""
         return await self._execute_async(
             "deleteStaticRoute",
-            {"id": id},
+            payload,
             envelope="deletestaticrouteresponse",
         )
 
-    def delete_vpc(self, id: str) -> APIResponse[Dict]:
+    def delete_vpc(self, payload: DeleteVPCRequest) -> APIResponse[Dict]:
         """Deletes a VPC."""
         return self._execute(
             "deleteVPC",
-            {"id": id},
+            payload,
             envelope="deletevpcresponse",
         )
 
-    async def delete_vpc_async(self, id: str) -> APIResponse[Dict]:
+    async def delete_vpc_async(self, payload: DeleteVPCRequest) -> APIResponse[Dict]:
         """Asynchronously deletes a VPC."""
         return await self._execute_async(
             "deleteVPC",
-            {"id": id},
+            payload,
             envelope="deletevpcresponse",
         )
 

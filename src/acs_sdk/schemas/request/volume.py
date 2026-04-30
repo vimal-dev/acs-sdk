@@ -154,6 +154,10 @@ class CreateVolumeRequest(APIRequest):
         return self
 
 
+class DeleteVolumeRequest(APIRequest):
+    id: str = Field(..., description="ID of the volume")
+
+
 class DestroyVolumeRequest(APIRequest):
     id: str = Field(..., description="ID of the volume")
 
@@ -193,6 +197,10 @@ class ExtractVolumeRequest(APIRequest):
         None,
         description="The URL of the secondary storage where the volume will be extracted to. This parameter is required when mode is FTP_UPLOAD.",
     )
+
+
+class GetVolumeRequest(APIRequest):
+    id: str = Field(..., description="ID of the volume")
 
 
 class ListVolumesRequest(APIRequest):

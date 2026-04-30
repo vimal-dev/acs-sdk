@@ -81,6 +81,18 @@ class CreateVPCRequest(APIRequest):
     start: Optional[bool] = Field(None, description="Start VPC immediately (default: True)")
 
 
+class DeletePrivateGatewayRequest(APIRequest):
+    id: str = Field(..., description="ID of the Private Gateway to delete")
+
+
+class DeleteStaticRouteRequest(APIRequest):
+    id: str = Field(..., description="ID of the Static Route to delete")
+
+
+class DeleteVPCRequest(APIRequest):
+    id: str = Field(..., description="ID of the VPC to delete")
+
+
 class ListVPCRequest(APIRequest, PaginationMixin):
     id: Optional[str] = Field(None, description="List VPC by ID")
     name: Optional[str] = Field(None, description="List VPC by name")

@@ -14,7 +14,7 @@ if __name__ == "__main__":
     payload = ListUsageRecordsRequest(
         startdate="2025-04-01T00:00:00", enddate="2026-04-30T23:59:59"
     )
-    response = acs_client.vm.lis(payload)
+    response = acs_client.usage.list(payload)
     if response.is_ok:
         usage_records = response.data if response.data else []
         if not usage_records:
