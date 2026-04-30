@@ -7,9 +7,7 @@ from acs_sdk.schemas.request.base import APIRequest, PaginationMixin
 
 
 class AssignVolumeRequest(APIRequest):
-    volumeid: str = Field(
-        ..., alias="id", description="ID of the volume to be reassigned"
-    )
+    volumeid: str = Field(..., alias="id", description="ID of the volume to be reassigned")
 
     accountid: Optional[str] = Field(
         None,
@@ -51,9 +49,7 @@ class AttachVolumeRequest(APIRequest):
 
 
 class ChangeOfferingForVolumeRequest(APIRequest):
-    id: str = Field(
-        ..., description="ID of the volume for which to change the offering"
-    )
+    id: str = Field(..., description="ID of the volume for which to change the offering")
 
     diskofferingid: str = Field(
         ...,
@@ -96,13 +92,9 @@ class CheckVolumeRequest(APIRequest):
 class CreateVolumeRequest(APIRequest):
     name: str = Field(..., description="Name of the volume to be created")
 
-    diskofferingid: str = Field(
-        ..., alias="diskOfferingId", description="ID of the disk offering."
-    )
+    diskofferingid: str = Field(..., alias="diskOfferingId", description="ID of the disk offering.")
 
-    snapshotid: Optional[str] = Field(
-        None, alias="snapshotId", description="ID of the snapshot"
-    )
+    snapshotid: Optional[str] = Field(None, alias="snapshotId", description="ID of the snapshot")
 
     zoneid: str = Field(
         ..., alias="zoneId", description="ID of the zone in which to create the volume"
@@ -311,13 +303,10 @@ class ImportVolumeRequest(APIRequest):
 
 
 class ListElastistorVolumesRequest(APIRequest):
-    id: str = Field(
-        ..., alias="accountId", description="the ID of the account to list volumes for"
-    )
+    id: str = Field(..., alias="accountId", description="the ID of the account to list volumes for")
 
 
 class ListVolumesRequest(APIRequest, PaginationMixin):
-
     # Basic filters
     id: Optional[str] = Field(None, description="ID of the disk volume")
     ids: Optional[List[str]] = Field(
@@ -331,9 +320,7 @@ class ListVolumesRequest(APIRequest, PaginationMixin):
         None, description="List resources by account (requires domainid)"
     )
     domainid: Optional[str] = Field(None, alias="domainId", description="Domain ID")
-    isrecursive: Optional[bool] = Field(
-        None, alias="isRecursive", description="Include subdomains"
-    )
+    isrecursive: Optional[bool] = Field(None, alias="isRecursive", description="Include subdomains")
     projectid: Optional[str] = Field(None, alias="projectId", description="Project ID")
 
     # Resource filters
@@ -390,9 +377,7 @@ class ListVolumesRequest(APIRequest, PaginationMixin):
 
 
 class ListVolumesForImportRequest(APIRequest, PaginationMixin):
-    storageid: str = Field(
-        ..., alias="storageId", description="Storage pool ID (admin only)"
-    )
+    storageid: str = Field(..., alias="storageId", description="Storage pool ID (admin only)")
 
     # Basic filters
     keyword: Optional[str] = Field(None, description="Search keyword")
@@ -400,7 +385,6 @@ class ListVolumesForImportRequest(APIRequest, PaginationMixin):
 
 
 class ListVolumesUsageHistoryRequest(APIRequest, PaginationMixin):
-
     # Basic filters
     id: Optional[str] = Field(None, description="ID of the disk volume")
     ids: Optional[List[str]] = Field(
@@ -502,9 +486,7 @@ class ResizeVolumeFromBackupAndAttachToVMRequest(APIRequest):
 
 
 class UnmanageVolumeRequest(APIRequest):
-    id: str = Field(
-        ..., alias="volumeId", description="The ID of the volume to unmanage"
-    )
+    id: str = Field(..., alias="volumeId", description="The ID of the volume to unmanage")
 
 
 class UpdateVolumeRequest(APIRequest):
@@ -533,9 +515,7 @@ class UpdateVolumeRequest(APIRequest):
 
     chaininfo: Optional[str] = Field(None, description="Chain info of the volume")
 
-    customid: Optional[str] = Field(
-        None, description="Custom resource ID (Root Admin only)"
-    )
+    customid: Optional[str] = Field(None, description="Custom resource ID (Root Admin only)")
 
     state: Optional[str] = Field(None, description="State of the volume")
 
@@ -569,13 +549,9 @@ class UploadVolumeRequest(APIRequest):
     # ---------------------------
     # OPTIONAL
     # ---------------------------
-    checksum: Optional[str] = Field(
-        None, description="MD5 or {SHA-256} prefixed checksum"
-    )
+    checksum: Optional[str] = Field(None, description="MD5 or {SHA-256} prefixed checksum")
 
-    diskofferingid: Optional[str] = Field(
-        None, description="Must be custom disk offering"
-    )
+    diskofferingid: Optional[str] = Field(None, description="Must be custom disk offering")
 
     account: Optional[str] = Field(None, description="Account name (requires domainid)")
 

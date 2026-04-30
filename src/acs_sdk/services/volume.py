@@ -41,9 +41,7 @@ class Volume(BaseService):
             envelope="assignvolumeresponse",
         )
 
-    async def assign_volume_async(
-        self, payload: AssignVolumeRequest
-    ) -> APIResponse[Dict]:
+    async def assign_volume_async(self, payload: AssignVolumeRequest) -> APIResponse[Dict]:
         """Changes ownership of a Volume from one account to another."""
         return await self._execute_async(
             "assignVolume",
@@ -59,9 +57,7 @@ class Volume(BaseService):
             envelope="attachvolumeresponse",
         )
 
-    async def attach_volume_async(
-        self, payload: AttachVolumeRequest
-    ) -> APIResponse[Dict]:
+    async def attach_volume_async(self, payload: AttachVolumeRequest) -> APIResponse[Dict]:
         """Attaches a Volume to a Compute Instance."""
         return await self._execute_async(
             "attachVolume",
@@ -69,9 +65,7 @@ class Volume(BaseService):
             envelope="attachvolumeresponse",
         )
 
-    def change_offering(
-        self, payload: ChangeOfferingForVolumeRequest
-    ) -> APIResponse[Dict]:
+    def change_offering(self, payload: ChangeOfferingForVolumeRequest) -> APIResponse[Dict]:
         """Change disk offering of the volume and also an option to auto migrate if required to apply the new disk offering."""
         return self._execute(
             "changeOfferingForVolume",
@@ -97,9 +91,7 @@ class Volume(BaseService):
             envelope="checkvolumeresponse",
         )
 
-    async def check_volume_async(
-        self, payload: CheckVolumeRequest
-    ) -> APIResponse[Dict]:
+    async def check_volume_async(self, payload: CheckVolumeRequest) -> APIResponse[Dict]:
         """Check the volume for any errors or leaks and also repairs when repair parameter is passed, this is currently supported for KVM only."""
         return await self._execute_async(
             "checkVolume",
@@ -115,9 +107,7 @@ class Volume(BaseService):
             envelope="createvolumeresponse",
         )
 
-    async def create_volume_async(
-        self, payload: CreateVolumeRequest
-    ) -> APIResponse[Dict]:
+    async def create_volume_async(self, payload: CreateVolumeRequest) -> APIResponse[Dict]:
         """Creates a disk volume from a disk offering. This disk volume must still be attached to a virtual machine to make use of it."""
         return await self._execute_async(
             "createVolume",
@@ -133,9 +123,7 @@ class Volume(BaseService):
             envelope="deletevolumeresponse",
         )
 
-    async def delete_volume_async(
-        self, payload: DeleteVolumeRequest
-    ) -> APIResponse[Dict]:
+    async def delete_volume_async(self, payload: DeleteVolumeRequest) -> APIResponse[Dict]:
         """Deletes a detached disk volume."""
         return await self._execute_async(
             "deleteVolume",
@@ -151,9 +139,7 @@ class Volume(BaseService):
             envelope="destroyvolumeresponse",
         )
 
-    async def destroy_volume_async(
-        self, payload: DestroyVolumeRequest
-    ) -> APIResponse[Dict]:
+    async def destroy_volume_async(self, payload: DestroyVolumeRequest) -> APIResponse[Dict]:
         """Destroys a detached disk volume."""
         return await self._execute_async(
             "destroyVolume",
@@ -169,9 +155,7 @@ class Volume(BaseService):
             envelope="detachvolumeresponse",
         )
 
-    async def detach_volume_async(
-        self, payload: DetachVolumeRequest
-    ) -> APIResponse[Dict]:
+    async def detach_volume_async(self, payload: DetachVolumeRequest) -> APIResponse[Dict]:
         """Detaches a volume from a virtual machine."""
         return await self._execute_async(
             "detachVolume",
@@ -187,9 +171,7 @@ class Volume(BaseService):
             envelope="extractvolumeresponse",
         )
 
-    async def extract_volume_async(
-        self, payload: ExtractVolumeRequest
-    ) -> APIResponse[Dict]:
+    async def extract_volume_async(self, payload: ExtractVolumeRequest) -> APIResponse[Dict]:
         """Extracts a volume. Used for backup or migration purposes."""
         return await self._execute_async(
             "extractVolume",
@@ -205,9 +187,7 @@ class Volume(BaseService):
             envelope="getpathforvolumeresponse",
         )
 
-    async def get_path_for_volume_async(
-        self, payload: GetVolumeRequest
-    ) -> APIResponse[Dict]:
+    async def get_path_for_volume_async(self, payload: GetVolumeRequest) -> APIResponse[Dict]:
         """Asyncronously Gets the path of a volume."""
         return await self._execute_async(
             "getPathForVolume",
@@ -235,9 +215,7 @@ class Volume(BaseService):
             envelope="getuploadparamsforvolumeresponse",
         )
 
-    def get_volume_iscsi_name(
-        self, payload: GetVolumeIscsiNameRequest
-    ) -> APIResponse[Dict]:
+    def get_volume_iscsi_name(self, payload: GetVolumeIscsiNameRequest) -> APIResponse[Dict]:
         """Get Volume's iSCSI Name."""
         return self._execute(
             "getVolumeiScsiName",
@@ -263,9 +241,7 @@ class Volume(BaseService):
             envelope="importvolumeresponse",
         )
 
-    async def import_volume_async(
-        self, payload: ImportVolumeRequest
-    ) -> APIResponse[Dict]:
+    async def import_volume_async(self, payload: ImportVolumeRequest) -> APIResponse[Dict]:
         """Asyncronously Import an unmanaged volume from a storage pool on a host into CloudStack."""
         return await self._execute_async(
             "importVolume",
@@ -273,9 +249,7 @@ class Volume(BaseService):
             envelope="importvolumeresponse",
         )
 
-    def list_elastistor_volumes(
-        self, payload: ListElastistorVolumesRequest
-    ) -> APIResponse[Dict]:
+    def list_elastistor_volumes(self, payload: ListElastistorVolumesRequest) -> APIResponse[Dict]:
         """Lists the volumes of elastistor."""
         return self._execute(
             "listElastistorVolume",
@@ -313,9 +287,7 @@ class Volume(BaseService):
             entity="volume",
         )
 
-    def list_volumes_for_import(
-        self, payload: ListVolumesForImportRequest
-    ) -> APIResponse[Dict]:
+    def list_volumes_for_import(self, payload: ListVolumesForImportRequest) -> APIResponse[Dict]:
         """Lists unmanaged volumes on a storage pool."""
         return self._execute(
             "listVolumesForImport",
@@ -365,9 +337,7 @@ class Volume(BaseService):
             envelope="migratevolumeresponse",
         )
 
-    async def migrate_volume_async(
-        self, payload: MigrateVolumeRequest
-    ) -> APIResponse[Dict]:
+    async def migrate_volume_async(self, payload: MigrateVolumeRequest) -> APIResponse[Dict]:
         """Asyncronously Migrate a volume to a different storage pool."""
         return await self._execute_async(
             "migrateVolume",
@@ -383,9 +353,7 @@ class Volume(BaseService):
             envelope="recovervolumeresponse",
         )
 
-    async def recover_volume_async(
-        self, payload: RecoverVolumeRequest
-    ) -> APIResponse[Dict]:
+    async def recover_volume_async(self, payload: RecoverVolumeRequest) -> APIResponse[Dict]:
         """Asyncronously Recover a volume."""
         return await self._execute_async(
             "recoverVolume",
@@ -401,9 +369,7 @@ class Volume(BaseService):
             envelope="resizevolumeresponse",
         )
 
-    async def resize_volume_async(
-        self, payload: ResizeVolumeRequest
-    ) -> APIResponse[Dict]:
+    async def resize_volume_async(self, payload: ResizeVolumeRequest) -> APIResponse[Dict]:
         """Asyncronously Resize a volume."""
         return await self._execute_async(
             "resizeVolume",
@@ -439,9 +405,7 @@ class Volume(BaseService):
             envelope="unmanagevolumeresponse",
         )
 
-    async def unmanage_volume_async(
-        self, payload: UnmanageVolumeRequest
-    ) -> APIResponse[Dict]:
+    async def unmanage_volume_async(self, payload: UnmanageVolumeRequest) -> APIResponse[Dict]:
         """Asyncronously Unmanage a volume on storage pool."""
         return await self._execute_async(
             "unmanageVolume",
@@ -457,9 +421,7 @@ class Volume(BaseService):
             envelope="updatevolumeresponse",
         )
 
-    async def update_volume_async(
-        self, payload: UpdateVolumeRequest
-    ) -> APIResponse[Dict]:
+    async def update_volume_async(self, payload: UpdateVolumeRequest) -> APIResponse[Dict]:
         """Asyncronously Update a volume."""
         return await self._execute_async(
             "updateVolume",
@@ -475,9 +437,7 @@ class Volume(BaseService):
             envelope="uploadvolumeresponse",
         )
 
-    async def upload_volume_async(
-        self, payload: UploadVolumeRequest
-    ) -> APIResponse[Dict]:
+    async def upload_volume_async(self, payload: UploadVolumeRequest) -> APIResponse[Dict]:
         """Asyncronously Upload a volume."""
         return await self._execute_async(
             "uploadVolume",
