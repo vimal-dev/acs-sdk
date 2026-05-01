@@ -4,6 +4,7 @@ from typing import Dict, List
 from acs_sdk.schemas.request.vpc import (
     CreatePrivateGatewayRequest,
     CreateStaticRouteRequest,
+    CreateVPCRequest,
     DeletePrivateGatewayRequest,
     DeleteStaticRouteRequest,
     DeleteVPCRequest,
@@ -56,7 +57,7 @@ class VPC(BaseService):
             envelope="createstaticrouteresponse",
         )
 
-    def create_vpc(self, payload: CreateStaticRouteRequest) -> APIResponse[Dict]:
+    def create_vpc(self, payload: CreateVPCRequest) -> APIResponse[Dict]:
         """Creates a VPC."""
         return self._execute(
             "createVPC",
@@ -64,7 +65,7 @@ class VPC(BaseService):
             envelope="createvpcresponse",
         )
 
-    async def create_vpc_async(self, payload: CreateStaticRouteRequest) -> APIResponse[Dict]:
+    async def create_vpc_async(self, payload: CreateVPCRequest) -> APIResponse[Dict]:
         """Asynchronously Creates a VPC."""
         return await self._execute_async(
             "createVPC",
