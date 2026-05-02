@@ -108,6 +108,7 @@ class Network(BaseService):
             "createNetwork",
             payload,
             envelope="createnetworkresponse",
+            entity="network",
         )
 
     async def create_async(self, payload: CreateNetworkRequest) -> APIResponse[Dict]:
@@ -123,6 +124,7 @@ class Network(BaseService):
             "createNetwork",
             payload,
             envelope="createnetworkresponse",
+            entity="network",
         )
 
     def delete(self, payload: DeleteNetworkRequest) -> APIResponse[Dict]:

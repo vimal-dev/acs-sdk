@@ -8,18 +8,18 @@ class CreateNetworkRequest(APIRequest):
 
     # Required fields
     name: str = Field(..., description="The name of the network")
-    displaytext: str = Field(
-        ..., alias="displayText", description="The display text of the network"
-    )
     networkofferingid: str = Field(
         ..., alias="networkOfferingId", description="The network offering ID"
     )
     zoneid: str = Field(..., alias="zoneId", description="The zone ID")
+    gateway: str = Field(..., description="The gateway of the network")
+    netmask: str = Field(..., description="The netmask of the network")
 
     # Optional fields
+    displaytext: Optional[str] = Field(
+        None, alias="displayText", description="The display text of the network"
+    )
     vpcid: Optional[str] = Field(None, alias="vpcId", description="The VPC ID")
-    gateway: Optional[str] = Field(None, description="The gateway of the network")
-    netmask: Optional[str] = Field(None, description="The netmask of the network")
     startip: Optional[str] = Field(None, alias="startIp", description="The start IP of the network")
     endip: Optional[str] = Field(None, alias="endIp", description="The end IP of the network")
     aclid: Optional[str] = Field(None, alias="aclId", description="The ACL ID")

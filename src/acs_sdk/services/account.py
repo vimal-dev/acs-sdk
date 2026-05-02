@@ -1,4 +1,4 @@
-# services/job.py
+# services/account.py
 from typing import Dict, List
 
 from acs_sdk.schemas.request.account import (
@@ -24,6 +24,7 @@ class Account(BaseService):
             "createAccount",
             payload,
             envelope="createaccountresponse",
+            entity="account",
         )
 
     async def create_account_async(self, payload: CreateAccountRequest) -> APIResponse[Dict]:
@@ -32,6 +33,7 @@ class Account(BaseService):
             "createAccount",
             payload,
             envelope="createaccountresponse",
+            entity="account",
         )
 
     def list(self, payload: ListAccountsRequest) -> APIResponse[List[Dict]]:

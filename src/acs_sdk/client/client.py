@@ -162,6 +162,14 @@ class ApacheCloudStackClient(ClientContract):
                 "CloudStack request completed: %s %s", response.status_code, response.url
             )
             return response.json()
+        except httpx.HTTPStatusError as exc:
+            span = trace.get_current_span()
+            span.record_exception(exc)
+            span.set_status(Status(StatusCode.ERROR))
+            span.set_attribute("http.status_code", exc.response.status_code)
+            span.set_attribute("http.error_message", exc.response.text)
+            self.logger.error("CloudStack request failed: %s", exc, exc_info=True)
+            raise
         except Exception as exc:
             span = trace.get_current_span()
             span.record_exception(exc)
@@ -200,6 +208,14 @@ class ApacheCloudStackClient(ClientContract):
                     response.url,
                 )
                 return response.json()
+        except httpx.HTTPStatusError as exc:
+            span = trace.get_current_span()
+            span.record_exception(exc)
+            span.set_status(Status(StatusCode.ERROR))
+            span.set_attribute("http.status_code", exc.response.status_code)
+            span.set_attribute("http.error_message", exc.response.text)
+            self.logger.error("CloudStack request failed: %s", exc, exc_info=True)
+            raise
         except Exception as exc:
             span = trace.get_current_span()
             span.record_exception(exc)
@@ -293,6 +309,14 @@ class ApacheCloudStackAsyncClient(ClientContract):
                 response.url,
             )
             return response.json()
+        except httpx.HTTPStatusError as exc:
+            span = trace.get_current_span()
+            span.record_exception(exc)
+            span.set_status(Status(StatusCode.ERROR))
+            span.set_attribute("http.status_code", exc.response.status_code)
+            span.set_attribute("http.error_message", exc.response.text)
+            self.logger.error("CloudStack request failed: %s", exc, exc_info=True)
+            raise
         except Exception as exc:
             span = trace.get_current_span()
             span.record_exception(exc)
