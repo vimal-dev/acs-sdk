@@ -1,6 +1,3 @@
-from pprint import pprint
-import sys
-
 import click
 import httpx
 
@@ -42,10 +39,13 @@ def get_default_vpc_network_offering(acs_client, zone_id):
         return response.data[0]
     return None
 
+
 def get_network_acl(acs_client, vpc_id, account, domain_id):
     """Get the default network ACL ID for the account."""
     # This is a placeholder implementation. You may need to implement logic to find the correct ACL ID.
-    payload = ListNetworkACLListsRequest(account=account, domainid=domain_id, vpcId=vpc_id, name="default_allow")
+    payload = ListNetworkACLListsRequest(
+        account=account, domainid=domain_id, vpcId=vpc_id, name="default_allow"
+    )
     response = acs_client.networkacl.list_acl_lists(payload)
     if response.is_ok and response.data:
         return response.data[0]
@@ -84,14 +84,13 @@ def deploy_vpc(account, domain_id, zone_id, vpc_name, vpc_cidr, subnet1_cidr, su
 
     # Create VPC
     vpc_payload = CreateVPCRequest(
-        name=f"default-vpc-auto",
+        name="default-vpc-auto",
         # display_text=f"Default VPC",
         cidr=vpc_cidr,
         vpcOfferingId=vpc_offering["id"],
         zoneId=zone_id,
         account=account,
         domainId=domain_id,
-
         # name=f"default-vpc-auto",
         # display_text=f"Default VPC",
         # cidr="172.16.0.0/16",
@@ -117,7 +116,7 @@ def deploy_vpc(account, domain_id, zone_id, vpc_name, vpc_cidr, subnet1_cidr, su
     vpc = vpc_response.data
     vpc_id = vpc["id"]
     click.echo(f"✅ Created VPC: (ID: {vpc_id})")
-    #click.echo(f"✅ Created VPC: {vpc['name']} (ID: {vpc_id})")
+    # click.echo(f"✅ Created VPC: {vpc['name']} (ID: {vpc_id})")
 
     # Get default network offering for VPC networks
     network_offering = get_default_vpc_network_offering(acs_client, zone_id)
@@ -131,7 +130,7 @@ def deploy_vpc(account, domain_id, zone_id, vpc_name, vpc_cidr, subnet1_cidr, su
     if not acl:
         click.echo("Error: No ACL list available for VPC networks", err=True)
         return
-    
+
     acl_id = acl["id"]
     click.echo(f"Using ACL list: {acl['name']} (ID: {acl_id})")
 
@@ -139,7 +138,7 @@ def deploy_vpc(account, domain_id, zone_id, vpc_name, vpc_cidr, subnet1_cidr, su
     subnet1_info = cidr_info(subnet1_cidr)
     subnet1_payload = CreateNetworkRequest(
         name=f"{vpc_name}-subnet1",
-        #displayText=f"Subnet 1 for {vpc_name}",
+        # displayText=f"Subnet 1 for {vpc_name}",
         networkOfferingId=network_offering["id"],
         zoneId=zone_id,
         vpcId=vpc_id,
@@ -161,7 +160,7 @@ def deploy_vpc(account, domain_id, zone_id, vpc_name, vpc_cidr, subnet1_cidr, su
     subnet2_info = cidr_info(subnet2_cidr)
     subnet2_payload = CreateNetworkRequest(
         name=f"{vpc_name}-subnet2",
-        #displayText=f"Subnet 2 for {vpc_name}",
+        # displayText=f"Subnet 2 for {vpc_name}",
         networkOfferingId=network_offering["id"],
         zoneId=zone_id,
         vpcId=vpc_id,

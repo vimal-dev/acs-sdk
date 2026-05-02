@@ -38,14 +38,18 @@ class CreateVPCRequest(APIRequest):
 
     # CIDR (depends on version / mode)
     cidr: Optional[str] = Field(None, description="CIDR of the VPC (required in most setups)")
-    cidrsize: Optional[int] = Field(None, alias="cidrSize", description="CIDR size (used in routed mode VPCs)")
+    cidrsize: Optional[int] = Field(
+        None, alias="cidrSize", description="CIDR size (used in routed mode VPCs)"
+    )
 
     # Metadata
     displaytext: Optional[str] = Field(
         None, alias="displayText", description="Display text of the VPC (defaults to name)"
     )
 
-    networkdomain: Optional[str] = Field(None, alias="networkDomain", description="Network domain for the VPC")
+    networkdomain: Optional[str] = Field(
+        None, alias="networkDomain", description="Network domain for the VPC"
+    )
 
     # Account / Domain / Project
     account: Optional[str] = Field(
@@ -55,7 +59,9 @@ class CreateVPCRequest(APIRequest):
     projectid: Optional[str] = Field(None, alias="projectId", description="Project ID")
 
     # Visibility
-    fordisplay: Optional[bool] = Field(None, alias="forDisplay", description="Whether VPC is visible to end users")
+    fordisplay: Optional[bool] = Field(
+        None, alias="forDisplay", description="Whether VPC is visible to end users"
+    )
 
     # DNS
     dns1: Optional[str] = Field(None, description="Primary IPv4 DNS")
@@ -64,18 +70,24 @@ class CreateVPCRequest(APIRequest):
     ip6dns2: Optional[str] = Field(None, description="Secondary IPv6 DNS")
 
     # Advanced networking
-    publicmtu: Optional[int] = Field(None, alias="publicMtu", description="MTU for public interfaces")
+    publicmtu: Optional[int] = Field(
+        None, alias="publicMtu", description="MTU for public interfaces"
+    )
 
     sourcenatipaddress: Optional[str] = Field(
         None, alias="sourceNatIpAddress", description="Custom source NAT IP for VPC router"
     )
 
-    userouteripresolver: Optional[bool] = Field(None, alias="useRouterIpResolver", description="Use router IP as DNS resolver")
+    userouteripresolver: Optional[bool] = Field(
+        None, alias="useRouterIpResolver", description="Use router IP as DNS resolver"
+    )
 
     # BGP / routing (advanced setups)
     asnumber: Optional[int] = Field(None, alias="asNumber", description="AS number for VPC tiers")
 
-    bgppeerids: Optional[List[str]] = Field(None, alias="bgpPeerIds", description="List of BGP peer IDs")
+    bgppeerids: Optional[List[str]] = Field(
+        None, alias="bgpPeerIds", description="List of BGP peer IDs"
+    )
 
     # Lifecycle
     start: Optional[bool] = Field(None, description="Start VPC immediately (default: True)")
