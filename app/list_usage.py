@@ -29,4 +29,5 @@ if __name__ == "__main__":
             click.echo(f"   Usage Hours: {usage_record.get('usage')}")
             click.echo()
     else:
-        acs_client.logger.error(f"Error initiating cleanup: {response.error}")
+        print(response.error)
+        #acs_client.logger.error(f"Error initiating cleanup: {response.error}")

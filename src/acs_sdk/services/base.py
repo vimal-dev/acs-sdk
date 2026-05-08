@@ -3,14 +3,14 @@
 This module provides the BaseService class that acts as a foundation for
 service implementations that communicate with the CloudStack API.
 """
-
+from httpx import HTTPStatusError
 from typing import Dict, List, Optional
 
 from pydantic import BaseModel
 
 from acs_sdk.client.contract import ClientContract
 from acs_sdk.core.response_mapper import DefaultResponseMapper, ResponseMapper
-from acs_sdk.schemas.response.base import APIResponse
+from acs_sdk.schemas.response.base import APIError, APIResponse
 
 
 class BaseService:
@@ -67,6 +67,23 @@ class BaseService:
                 return APIResponse[List[Dict]](data=data, count=count)
             return APIResponse[Dict](data=data)
         return APIResponse[Dict](data=response_data)
+    
+    @staticmethod
+    def _error(response_data: Dict) -> APIResponse:
+        """
+        Wraps the error response data in an APIResponse object, handling both single items and lists.
+        Args:
+            response_data (Dict): The raw response data extracted from the API response.
+        Returns:
+            APIResponse: The API response wrapped in an APIResponse object.
+        """
+        return APIResponse[None](
+            status="ERROR",
+            data=None,
+            errors=[
+                APIError(Number=response_data.get("cserrorcode", response_data.get("errorcode", "")), Text=response_data.get("errortext", ""))
+            ]
+        )
 
     def _execute(
         self,
@@ -86,9 +103,14 @@ class BaseService:
         Returns:
             APIResponse: The API response wrapped in an APIResponse object.
         """
-        response = self.client.call(command, payload.model_dump(exclude_none=True))
-        response_data = self._extract_response(response, envelope)
-        return self._wrap(response_data, entity)
+        try:
+            response = self.client.call(command, payload.model_dump(exclude_none=True))
+            response_data = self._extract_response(response, envelope)
+            return self._wrap(response_data, entity)
+        except HTTPStatusError as e:
+            response = e.response.json()
+            response_data = self._extract_response(response, envelope)
+            return self._error(response_data)
 
     async def _execute_async(
         self,
@@ -107,6 +129,11 @@ class BaseService:
         Returns:
             APIResponse: The API response wrapped in an APIResponse object.
         """
-        response = await self.client.call_async(command, payload.model_dump(exclude_none=True))
-        response_data = self._extract_response(response, envelope)
-        return self._wrap(response_data, entity)
+        try:
+            response = await self.client.call_async(command, payload.model_dump(exclude_none=True))
+            response_data = self._extract_response(response, envelope)
+            return self._wrap(response_data, entity)
+        except HTTPStatusError as e:
+            response = e.response.json()
+            response_data = self._extract_response(response, envelope)
+            return self._error(response_data)

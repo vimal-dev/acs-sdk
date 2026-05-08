@@ -15,7 +15,7 @@ class CloudStackAPIError(Exception):
         self.error_code = error_code
         self.error_text = error_text
         self.response = response
-        message = "CloudStack API Error"
+        message = "[CloudStack API Error]"
         if error_code:
             message += f" {error_code}"
         if error_text:
