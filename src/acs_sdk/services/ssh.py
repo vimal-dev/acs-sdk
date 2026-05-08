@@ -19,6 +19,7 @@ class SSH(BaseService):
             "createSSHKeyPair",
             payload,
             envelope="createsshkeypairresponse",
+            entity="keypair",
         )
 
     async def create_ssh_key_pair_async(
@@ -29,6 +30,7 @@ class SSH(BaseService):
             "createSSHKeyPair",
             payload,
             envelope="createsshkeypairresponse",
+            entity="keypair",
         )
 
     def delete_ssh_key_pair(self, payload: DeleteSSHKeyPairRequest) -> APIResponse[Dict]:
@@ -55,7 +57,7 @@ class SSH(BaseService):
             "listSSHKeyPairs",
             payload,
             envelope="listsshkeypairsresponse",
-            entity="sshkeypair",
+            entity="keypair",
         )
 
     async def list_ssh_key_pairs_async(
@@ -66,7 +68,7 @@ class SSH(BaseService):
             "listSSHKeyPairs",
             payload,
             envelope="listsshkeypairsresponse",
-            entity="sshkeypair",
+            entity="keypair",
         )
 
     def register_ssh_key_pair(self, payload: RegisterSSHKeyPairRequest) -> APIResponse[Dict]:
