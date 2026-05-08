@@ -10,6 +10,7 @@ from pydantic import BaseModel
 
 from acs_sdk.client.contract import ClientContract
 from acs_sdk.core.response_mapper import DefaultResponseMapper, ResponseMapper
+from acs_sdk.exceptions import CloudStackAPIError
 from acs_sdk.schemas.response.base import APIError, APIResponse
 
 
@@ -77,13 +78,18 @@ class BaseService:
         Returns:
             APIResponse: The API response wrapped in an APIResponse object.
         """
-        return APIResponse[None](
-            status="ERROR",
-            data=None,
-            errors=[
-                APIError(Number=response_data.get("cserrorcode", response_data.get("errorcode", "")), Text=response_data.get("errortext", ""))
-            ]
+        raise CloudStackAPIError(
+            error_code=response_data.get("cserrorcode", response_data.get("errorcode", "")),
+            error_text=response_data.get("errortext", ""),
+            response=response_data
         )
+        # return APIResponse[None](
+        #     status="ERROR",
+        #     data=None,
+        #     errors=[
+        #         APIError(Number=response_data.get("cserrorcode", response_data.get("errorcode", "")), Text=response_data.get("errortext", ""))
+        #     ]
+        # )
 
     def _execute(
         self,

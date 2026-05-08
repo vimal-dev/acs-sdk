@@ -8,7 +8,7 @@ class CloudStackAPIError(Exception):
 
     def __init__(
         self,
-        error_code: Optional[str] = None,
+        error_code: Optional[str | int] = None,
         error_text: Optional[str] = None,
         response: Optional[dict] = None,
     ):
