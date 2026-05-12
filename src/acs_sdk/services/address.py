@@ -45,6 +45,7 @@ class Address(BaseService):
             "associateIpAddress",
             payload,
             envelope="associateipaddressresponse",
+            entity="publicipaddress",
         )
 
     async def associate_ip_address_async(
@@ -55,6 +56,7 @@ class Address(BaseService):
             "associateIpAddress",
             payload,
             envelope="associateipaddressresponse",
+            entity="publicipaddress",
         )
 
     def disassociate_ip_address(self, payload: DisassociateIpAddressRequest) -> APIResponse[Dict]:
@@ -81,6 +83,7 @@ class Address(BaseService):
             "updateIpAddress",
             payload,
             envelope="updateipaddressresponse",
+            entity="publicipaddress",
         )
 
     async def update_ip_address_async(self, payload: UpdateIpAddressRequest) -> APIResponse[Dict]:
@@ -89,6 +92,7 @@ class Address(BaseService):
             "updateIpAddress",
             payload,
             envelope="updateipaddressresponse",
+            entity="publicipaddress",
         )
 
     def release_ip_address(self, payload: ReleaseIpAddressRequest) -> APIResponse[Dict]:
@@ -113,6 +117,7 @@ class Address(BaseService):
             "reserveIpAddress",
             payload,
             envelope="reserveipaddressresponse",
+            entity="publicipaddress",
         )
 
     async def reserve_ip_address_async(self, payload: ReserveIpAddressRequest) -> APIResponse[Dict]:
@@ -121,6 +126,7 @@ class Address(BaseService):
             "reserveIpAddress",
             payload,
             envelope="reserveipaddressresponse",
+            entity="publicipaddress",
         )
 
     def acquire_pod_ip_address(self, payload: AcquirePodIpAddressRequest) -> APIResponse[Dict]:
