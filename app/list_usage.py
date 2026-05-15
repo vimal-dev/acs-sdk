@@ -30,4 +30,4 @@ if __name__ == "__main__":
             click.echo()
     else:
         print(response.error)
-        #acs_client.logger.error(f"Error initiating cleanup: {response.error}")
+        # acs_client.logger.error(f"Error initiating cleanup: {response.error}")

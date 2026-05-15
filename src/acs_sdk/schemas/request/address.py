@@ -56,7 +56,7 @@ class ListPublicIpAddressesRequest(APIRequest, PaginationMixin):
     issourcenat: Optional[bool] = Field(
         None,
         alias="isSourceNat",
-        description="List only source NAT IP addresses. If false, list only non-source NAT IP"
+        description="List only source NAT IP addresses. If false, list only non-source NAT IP",
     )
     isstaticnat: Optional[bool] = Field(
         None,
@@ -67,7 +67,9 @@ class ListPublicIpAddressesRequest(APIRequest, PaginationMixin):
     listall: Optional[bool] = Field(
         False, alias="listAll", description="List all resources caller is authorized to see"
     )
-    networkid: Optional[str] = Field(None, alias="networkId", description="List IP addresses by network ID")
+    networkid: Optional[str] = Field(
+        None, alias="networkId", description="List IP addresses by network ID"
+    )
     physicalnetworkid: Optional[str] = Field(
         None, alias="physicalNetworkId", description="List IP addresses by physical network ID"
     )
@@ -86,6 +88,7 @@ class ListPublicIpAddressesRequest(APIRequest, PaginationMixin):
 
 class AssociateIpAddressRequest(APIRequest):
     """Request to associate an IP address to a network."""
+
     account: Optional[str] = Field(None, description="The account that will own the IP")
     domainid: Optional[str] = Field(None, alias="domainId", description="The domain ID")
     fordisplay: Optional[bool] = Field(
@@ -99,33 +102,49 @@ class AssociateIpAddressRequest(APIRequest):
     isportable: Optional[bool] = Field(
         None,
         alias="isPortable",
-        description="should be set to true if public IP is required to be transferable across zones, if not specified defaults to false"
+        description="should be set to true if public IP is required to be transferable across zones, if not specified defaults to false",
     )
-    networkid: Optional[str] = Field(None, alias="networkId", description="The network this IP address should be associated to.")
-    projectid: Optional[str] = Field(None, alias="projectId", description="Deploy VM for the project")
-    regionid: Optional[str] = Field(None, alias="regionId", description="The region ID from where portable IP is to be associated.")
-    vpcid: Optional[str] = Field(None, alias="vpcId", description="The VPC you want the IP address to be associated with")
-    zoneid: Optional[str] = Field(None, alias="zoneId", description="The ID of the availability zone you want to acquire an public IP address from")
+    networkid: Optional[str] = Field(
+        None, alias="networkId", description="The network this IP address should be associated to."
+    )
+    projectid: Optional[str] = Field(
+        None, alias="projectId", description="Deploy VM for the project"
+    )
+    regionid: Optional[str] = Field(
+        None,
+        alias="regionId",
+        description="The region ID from where portable IP is to be associated.",
+    )
+    vpcid: Optional[str] = Field(
+        None, alias="vpcId", description="The VPC you want the IP address to be associated with"
+    )
+    zoneid: Optional[str] = Field(
+        None,
+        alias="zoneId",
+        description="The ID of the availability zone you want to acquire an public IP address from",
+    )
 
 
 class DisassociateIpAddressRequest(APIRequest):
     """Request to disassociate an IP address."""
-    id: str = Field(..., description="The ID of the public IP address to disassociate. Mutually exclusive with the ipaddress parameter")
+
+    id: str = Field(
+        ...,
+        description="The ID of the public IP address to disassociate. Mutually exclusive with the ipaddress parameter",
+    )
     ipaddress: Optional[str] = Field(
-        None, alias="ipAddress", description="IP Address to be disassociated. Mutually exclusive with the id parameter"
+        None,
+        alias="ipAddress",
+        description="IP Address to be disassociated. Mutually exclusive with the id parameter",
     )
 
     @model_validator(mode="after")
     def validate_mutually_exclusive(self):
         if self.id and self.ipaddress:
-            raise ValueError(
-                "id and ipaddress are mutually exclusive"
-            )
+            raise ValueError("id and ipaddress are mutually exclusive")
 
         if not self.id and not self.ipaddress:
-            raise ValueError(
-                "either id or ipaddress must be provided"
-            )
+            raise ValueError("either id or ipaddress must be provided")
 
         return self
 
@@ -151,17 +170,25 @@ class ReleaseIpAddressRequest(APIRequest):
 class ReserveIpAddressRequest(APIRequest):
     id: str = Field(..., description="The ID of the public IP address to release")
     account: Optional[str] = Field(None, description="The account to reserve with this IP address")
-    domainid: Optional[str] = Field(None, alias="domainId", description="The ID of the domain to reserve with this IP address")
+    domainid: Optional[str] = Field(
+        None, alias="domainId", description="The ID of the domain to reserve with this IP address"
+    )
     fordisplay: Optional[bool] = Field(
         None,
         alias="forDisplay",
         description="an optional field, whether to the display the IP to the end user or not.",
     )
-    projectid: Optional[str] = Field(None, alias="projectId", description="The ID of the project to reserve with this IP address")
+    projectid: Optional[str] = Field(
+        None, alias="projectId", description="The ID of the project to reserve with this IP address"
+    )
 
 
 class AcquirePodIpAddressRequest(APIRequest):
-    zoneid: Optional[str] = Field(None, alias="zoneId", description="The ID of the availability zone you want to acquire an public IP address from")
+    zoneid: Optional[str] = Field(
+        None,
+        alias="zoneId",
+        description="The ID of the availability zone you want to acquire an public IP address from",
+    )
     podid: Optional[str] = Field(
         None, alias="podId", description="The ID of the pod to acquire the IP address in"
     )

@@ -7,7 +7,7 @@ T = TypeVar("T")
 
 
 class APIError(BaseModel):
-    number: str|int = Field(
+    number: str | int = Field(
         ..., alias="Number", description="The error code number returned by the API."
     )
     text: str = Field(..., alias="Text", description="The error message returned by the API.")
@@ -42,7 +42,7 @@ class APIResponse(BaseModel, Generic[T]):
         Check if the API response indicates an error.
         """
         return self.status.upper() == "ERROR"
-    
+
     @property
     def error(self) -> str | None:
         """Extract error messages from the API response, if any."""

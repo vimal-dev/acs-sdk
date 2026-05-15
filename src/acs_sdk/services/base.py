@@ -3,6 +3,7 @@
 This module provides the BaseService class that acts as a foundation for
 service implementations that communicate with the CloudStack API.
 """
+
 from httpx import HTTPStatusError
 from typing import Dict, List, Optional
 
@@ -11,7 +12,7 @@ from pydantic import BaseModel
 from acs_sdk.client.contract import ClientContract
 from acs_sdk.core.response_mapper import DefaultResponseMapper, ResponseMapper
 from acs_sdk.exceptions import CloudStackAPIError
-from acs_sdk.schemas.response.base import APIError, APIResponse
+from acs_sdk.schemas.response.base import APIResponse
 
 
 class BaseService:
@@ -68,7 +69,7 @@ class BaseService:
                 return APIResponse[List[Dict]](data=data, count=count)
             return APIResponse[Dict](data=data)
         return APIResponse[Dict](data=response_data)
-    
+
     @staticmethod
     def _error(response_data: Dict) -> APIResponse:
         """
@@ -81,7 +82,7 @@ class BaseService:
         raise CloudStackAPIError(
             error_code=response_data.get("cserrorcode", response_data.get("errorcode", "")),
             error_text=response_data.get("errortext", ""),
-            response=response_data
+            response=response_data,
         )
         # return APIResponse[None](
         #     status="ERROR",

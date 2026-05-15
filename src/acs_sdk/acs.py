@@ -26,6 +26,7 @@ from acs_sdk.services.security_group import SecurityGroup
 from acs_sdk.services.service_offering import ServiceOffering
 from acs_sdk.services.snapshot import Snapshot
 from acs_sdk.services.ssh import SSH
+from acs_sdk.services.template import Template
 from acs_sdk.services.usage import Usage
 from acs_sdk.services.virtual_machine import VirtualMachine
 from acs_sdk.services.volume import Volume
@@ -63,6 +64,7 @@ class ApacheCloudStack:
     diskoffering: "DiskOffering"
     firewall: "Firewall"
     job: "Job"
+    template: "Template"
     nat: "NAT"
     network: "Network"
     networkacl: "NetworkACL"
@@ -95,6 +97,7 @@ class ApacheCloudStack:
         "serviceoffering": ServiceOffering,
         "snapshot": Snapshot,
         "ssh": SSH,
+        "template": Template,
         "vm": VirtualMachine,
         "volume": Volume,
         "vpc": VPC,
