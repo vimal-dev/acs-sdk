@@ -14,90 +14,96 @@ from ..schemas.response.base import APIResponse
 
 
 class NAT(BaseService):
-    def list_ip_forwarding_rules(self, payload: ListIpForwardingRulesRequest) -> APIResponse[List[Dict]]:
+    def list_ip_forwarding_rules(
+        self, payload: ListIpForwardingRulesRequest
+    ) -> APIResponse[List[Dict]]:
         """List all IP forwarding rules."""
-        response = self.client.call("listIpForwardingRules", payload.model_dump(exclude_none=True))
-        count = 0
-        data = []
-        if 'listipforwardingrulesresponse' in response:
-            response = response['listipforwardingrulesresponse']
-        if 'ipforwardingrule' in response and response['ipforwardingrule']:
-            data = response['ipforwardingrule']
-            count = response['count']
-        return APIResponse[List[Dict]](**{"data": data, "count": count})
+        return self._execute(
+            "listIpForwardingRules",
+            payload,
+            envelope="listipforwardingrulesresponse",
+            entity="ipforwardingrule",
+        )
 
-    async def list_ip_forwarding_rules_async(self, payload: ListIpForwardingRulesRequest) -> APIResponse[List[Dict]]:
+    async def list_ip_forwarding_rules_async(
+        self, payload: ListIpForwardingRulesRequest
+    ) -> APIResponse[List[Dict]]:
         """Asynchronously list all IP forwarding rules."""
-        response = await self.client.call_async("listIpForwardingRules", payload.model_dump(exclude_none=True))
-        count = 0
-        data = []
-        if 'listipforwardingrulesresponse' in response:
-            response = response['listipforwardingrulesresponse']
-        if 'ipforwardingrule' in response and response['ipforwardingrule']:
-            data = response['ipforwardingrule']
-            count = response['count']
-        return APIResponse[List[Dict]](**{"data": data, "count": count})
+        return await self._execute_async(
+            "listIpForwardingRules",
+            payload,
+            envelope="listipforwardingrulesresponse",
+            entity="ipforwardingrule",
+        )
 
-    def create_ip_forwarding_rule(self, payload: CreateIpForwardingRuleRequest) -> APIResponse[Dict]:
+    def create_ip_forwarding_rule(
+        self, payload: CreateIpForwardingRuleRequest
+    ) -> APIResponse[Dict]:
         """Create an IP forwarding rule."""
-        response = self.client.call("createIpForwardingRule", payload.model_dump(exclude_none=True))
-        data = {}
-        if 'createipforwardingruleresponse' in response:
-            data = response['createipforwardingruleresponse']
-        return APIResponse[Dict](**{"data": data})
+        return self._execute(
+            "createIpForwardingRule",
+            payload,
+            envelope="createipforwardingruleresponse",
+        )
 
-    async def create_ip_forwarding_rule_async(self, payload: CreateIpForwardingRuleRequest) -> APIResponse[Dict]:
+    async def create_ip_forwarding_rule_async(
+        self, payload: CreateIpForwardingRuleRequest
+    ) -> APIResponse[Dict]:
         """Asynchronously create an IP forwarding rule."""
-        response = await self.client.call_async("createIpForwardingRule", payload.model_dump(exclude_none=True))
-        data = {}
-        if 'createipforwardingruleresponse' in response:
-            data = response['createipforwardingruleresponse']
-        return APIResponse[Dict](**{"data": data})
+        return await self._execute_async(
+            "createIpForwardingRule",
+            payload,
+            envelope="createipforwardingruleresponse",
+        )
 
-    def delete_ip_forwarding_rule(self, payload: DeleteIpForwardingRuleRequest) -> APIResponse[Dict]:
+    def delete_ip_forwarding_rule(
+        self, payload: DeleteIpForwardingRuleRequest
+    ) -> APIResponse[Dict]:
         """Delete an IP forwarding rule."""
-        response = self.client.call("deleteIpForwardingRule", payload.model_dump(exclude_none=True))
-        data = {}
-        if 'deleteipforwardingruleresponse' in response:
-            data = response['deleteipforwardingruleresponse']
-        return APIResponse[Dict](**{"data": data})
+        return self._execute(
+            "deleteIpForwardingRule",
+            payload,
+            envelope="deleteipforwardingruleresponse",
+        )
 
-    async def delete_ip_forwarding_rule_async(self, payload: DeleteIpForwardingRuleRequest) -> APIResponse[Dict]:
+    async def delete_ip_forwarding_rule_async(
+        self, payload: DeleteIpForwardingRuleRequest
+    ) -> APIResponse[Dict]:
         """Asynchronously delete an IP forwarding rule."""
-        response = await self.client.call_async("deleteIpForwardingRule", payload.model_dump(exclude_none=True))
-        data = {}
-        if 'deleteipforwardingruleresponse' in response:
-            data = response['deleteipforwardingruleresponse']
-        return APIResponse[Dict](**{"data": data})
+        return await self._execute_async(
+            "deleteIpForwardingRule",
+            payload,
+            envelope="deleteipforwardingruleresponse",
+        )
 
     def enable_static_nat(self, payload: EnableStaticNatRequest) -> APIResponse[Dict]:
         """Enable static NAT."""
-        response = self.client.call("enableStaticNat", payload.model_dump(exclude_none=True))
-        data = {}
-        if 'enablestaticnatresponse' in response:
-            data = response['enablestaticnatresponse']
-        return APIResponse[Dict](**{"data": data})
+        return self._execute(
+            "enableStaticNat",
+            payload,
+            envelope="enablestaticnatresponse",
+        )
 
     async def enable_static_nat_async(self, payload: EnableStaticNatRequest) -> APIResponse[Dict]:
         """Asynchronously enable static NAT."""
-        response = await self.client.call_async("enableStaticNat", payload.model_dump(exclude_none=True))
-        data = {}
-        if 'enablestaticnatresponse' in response:
-            data = response['enablestaticnatresponse']
-        return APIResponse[Dict](**{"data": data})
+        return await self._execute_async(
+            "enableStaticNat",
+            payload,
+            envelope="enablestaticnatresponse",
+        )
 
     def disable_static_nat(self, payload: DisableStaticNatRequest) -> APIResponse[Dict]:
         """Disable static NAT."""
-        response = self.client.call("disableStaticNat", payload.model_dump(exclude_none=True))
-        data = {}
-        if 'disablestaticnatresponse' in response:
-            data = response['disablestaticnatresponse']
-        return APIResponse[Dict](**{"data": data})
+        return self._execute(
+            "disableStaticNat",
+            payload,
+            envelope="disablestaticnatresponse",
+        )
 
     async def disable_static_nat_async(self, payload: DisableStaticNatRequest) -> APIResponse[Dict]:
         """Asynchronously disable static NAT."""
-        response = await self.client.call_async("disableStaticNat", payload.model_dump(exclude_none=True))
-        data = {}
-        if 'disablestaticnatresponse' in response:
-            data = response['disablestaticnatresponse']
-        return APIResponse[Dict](**{"data": data})
+        return await self._execute_async(
+            "disableStaticNat",
+            payload,
+            envelope="disablestaticnatresponse",
+        )

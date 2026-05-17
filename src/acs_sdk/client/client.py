@@ -22,8 +22,8 @@ class ApacheCloudStackClient(ClientContract):
         self,
         config: ApacheCloudStackConfig,
         client: Optional[httpx.Client] = None,
-        tracer: trace.Tracer = None, 
-        logger: logging.Logger = None
+        tracer: trace.Tracer = None,
+        logger: logging.Logger = None,
     ):
         self.config = config
         self.signer = RequestSigner(config.api_key, config.api_secret)
@@ -78,7 +78,9 @@ class ApacheCloudStackClient(ClientContract):
 
     # 🔹 Async API call
     @with_retry
-    async def call_async(self, command: str, params: Optional[Dict[str, Any]] = None) -> Dict[str, Any]:
+    async def call_async(
+        self, command: str, params: Optional[Dict[str, Any]] = None
+    ) -> Dict[str, Any]:
         """Execute an Apache CloudStack API command (async).
 
         Async version of the call method for use with asyncio. Provides the same
@@ -160,6 +162,14 @@ class ApacheCloudStackClient(ClientContract):
                 "CloudStack request completed: %s %s", response.status_code, response.url
             )
             return response.json()
+        except httpx.HTTPStatusError as exc:
+            span = trace.get_current_span()
+            span.record_exception(exc)
+            span.set_status(Status(StatusCode.ERROR))
+            span.set_attribute("http.status_code", exc.response.status_code)
+            span.set_attribute("http.error_message", exc.response.text)
+            self.logger.error("CloudStack request failed: %s", exc, exc_info=True)
+            raise
         except Exception as exc:
             span = trace.get_current_span()
             span.record_exception(exc)
@@ -198,6 +208,14 @@ class ApacheCloudStackClient(ClientContract):
                     response.url,
                 )
                 return response.json()
+        except httpx.HTTPStatusError as exc:
+            span = trace.get_current_span()
+            span.record_exception(exc)
+            span.set_status(Status(StatusCode.ERROR))
+            span.set_attribute("http.status_code", exc.response.status_code)
+            span.set_attribute("http.error_message", exc.response.text)
+            self.logger.error("CloudStack request failed: %s", exc, exc_info=True)
+            raise
         except Exception as exc:
             span = trace.get_current_span()
             span.record_exception(exc)
@@ -251,7 +269,9 @@ class ApacheCloudStackAsyncClient(ClientContract):
         await self.close()
 
     @with_retry
-    async def call_async(self, command: str, params: Optional[Dict[str, Any]] = None) -> Dict[str, Any]:
+    async def call_async(
+        self, command: str, params: Optional[Dict[str, Any]] = None
+    ) -> Dict[str, Any]:
         """Execute an Apache CloudStack API command asynchronously.
 
         Args:
@@ -277,9 +297,32 @@ class ApacheCloudStackAsyncClient(ClientContract):
 
     async def _request_async(self, params: Dict[str, Any]) -> Dict[str, Any]:
         """Send signed HTTP GET request asynchronously."""
-        response = await self.client.get("", params=params)
-        response.raise_for_status()
-        return response.json()
+        try:
+            response = await self.client.get("", params=params)
+            response.raise_for_status()
+            span = trace.get_current_span()
+            span.set_attribute("http.status_code", response.status_code)
+            span.set_status(Status(StatusCode.OK))
+            self.logger.debug(
+                "CloudStack async request completed: %s %s",
+                response.status_code,
+                response.url,
+            )
+            return response.json()
+        except httpx.HTTPStatusError as exc:
+            span = trace.get_current_span()
+            span.record_exception(exc)
+            span.set_status(Status(StatusCode.ERROR))
+            span.set_attribute("http.status_code", exc.response.status_code)
+            span.set_attribute("http.error_message", exc.response.text)
+            self.logger.error("CloudStack request failed: %s", exc, exc_info=True)
+            raise
+        except Exception as exc:
+            span = trace.get_current_span()
+            span.record_exception(exc)
+            span.set_status(Status(StatusCode.ERROR))
+            self.logger.error("CloudStack async request failed: %s", exc, exc_info=True)
+            raise
 
     async def close(self):
         """Close the async HTTP client connection."""

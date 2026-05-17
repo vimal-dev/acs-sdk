@@ -56,7 +56,7 @@ class RequestSigner:
         sorted_params = sorted(params.items(), key=lambda x: x[0].lower())
 
         query_string = "&".join(
-            f"{k}={urllib.parse.quote_plus(str(v))}" for k, v in sorted_params
+            f"{k}={urllib.parse.quote(str(v), safe='')}" for k, v in sorted_params
         ).lower()
 
         digest = hmac.new(self.api_secret.encode(), query_string.encode(), hashlib.sha1).digest()

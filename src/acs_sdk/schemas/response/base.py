@@ -7,7 +7,9 @@ T = TypeVar("T")
 
 
 class APIError(BaseModel):
-    number: str = Field(..., alias="Number", description="The error code number returned by the API.")
+    number: str | int = Field(
+        ..., alias="Number", description="The error code number returned by the API."
+    )
     text: str = Field(..., alias="Text", description="The error message returned by the API.")
 
 
@@ -22,7 +24,9 @@ class APIResponse(BaseModel, Generic[T]):
         None,
         description="A list of error messages if the API call was not successful.",
     )
-    count: Optional[int] = Field(None, description="The count of items returned in the data, if applicable.")
+    count: Optional[int] = Field(
+        None, description="The count of items returned in the data, if applicable."
+    )
     data: Optional[T] = Field(None, description="The data returned from the API call, if any.")
 
     @property
@@ -38,6 +42,19 @@ class APIResponse(BaseModel, Generic[T]):
         Check if the API response indicates an error.
         """
         return self.status.upper() == "ERROR"
+
+    @property
+    def error(self) -> str | None:
+        """Extract error messages from the API response, if any."""
+        if not self.has_errors:
+            return None
+
+        err = self.errors
+
+        if isinstance(err, list):
+            return err[0].text
+
+        return err.text
 
     def error_messages(self) -> list[str]:
         """Extract error messages from the API response, if any."""

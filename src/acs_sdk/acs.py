@@ -14,17 +14,24 @@ from acs_sdk.services.account import Account
 from acs_sdk.services.address import Address
 from acs_sdk.services.base import BaseService
 from acs_sdk.services.backup_and_recovery import BackupAndRecovery
+from acs_sdk.services.disk_offering import DiskOffering
 from acs_sdk.services.firewall import Firewall
 from acs_sdk.services.job import Job
 from acs_sdk.services.nat import NAT
+from acs_sdk.services.network import Network
+from acs_sdk.services.network_acl import NetworkACL
+from acs_sdk.services.network_offering import NetworkOffering
 from acs_sdk.services.region import Region
 from acs_sdk.services.security_group import SecurityGroup
 from acs_sdk.services.service_offering import ServiceOffering
 from acs_sdk.services.snapshot import Snapshot
 from acs_sdk.services.ssh import SSH
+from acs_sdk.services.template import Template
+from acs_sdk.services.usage import Usage
 from acs_sdk.services.virtual_machine import VirtualMachine
 from acs_sdk.services.volume import Volume
 from acs_sdk.services.vpc import VPC
+from acs_sdk.services.vpc_offering import VPCOffering
 from acs_sdk.services.zone import Zone
 
 
@@ -54,34 +61,48 @@ class ApacheCloudStack:
     account: "Account"
     address: "Address"
     backupandrecovery: "BackupAndRecovery"
+    diskoffering: "DiskOffering"
     firewall: "Firewall"
     job: "Job"
+    template: "Template"
     nat: "NAT"
+    network: "Network"
+    networkacl: "NetworkACL"
+    networkoffering: "NetworkOffering"
     region: "Region"
     securitygroup: "SecurityGroup"
     serviceoffering: "ServiceOffering"
     snapshot: "Snapshot"
     ssh: "SSH"
+    usage: "Usage"
     vm: "VirtualMachine"
     volume: "Volume"
     vpc: "VPC"
+    vpcoffering: "VPCOffering"
     zone: "Zone"
 
     _service_map: Dict[str, Type["BaseService"]] = {
         "account": Account,
         "address": Address,
         "backupandrecovery": BackupAndRecovery,
+        "diskoffering": DiskOffering,
         "firewall": Firewall,
         "job": Job,
         "nat": NAT,
+        "network": Network,
+        "networkacl": NetworkACL,
+        "networkoffering": NetworkOffering,
         "region": Region,
         "securitygroup": SecurityGroup,
         "serviceoffering": ServiceOffering,
         "snapshot": Snapshot,
         "ssh": SSH,
+        "template": Template,
         "vm": VirtualMachine,
         "volume": Volume,
         "vpc": VPC,
+        "vpcoffering": VPCOffering,
+        "usage": Usage,
         "zone": Zone,
     }
 
