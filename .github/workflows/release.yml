@@ -80,6 +80,9 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
+      - name: PyPI Trusted Publisher
+        uses: pypa/gh-action-pypi-publish@release/v1
+
       - name: Publish to PyPI
         run: twine upload --skip-existing dist/*
         env:
