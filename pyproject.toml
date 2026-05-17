@@ -31,6 +31,11 @@ dev = [
     "mypy (>=1.19.1,<2.0.0)"
 ]
 
+[tool.poetry]
+packages = [
+    { include = "acs_sdk", from = "src" }
+]
+
 [tool.setuptools.packages.find]
 where = ["src"]
 
