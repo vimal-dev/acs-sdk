@@ -32,6 +32,7 @@ if __name__ == "__main__":
             click.echo(f"       Is Featured: {template.get('isfeatured')}")
             click.echo(f"       Is Extractable: {template.get('isextractable')}")
             click.echo(f"       SSHKey Enabled: {template.get('sshkeyenabled')}")
+            click.echo(f"       Password Enabled: {template.get('passwordenabled')}")
             click.echo(f"       For CKS: {template.get('forcks')}")
             click.echo()
     else:
