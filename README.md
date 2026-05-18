@@ -19,7 +19,7 @@ A Python SDK for the Apache CloudStack API that provides a simple and type-safe 
 ## Installation
 
 ```bash
-pip install acs-sdk
+pip install py-acs-sdk
 ```
 
 ## Getting Started
