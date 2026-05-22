@@ -1,5 +1,5 @@
 from typing import Dict, List, Optional
-from pydantic import Field, model_validator
+from pydantic import Field, field_serializer, model_validator
 
 from .base import APIRequest
 
@@ -134,164 +134,179 @@ class DeleteVMScheduleRequest(APIRequest):
 
 
 class DeployVirtualMachineRequest(APIRequest):
+    # -------------------------------------------------------------------------
     # REQUIRED
+    # -------------------------------------------------------------------------
     serviceofferingid: str = Field(..., description="ID of the service offering")
     zoneid: str = Field(..., description="Availability zone for the virtual machine")
-    templateid: str = Field(..., description="ID of the template")
 
-    # GENERAL OPTIONS
-    customid: Optional[str] = Field(
-        None,
-        description="Custom ID for the virtual machine (optional, allows you to specify your own ID instead of having one auto-generated)",
+    # -------------------------------------------------------------------------
+    # IDENTITY
+    # templateid is optional per docs — can deploy from snapshotid instead
+    # -------------------------------------------------------------------------
+    templateid: Optional[str] = Field(None, description="ID of the template")
+    snapshotid: Optional[str] = Field(
+        None, description="ID of the snapshot to create the VM from (mutually exclusive with templateid)"
     )
-    name: Optional[str] = Field(None, description="Host name for the virtual machine (optional)")
-    displayname: Optional[str] = Field(
-        None, description="Display name for the virtual machine (optional)"
-    )
-    displayvm: Optional[bool] = Field(
-        None, description="Whether to display the VM to the end user (default: True)"
-    )
-    group: Optional[str] = Field(None, description="Group for the virtual machine (optional)")
-    projectid: Optional[str] = Field(
-        None, description="Project ID for the virtual machine (optional)"
-    )
+    name: Optional[str] = Field(None, description="Host name for the virtual machine")
+    displayname: Optional[str] = Field(None, description="User generated display name")
+    customid: Optional[str] = Field(None, description="Custom ID (root admin only)")
 
-    # ACCOUNT / DOMAIN
-    account: Optional[str] = Field(
-        None, description="List resources by account (requires domainid)"
-    )
-    domainid: Optional[str] = Field(None, alias="domainId", description="Filter by domain ID")
+    # -------------------------------------------------------------------------
+    # ACCOUNT / DOMAIN / PROJECT
+    # -------------------------------------------------------------------------
+    account: Optional[str] = Field(None, description="Account for the VM (requires domainid)")
+    domainid: Optional[str] = Field(None, description="Domain ID (required when account is set)")
+    projectid: Optional[str] = Field(None, description="Deploy VM under this project")
 
+    # -------------------------------------------------------------------------
+    # NETWORK
+    # networkids and iptonetworklist are mutually exclusive
+    # -------------------------------------------------------------------------
+    networkids: Optional[list[str]] = Field(
+        None, description="Network IDs to attach (CSV serialized, mutually exclusive with iptonetworklist)"
+    )
+    ipaddress: Optional[str] = Field(None, description="Static IPv4 for the default network")
+    ip6address: Optional[str] = Field(None, description="Static IPv6 for the default network")
+    macaddress: Optional[str] = Field(None, description="MAC address for the default network")
+
+    # -------------------------------------------------------------------------
     # AFFINITY GROUPS (mutually exclusive)
-    affinitygroupids: Optional[List[str]] = Field(None, alias="affinityGroupIds")
-    affinitygroupnames: Optional[List[str]] = Field(None, alias="affinityGroupNames")
-
-    # SECURITY GROUPS (mutually exclusive)
-    securitygroupids: Optional[List[str]] = Field(None, alias="securityGroupIds")
-    securitygroupnames: Optional[List[str]] = Field(None, alias="securityGroupNames")
-
-    # DISK OPTIONS
-    diskofferingid: Optional[str] = Field(
-        None,
-        description="ID of the disk offering (optional if template already has a disk offering)",
+    # -------------------------------------------------------------------------
+    affinitygroupids: Optional[list[str]] = Field(
+        None, description="Affinity group IDs (mutually exclusive with affinitygroupnames)"
     )
-    size: Optional[int] = Field(
-        None,
-        description="Data disk size in GB (optional, only used if diskofferingid is not specified and template does not have a disk offering)",
+    affinitygroupnames: Optional[list[str]] = Field(
+        None, description="Affinity group names (mutually exclusive with affinitygroupids)"
+    )
+
+    # -------------------------------------------------------------------------
+    # SECURITY GROUPS (mutually exclusive, Basic Network zones only)
+    # -------------------------------------------------------------------------
+    securitygroupids: Optional[list[str]] = Field(
+        None, description="Security group IDs (mutually exclusive with securitygroupnames)"
+    )
+    securitygroupnames: Optional[list[str]] = Field(
+        None, description="Security group names (mutually exclusive with securitygroupids)"
+    )
+
+    # -------------------------------------------------------------------------
+    # DISK
+    # diskofferingid and datadisksdetails are mutually exclusive
+    # size is mutually exclusive with diskofferingid
+    # -------------------------------------------------------------------------
+    diskofferingid: Optional[str] = Field(None, description="Disk offering ID")
+    overridediskofferingid: Optional[str] = Field(
+        None, description="Override root disk offering (takes precedence for ISO deploys)"
     )
     rootdisksize: Optional[int] = Field(
-        None,
-        description="Root disk size in GB (optional, only used if template does not have a disk offering or if you want to override the template's root disk size)",
+        None, description="Root disk size in GB (template-based deploys only)"
     )
-    overridediskofferingid: Optional[str] = Field(
-        None,
-        description="ID of the disk offering to override the template's disk offering (optional, only used if template has a disk offering and you want to use a different one)",
+    size: Optional[int] = Field(
+        None, description="Data disk size in GB (mutually exclusive with diskofferingid)"
     )
-    datadiskofferinglist: Optional[List[str]] = Field(
-        None,
-        description="List of disk offering IDs for data disks (optional, only used if you want to specify multiple data disks or if you want to override the template's disk offering for data disks)",
+    datadiskofferinglist: Optional[list[str]] = Field(
+        None, description="Data disk offering IDs (mutually exclusive with diskofferingid)"
     )
-    dadatadisksdetails: Optional[List[Dict[str, str]]] = Field(
-        None,
-        alias="datadisksdetails",
-        description="List of key-value pairs for data disk details (optional, alternative to providing datadiskofferinglist or used to provide additional details for each data disk such as size if not specified in the disk offering)",
+    datadisksdetails: Optional[list[dict[str, str]]] = Field(
+        None, description="Data disk details e.g. diskofferingid, size, miniops, maxiops per disk"
     )
 
-    # NETWORK / HOST CONFIG
-    networkids: Optional[List[str]] = Field(
-        None,
-        description="List of network IDs to attach to the VM (optional if template already has network requirements)",
-    )
-    vpcid: Optional[str] = Field(
-        None,
-        description="ID of the VPC to deploy the VM into (optional, only used if template does not have network requirements or if you want to override the template's network requirements)",
-    )
-    extraconfig: Optional[str] = Field(
-        None, description="Extra configuration parameters for the VM in key=value format (optional)"
-    )
-
+    # -------------------------------------------------------------------------
     # USER DATA
-    userdata: Optional[str] = Field(
-        None, description="Base64-encoded user data to be passed to the VM (optional)"
-    )
-    userdatadetails: Optional[Dict[str, str]] = Field(
-        None,
-        alias="userDataDetails",
-        description="Key-value pairs of user data details (optional, alternative to providing userdata directly or via userdataid)",
-    )
-    userdataid: Optional[str] = Field(
-        None,
-        description="ID of the user data to be passed to the VM (optional, alternative to providing userdata directly)",
+    # -------------------------------------------------------------------------
+    userdata: Optional[str] = Field(None, description="Base64-encoded user data (max 4KB via GET, 1MB via POST)")
+    userdataid: Optional[str] = Field(None, description="ID of pre-registered userdata")
+    userdatadetails: Optional[dict[str, str]] = Field(
+        None, description="Variable values for userdata template variables"
     )
 
-    # Security / access
-    keypair: Optional[str] = Field(
-        None, description="Name of the SSH key pair to inject into the VM (optional)"
-    )
-    keyspairs: Optional[List[str]] = Field(
-        None,
-        description="List of SSH key pairs to inject into the VM (optional, alternative to providing a single keypair)",
-    )
-
-    # ✅ AFFINITY GROUPS (mutually exclusive)
-    affinitygroupids: Optional[List[str]] = Field(None, alias="affinityGroupIds")
-    affinitygroupnames: Optional[List[str]] = Field(None, alias="affinityGroupNames")
-
-    # ADVANCED FLAGS
-    bootintosetup: Optional[bool] = Field(
-        None, description="Whether to boot the VM into setup mode (default: False)"
-    )
-    bootmode: Optional[str] = Field(
-        None, description="Boot mode for the VM (e.g., 'legacy', 'uefi', 'uefi_secure')"
-    )
-    clusterid: Optional[str] = Field(
-        None,
-        description="ID of the cluster to deploy the VM into (optional, overrides hostid if both are specified)",
-    )
-    hostid: Optional[str] = Field(
-        None,
-        description="ID of the host to deploy the VM on (optional, overrides clusterid if both are specified)",
-    )
-    podid: Optional[str] = Field(
-        None,
-        description="ID of the pod to deploy the VM into (optional, overrides zoneid if both are specified)",
-    )
-    dynamicscalingenabled: Optional[bool] = Field(
-        None, description="Whether dynamic scaling is enabled for the VM (default: False)"
-    )
-    haenable: Optional[bool] = Field(
-        None, description="Whether to enable high availability for the VM (default: False)"
-    )
-    iothreadsenabled: Optional[bool] = Field(
-        None, description="Whether to enable IO threads for the VM (default: False)"
-    )
-    iodriverpolicy: Optional[str] = Field(
-        None, description="IO driver policy for the VM (e.g., 'native', 'emulated', 'auto')"
-    )
-    hypervisor: Optional[str] = Field(
-        None, description="Hypervisor type to deploy the VM on (e.g., 'kvm', 'xen', 'vmware')"
-    )
-    snapshotid: Optional[str] = Field(
-        None,
-        description="ID of the snapshot to create the VM from (optional, alternative to templateid)",
-    )
-    startvm: Optional[bool] = Field(
-        None, description="Whether to start the VM after deployment (default: True)"
+    # -------------------------------------------------------------------------
+    # SSH KEY PAIRS
+    # -------------------------------------------------------------------------
+    keypair: Optional[str] = Field(None, description="SSH key pair name")
+    keypairs: Optional[list[str]] = Field(
+        None, description="Multiple SSH key pair names (CSV serialized)"
     )
 
+    # -------------------------------------------------------------------------
+    # BOOT OPTIONS
+    # bootintosetup is VMware only and ignored when startvm=False
+    # -------------------------------------------------------------------------
+    startvm: Optional[bool] = Field(None, description="Start VM after deploy (default: True)")
+    boottype: Optional[str] = Field(None, description="Boot type: BIOS or UEFI")
+    bootmode: Optional[str] = Field(None, description="Boot mode: Legacy or Secure (UEFI only)")
+    bootintosetup: Optional[bool] = Field(None, description="Boot into hardware setup (VMware only)")
+
+    # -------------------------------------------------------------------------
+    # PLACEMENT (root admin only)
+    # -------------------------------------------------------------------------
+    hostid: Optional[str] = Field(None, description="Target host ID (root admin only)")
+    clusterid: Optional[str] = Field(None, description="Target cluster ID (root admin only)")
+    podid: Optional[str] = Field(None, description="Target pod ID (root admin only)")
+    deploymentplanner: Optional[str] = Field(None, description="Deployment planner (root admin only)")
+    hypervisor: Optional[str] = Field(None, description="Hypervisor type (required if not set on template/ISO)")
+
+    # -------------------------------------------------------------------------
+    # ADVANCED / MISC
+    # -------------------------------------------------------------------------
+    group: Optional[str] = Field(None, description="VM group name")
+    displayvm: Optional[bool] = Field(None, description="Display VM to end user (default: True)")
+    copyimagetags: Optional[bool] = Field(None, description="Copy image tags to VM (default: False)")
+    dynamicscalingenabled: Optional[bool] = Field(None, description="Enable dynamic CPU/memory scaling")
+    iothreadsenabled: Optional[bool] = Field(None, description="Enable IO threads for disk devices")
+    iodriverpolicy: Optional[str] = Field(None, description="IO driver policy: native, emulated, auto")
+    nicmultiqueuenumber: Optional[int] = Field(None, description="Number of queues for multiqueue NICs")
+    nicpackedvirtqueuesenabled: Optional[bool] = Field(None, description="Enable packed virtqueues")
+    keyboard: Optional[str] = Field(
+        None, description="Keyboard type: de, de-ch, es, fi, fr, fr-be, fr-ch, is, it, jp, nl-be, no, pt, uk, us"
+    )
+    extraconfig: Optional[str] = Field(None, description="URL-encoded extra config (passed on successful deploy)")
+    leaseduration: Optional[int] = Field(None, description="Lease duration in days")
+    leaseexpiryaction: Optional[str] = Field(None, description="Lease expiry action: STOP or DESTROY")
+    password: Optional[str] = Field(None, description="VM password (random if not set)")
+
+    # -------------------------------------------------------------------------
+    # SERIALIZERS — CSV fields
+    # -------------------------------------------------------------------------
+    @field_serializer("networkids", "keypairs", "affinitygroupids", "affinitygroupnames",
+                      "securitygroupids", "securitygroupnames", "datadiskofferinglist")
+    def serialize_csv(self, value: list[str] | None) -> str | None:
+        if value is None:
+            return None
+        return ",".join(value)
+
+    # -------------------------------------------------------------------------
+    # VALIDATORS
+    # -------------------------------------------------------------------------
     @model_validator(mode="after")
-    def validate_model_dependency(self):
+    def validate_mutual_exclusions(self):
+        errors = []
+
+        if self.templateid and self.snapshotid:
+            errors.append("templateid and snapshotid are mutually exclusive")
+
         if self.affinitygroupids and self.affinitygroupnames:
-            raise ValueError("affinitygroupids and affinitygroupnames are mutually exclusive")
+            errors.append("affinitygroupids and affinitygroupnames are mutually exclusive")
 
         if self.securitygroupids and self.securitygroupnames:
-            raise ValueError("securitygroupids and securitygroupnames are mutually exclusive")
+            errors.append("securitygroupids and securitygroupnames are mutually exclusive")
 
         if self.diskofferingid and self.size:
-            raise ValueError("diskofferingid and size are mutually exclusive")
+            errors.append("diskofferingid and size are mutually exclusive")
+
+        if self.diskofferingid and self.datadisksdetails:
+            errors.append("diskofferingid and datadisksdetails are mutually exclusive")
 
         if self.account and not self.domainid:
-            raise ValueError("domainid is required when account is provided")
+            errors.append("domainid is required when account is provided")
+
+        if self.bootmode and not self.boottype:
+            errors.append("boottype is required when bootmode is set")
+
+        if errors:
+            raise ValueError(errors)
+
         return self
 
 
@@ -305,6 +320,15 @@ class DestroyVirtualMachineRequest(APIRequest):
         None,
         description="List of volume IDs to destroy along with the VM (optional, only used if expunge is True)",
     )
+
+     # -------------------------------------------------------------------------
+    # SERIALIZERS — CSV fields
+    # -------------------------------------------------------------------------
+    @field_serializer("volumeids")
+    def serialize_csv(self, value: list[str] | None) -> str | None:
+        if value is None:
+            return None
+        return ",".join(value)
 
 
 class CleanVMReservationsRequest(APIRequest):
