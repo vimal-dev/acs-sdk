@@ -9,12 +9,26 @@ from acs_sdk.schemas.request.virtual_machine import (
     DeleteVMScheduleRequest,
     DeployVirtualMachineRequest,
     DestroyVirtualMachineRequest,
+    ListVMScheduleRequest,
     ListVirtualMachinesRequest,
+    RebootVirtualMachineRequest,
+    RecoverVirtualMachineRequest,
+    RemoveNICFromVirtualMachineRequest,
+    RemoveVirtualMachineFromBackupOfferingRequest,
+    ResetSSHKeyForVirtualMachineRequest,
+    ResetUserDataForVirtualMachineRequest,
+    RestoreVirtualMachineRequest,
+    RevertTOVMSanpshotRequest,
+    ScaleVirtualMachineRequest,
+    StartVirtualMachineRequest,
+    StopVirtualMachineRequest,
+    UpdateDefaultNICForVirtualMachineRequest,
     UpdateVMScheduleRequest,
     CleanVMReservationsRequest,
     ExpungeVirtualMachineRequest,
     GetVMPasswordRequest,
     GetVMUserdataRequest,
+    UpdateVirtualMachineRequest,
 )
 
 from .base import BaseService
@@ -40,6 +54,26 @@ class VirtualMachine(BaseService):
             entity="virtualmachine",
         )
 
+    def list_vm_schedule(self, payload: ListVMScheduleRequest) -> APIResponse[List[Dict]]:
+        """List all available virtual machines."""
+        return self._execute(
+            "listVMSchedule",
+            payload,
+            envelope="listvmscheduleresponse",
+            entity="vmschedule",
+        )
+
+    async def list_vm_schedule_async(
+        self, payload: ListVMScheduleRequest
+    ) -> APIResponse[List[Dict]]:
+        """Asynchronously list all available virtual machines."""
+        return await self._execute_async(
+            "listVMSchedule",
+            payload,
+            envelope="listvmscheduleresponse",
+            entity="vmschedule",
+        )
+
     def add_nic_to_virtual_machine(
         self, payload: AddNICToVirtualMachineRequest
     ) -> APIResponse[Dict]:
@@ -59,10 +93,8 @@ class VirtualMachine(BaseService):
             payload,
             envelope="addnictovirtualmachineresponse",
         )
-    
-    def assign_virtual_machine(
-        self, payload: AssignVirtualMachineRequest
-    ) -> APIResponse[Dict]:
+
+    def assign_virtual_machine(self, payload: AssignVirtualMachineRequest) -> APIResponse[Dict]:
         """Change ownership of a VM from one account to another."""
         return self._execute(
             "assignVirtualMachine",
@@ -244,4 +276,254 @@ class VirtualMachine(BaseService):
             "getVMUserData",
             payload,
             envelope="getvmuserdataresponse",
+        )
+
+    def reboot_vm(self, payload: RebootVirtualMachineRequest) -> APIResponse[Dict]:
+        """Reboots a virtual machine."""
+        return self._execute(
+            "rebootVirtualMachine",
+            payload,
+            envelope="rebootvirtualmachineresponse",
+        )
+
+    async def reboot_vm_async(self, payload: RebootVirtualMachineRequest) -> APIResponse[Dict]:
+        """Asynchronously Reboots a virtual machine."""
+        return self._execute(
+            "rebootVirtualMachine",
+            payload,
+            envelope="rebootvirtualmachineresponse",
+        )
+
+    def recover_vm(self, payload: RecoverVirtualMachineRequest) -> APIResponse[Dict]:
+        """Recovers a virtual machine."""
+        return self._execute(
+            "recoverVirtualMachine",
+            payload,
+            envelope="recovervirtualmachineresponse",
+        )
+
+    async def recover_vm_async(self, payload: RecoverVirtualMachineRequest) -> APIResponse[Dict]:
+        """Asynchronously Recovers a virtual machine."""
+        return self._execute(
+            "recoverVirtualMachine",
+            payload,
+            envelope="recovervirtualmachineresponse",
+        )
+
+    def remove_nic_from_virtual_machine(
+        self, payload: RemoveNICFromVirtualMachineRequest
+    ) -> APIResponse[Dict]:
+        """Removes VM from specified network by deleting a NIC."""
+        return self._execute(
+            "removeNicFromVirtualMachine",
+            payload,
+            envelope="removenicfromvirtualmachineresponse",
+        )
+
+    async def remove_nic_from_virtual_machine_async(
+        self, payload: RemoveNICFromVirtualMachineRequest
+    ) -> APIResponse[Dict]:
+        """Asynchronously Removes VM from specified network by deleting a NIC."""
+        return await self._execute_async(
+            "removeNicFromVirtualMachine",
+            payload,
+            envelope="removenicfromvirtualmachineresponse",
+        )
+
+    def remove_virtual_machine_from_backup_offering(
+        self, payload: RemoveVirtualMachineFromBackupOfferingRequest
+    ) -> APIResponse[Dict]:
+        """Removes a VM from any existing backup offering."""
+        return self._execute(
+            "removeVirtualMachineFromBackupOffering",
+            payload,
+            envelope="removevirtualmachinefrombackupofferingresponse",
+        )
+
+    async def remove_virtual_machine_from_backup_offering_async(
+        self, payload: RemoveVirtualMachineFromBackupOfferingRequest
+    ) -> APIResponse[Dict]:
+        """Asynchronously Removes a VM from any existing backup offering."""
+        return await self._execute_async(
+            "removeVirtualMachineFromBackupOffering",
+            payload,
+            envelope="removevirtualmachinefrombackupofferingresponse",
+        )
+
+    def reset_password_for_vm(
+        self, payload: RemoveVirtualMachineFromBackupOfferingRequest
+    ) -> APIResponse[Dict]:
+        """Resets the password for virtual machine. The virtual machine must be in a "Stopped" state and the template must already support this feature for this command to take effect."""
+        return self._execute(
+            "resetPasswordForVirtualMachine",
+            payload,
+            envelope="resetpasswordforvirtualmachineresponse",
+        )
+
+    async def reset_password_for_vm_async(
+        self, payload: RemoveVirtualMachineFromBackupOfferingRequest
+    ) -> APIResponse[Dict]:
+        """Asynchronously Resets the password for virtual machine. The virtual machine must be in a "Stopped" state and the template must already support this feature for this command to take effect."""
+        return await self._execute_async(
+            "resetPasswordForVirtualMachine",
+            payload,
+            envelope="resetpasswordforvirtualmachineresponse",
+        )
+
+    def reset_sshkey_for_vm(
+        self, payload: ResetSSHKeyForVirtualMachineRequest
+    ) -> APIResponse[Dict]:
+        """Resets the SSH Key for virtual machine. The virtual machine must be in a "Stopped" state."""
+        return self._execute(
+            "resetSSHKeyForVirtualMachine",
+            payload,
+            envelope="resetsshkeyforvirtualmachineresponse",
+        )
+
+    async def reset_sshkey_for_vm_async(
+        self, payload: ResetSSHKeyForVirtualMachineRequest
+    ) -> APIResponse[Dict]:
+        """Asynchronously Resets the SSH Key for virtual machine. The virtual machine must be in a "Stopped" state."""
+        return await self._execute_async(
+            "resetSSHKeyForVirtualMachine",
+            payload,
+            envelope="resetsshkeyforvirtualmachineresponse",
+        )
+
+    def reset_userdata_for_vm(
+        self, payload: ResetUserDataForVirtualMachineRequest
+    ) -> APIResponse[Dict]:
+        """Resets the UserData for virtual machine. The virtual machine must be in a "Stopped" state."""
+        return self._execute(
+            "resetUserDataForVirtualMachine",
+            payload,
+            envelope="resetuserdataforvirtualmachineresponse",
+        )
+
+    async def reset_userdata_for_vm_async(
+        self, payload: ResetUserDataForVirtualMachineRequest
+    ) -> APIResponse[Dict]:
+        """Asynchronously Resets the UserData for virtual machine. The virtual machine must be in a "Stopped" state."""
+        return await self._execute_async(
+            "resetUserDataForVirtualMachine",
+            payload,
+            envelope="resetuserdataforvirtualmachineresponse",
+        )
+
+    def restore_vm(self, payload: RestoreVirtualMachineRequest) -> APIResponse[Dict]:
+        """Restore a VM to original template/ISO or new template/ISO."""
+        return self._execute(
+            "restoreVirtualMachine",
+            payload,
+            envelope="restorevirtualmachineresponse",
+        )
+
+    async def restore_vm_async(self, payload: RestoreVirtualMachineRequest) -> APIResponse[Dict]:
+        """Asynchronously Restore a VM to original template/ISO or new template/ISO."""
+        return await self._execute_async(
+            "restoreVirtualMachine",
+            payload,
+            envelope="restorevirtualmachineresponse",
+        )
+
+    def revert_to_vm_sanpshot(self, payload: RevertTOVMSanpshotRequest) -> APIResponse[Dict]:
+        """Revert VM from a vmsnapshot."""
+        return self._execute(
+            "revertToVMSnapshot",
+            payload,
+            envelope="reverttovmsnapshotresponse",
+        )
+
+    async def revert_to_vm_sanpshot_async(
+        self, payload: RevertTOVMSanpshotRequest
+    ) -> APIResponse[Dict]:
+        """Asynchronously Revert VM from a vmsnapshot."""
+        return await self._execute_async(
+            "revertToVMSnapshot",
+            payload,
+            envelope="reverttovmsnapshotresponse",
+        )
+
+    def scale_vm(self, payload: ScaleVirtualMachineRequest) -> APIResponse[Dict]:
+        """Scales the virtual machine to a new service offering."""
+        return self._execute(
+            "scaleVirtualMachine",
+            payload,
+            envelope="scalevirtualmachineresponse",
+        )
+
+    async def scale_vm_async(self, payload: ScaleVirtualMachineRequest) -> APIResponse[Dict]:
+        """Asynchronously Scales the virtual machine to a new service offering."""
+        return await self._execute_async(
+            "scaleVirtualMachine",
+            payload,
+            envelope="scalevirtualmachineresponse",
+        )
+
+    def start_vm(self, payload: StartVirtualMachineRequest) -> APIResponse[Dict]:
+        """Starts a virtual machine."""
+        return self._execute(
+            "startVirtualMachine",
+            payload,
+            envelope="startvirtualmachineresponse",
+        )
+
+    async def start_vm_async(self, payload: StartVirtualMachineRequest) -> APIResponse[Dict]:
+        """Asynchronously Starts a virtual machine."""
+        return await self._execute_async(
+            "startVirtualMachine",
+            payload,
+            envelope="startvirtualmachineresponse",
+        )
+
+    def stop_vm(self, payload: StopVirtualMachineRequest) -> APIResponse[Dict]:
+        """Stops a virtual machine."""
+        return self._execute(
+            "stopVirtualMachine",
+            payload,
+            envelope="stopvirtualmachineresponse",
+        )
+
+    async def stop_vm_async(self, payload: StopVirtualMachineRequest) -> APIResponse[Dict]:
+        """Asynchronously Stops a virtual machine."""
+        return await self._execute_async(
+            "stopVirtualMachine",
+            payload,
+            envelope="stopvirtualmachineresponse",
+        )
+
+    def update_default_nic_for_vm(
+        self, payload: UpdateDefaultNICForVirtualMachineRequest
+    ) -> APIResponse[Dict]:
+        """Changes the default NIC on a VM."""
+        return self._execute(
+            "updateDefaultNicForVirtualMachine",
+            payload,
+            envelope="updatedefaultnicforvirtualmachineresponse",
+        )
+
+    async def update_default_nic_for_vm_async(
+        self, payload: UpdateDefaultNICForVirtualMachineRequest
+    ) -> APIResponse[Dict]:
+        """Asynchronously Changes the default NIC on a VM."""
+        return await self._execute_async(
+            "updateDefaultNicForVirtualMachine",
+            payload,
+            envelope="updatedefaultnicforvirtualmachineresponse",
+        )
+
+    def update_vm(self, payload: UpdateVirtualMachineRequest) -> APIResponse[Dict]:
+        """Updates properties of a virtual machine. The VM has to be stopped and restarted for the new properties to take effect."""
+        return self._execute(
+            "updateVirtualMachine",
+            payload,
+            envelope="updatevirtualmachineresponse",
+        )
+
+    async def update_vm_async(self, payload: UpdateVirtualMachineRequest) -> APIResponse[Dict]:
+        """Asynchronously Updates properties of a virtual machine. The VM has to be stopped and restarted for the new properties to take effect."""
+        return await self._execute_async(
+            "updateVirtualMachine",
+            payload,
+            envelope="updatevirtualmachineresponse",
         )
