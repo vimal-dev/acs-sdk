@@ -1,8 +1,72 @@
-from typing import Dict, List, Optional
+from __future__ import annotations
+
+from typing import Any, Dict, List, Optional
 from pydantic import Field, field_serializer, model_validator
 
 from .base import APIRequest
 
+
+class AssignVirtualMachineRequest(APIRequest):
+    # -------------------------------------------------------------------------
+    # REQUIRED
+    # -------------------------------------------------------------------------
+    virtualmachineid: str = Field(..., description="ID of the VM to be moved")
+
+    # -------------------------------------------------------------------------
+    # NEW OWNER
+    # account and domainid go together; projectid is an alternative to account
+    # -------------------------------------------------------------------------
+    account: Optional[str] = Field(None, description="Account name of the new VM owner")
+    domainid: Optional[str] = Field(None, description="Domain ID of the new VM owner")
+    projectid: Optional[str] = Field(
+        None, description="Project for the new VM owner (alternative to account/domainid)"
+    )
+
+    # -------------------------------------------------------------------------
+    # NETWORK / SECURITY
+    # If not provided, VM joins the default network/security group of the zone
+    # -------------------------------------------------------------------------
+    networkids: Optional[list[str]] = Field(
+        None,
+        description=(
+            "Network IDs the moved VM will participate in. "
+            "Defaults to the new account's default network if omitted."
+        ),
+    )
+    securitygroupids: Optional[list[str]] = Field(
+        None,
+        description=(
+            "Security group IDs to apply. "
+            "Defaults to the new account's default security group if omitted."
+        ),
+    )
+
+    # -------------------------------------------------------------------------
+    # SERIALIZERS
+    # -------------------------------------------------------------------------
+    @field_serializer("networkids", "securitygroupids")
+    def serialize_csv(self, value: list[str] | None) -> str | None:
+        if value is None:
+            return None
+        return ",".join(value)
+
+    # -------------------------------------------------------------------------
+    # VALIDATORS
+    # -------------------------------------------------------------------------
+    @model_validator(mode="after")
+    def validate_owner(self) -> AssignVirtualMachineRequest:
+        errors = []
+
+        if self.account and not self.domainid:
+            errors.append("domainid is required when account is provided")
+
+        if self.projectid and (self.account or self.domainid):
+            errors.append("projectid is mutually exclusive with account/domainid")
+
+        if errors:
+            raise ValueError(errors)
+
+        return self
 
 class ListVirtualMachinesRequest(APIRequest):
     # Filters
@@ -145,6 +209,7 @@ class DeployVirtualMachineRequest(APIRequest):
     # templateid is optional per docs — can deploy from snapshotid instead
     # -------------------------------------------------------------------------
     templateid: Optional[str] = Field(None, description="ID of the template")
+    isoid: Optional[str] = Field(None, description="ID of the ISO (alternative to template)")
     snapshotid: Optional[str] = Field(
         None, description="ID of the snapshot to create the VM from (mutually exclusive with templateid)"
     )
@@ -165,6 +230,13 @@ class DeployVirtualMachineRequest(APIRequest):
     # -------------------------------------------------------------------------
     networkids: Optional[list[str]] = Field(
         None, description="Network IDs to attach (CSV serialized, mutually exclusive with iptonetworklist)"
+    )
+    iptonetworklist: Optional[List[Dict[str, str]]] = Field(
+        None,
+        description=(
+            "List of IP-to-network mappings when assigning a static IP to a specific network. "
+            "Each item is a dict with keys like 'networkid' and 'ip' (mutually exclusive with networkids)."
+        ),
     )
     ipaddress: Optional[str] = Field(None, description="Static IPv4 for the default network")
     ip6address: Optional[str] = Field(None, description="Static IPv6 for the default network")
@@ -275,6 +347,28 @@ class DeployVirtualMachineRequest(APIRequest):
         if value is None:
             return None
         return ",".join(value)
+    
+    # -------------------------------------------------------------------------
+    # REQUEST SERIALIZATION
+    # -------------------------------------------------------------------------
+    def model_dump(self, *args, **kwargs) -> Dict[str, Any]:
+        """Dump the request to a CloudStack-compatible parameter dictionary."""
+        data = super().model_dump(*args, **kwargs)
+        return self._flatten_cloudstack_list_dicts(data)
+
+    def _flatten_cloudstack_list_dicts(self, data: Dict[str, Any]) -> Dict[str, Any]:
+        flattened: Dict[str, Any] = {}
+        for key, value in data.items():
+            if key in {"iptonetworklist", "datadisksdetails"} and isinstance(value, list):
+                for idx, item in enumerate(value):
+                    if isinstance(item, dict):
+                        for subk, subv in item.items():
+                            flattened[f"{key}[{idx}].{subk}"] = subv
+                    else:
+                        flattened[f"{key}[{idx}]"] = item
+            else:
+                flattened[key] = value
+        return flattened
 
     # -------------------------------------------------------------------------
     # VALIDATORS
@@ -285,6 +379,9 @@ class DeployVirtualMachineRequest(APIRequest):
 
         if self.templateid and self.snapshotid:
             errors.append("templateid and snapshotid are mutually exclusive")
+
+        if self.networkids and self.iptonetworklist:
+            errors.append("networkids and iptonetworklist are mutually exclusive")
 
         if self.affinitygroupids and self.affinitygroupnames:
             errors.append("affinitygroupids and affinitygroupnames are mutually exclusive")

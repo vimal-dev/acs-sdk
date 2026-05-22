@@ -3,6 +3,7 @@ from typing import Dict, List
 
 from acs_sdk.schemas.request.virtual_machine import (
     AddNICToVirtualMachineRequest,
+    AssignVirtualMachineRequest,
     AssignVirtualMachineToBackupOfferingRequest,
     CreateVMScheduleRequest,
     DeleteVMScheduleRequest,
@@ -57,6 +58,26 @@ class VirtualMachine(BaseService):
             "addNicToVirtualMachine",
             payload,
             envelope="addnictovirtualmachineresponse",
+        )
+    
+    def assign_virtual_machine(
+        self, payload: AssignVirtualMachineRequest
+    ) -> APIResponse[Dict]:
+        """Change ownership of a VM from one account to another."""
+        return self._execute(
+            "assignVirtualMachine",
+            payload,
+            envelope="assignvirtualmachineresponse",
+        )
+
+    async def assign_virtual_machine_async(
+        self, payload: AssignVirtualMachineRequest
+    ) -> APIResponse[Dict]:
+        """Asynchronously Change ownership of a VM from one account to another."""
+        return await self._execute_async(
+            "assignVirtualMachine",
+            payload,
+            envelope="assignvirtualmachineresponse",
         )
 
     def assign_virtual_machine_to_backup_offering(
