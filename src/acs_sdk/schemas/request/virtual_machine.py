@@ -18,6 +18,20 @@ class UserDataDetail(BaseModel):
     )
 
 
+class AddNICToVirtualMachineRequest(APIRequest):
+    virtualmachineid: str = Field(..., description="ID of the virtual machine")
+    networkid: str = Field(..., description="ID of the network to add the NIC to")
+    dhcpoptions: Optional[str] = Field(
+        None,
+        description="DHCP options which are passed to the nic Example: dhcpoptions[0].dhcp:114=url&dhcpoptions[0].dhcp:66=www.test.com",
+    )
+    ipaddress: Optional[str] = Field(
+        None,
+        description="IP address for the new NIC. If not specified, an IP address will be automatically allocated from the specified network.",
+    )
+    macaddress: Optional[str] = Field(None, description="MAC address for the new NIC.")
+
+
 class AssignVirtualMachineRequest(APIRequest):
     # -------------------------------------------------------------------------
     # REQUIRED
@@ -82,108 +96,13 @@ class AssignVirtualMachineRequest(APIRequest):
         return self
 
 
-class ListVirtualMachinesRequest(APIRequest, PaginationMixin):
-    # Filters
-    id: Optional[str] = Field(None, description="List VM by ID")
-    name: Optional[str] = Field(None, description="List VM by name")
-    keyword: Optional[str] = Field(None, description="Search keyword")
-
-    account: Optional[str] = Field(None, description="List VMs by account name")
-    accountid: Optional[str] = Field(None, description="List VMs by account ID")
-
-    domainid: Optional[str] = Field(None, description="Domain ID")
-    isrecursive: Optional[bool] = Field(None, description="Include subdomains (used with domainid)")
-
-    projectid: Optional[str] = Field(None, description="Project ID")
-
-    zoneid: Optional[str] = Field(None, description="Zone ID")
-    hostid: Optional[str] = Field(None, description="Host ID")
-
-    clusterid: Optional[str] = Field(None, description="Cluster ID")
-    podid: Optional[str] = Field(None, description="Pod ID")
-
-    networkid: Optional[str] = Field(None, description="Network ID")
-    vpcid: Optional[str] = Field(None, description="VPC ID")
-
-    serviceofferingid: Optional[str] = Field(None, description="Filter by service offering")
-
-    templateid: Optional[str] = Field(None, description="Template ID")
-    isoid: Optional[str] = Field(None, description="ISO ID")
-
-    state: Optional[str] = Field(None, description="VM state (Running, Stopped, Destroyed, etc.)")
-
-    haenable: Optional[bool] = Field(None, description="Filter HA-enabled VMs")
-
-    hypervisor: Optional[str] = Field(None, description="Filter by hypervisor type")
-
-    tags: Optional[str] = Field(None, description="List VMs by tags (key/value pairs)")
-
-    # Access / visibility
-    listall: Optional[bool] = Field(None, description="List all VMs available to the caller")
-
-    details: Optional[str] = Field(
-        None,
-        description="Comma-separated list of details (e.g., 'all', 'nics', 'stats')",
-    )
-
-    # Advanced filters
-    forvirtualnetwork: Optional[bool] = Field(None, description="List VMs for virtual network")
-
-    storageid: Optional[str] = Field(None, description="Filter by storage ID")
-
-
-class ListVMScheduleRequest(APIRequest, PaginationMixin):
-    virtualmachineid: str = Field(
-        ...,
-        alias="virtualMachineId",
-        description="ID of the VM for which schedule is defined",
-    )
-
-    action: Optional[str] = Field(
-        default=None,
-        description="Action taken by schedule",
-    )
-
-    enabled: Optional[bool] = Field(
-        default=None,
-        description="Filter by enabled state",
-    )
-
-    id: Optional[str] = Field(
-        default=None,
-        description="ID of VM schedule",
-    )
-
-    keyword: Optional[str] = Field(
-        default=None,
-        description="List by keyword",
-    )
-
-
-class AddNICToVirtualMachineRequest(APIRequest):
-    virtualmachineid: str = Field(..., description="ID of the virtual machine")
-    networkid: str = Field(..., description="ID of the network to add the NIC to")
-    dhcpoptions: Optional[str] = Field(
-        None,
-        description="DHCP options which are passed to the nic Example: dhcpoptions[0].dhcp:114=url&dhcpoptions[0].dhcp:66=www.test.com",
-    )
-    ipaddress: Optional[str] = Field(
-        None,
-        description="IP address for the new NIC. If not specified, an IP address will be automatically allocated from the specified network.",
-    )
-    macaddress: Optional[str] = Field(None, description="MAC address for the new NIC.")
-
-
-class RemoveNICFromVirtualMachineRequest(APIRequest):
-    virtualmachineid: str = Field(
-        ..., alias="virtualMachineId", description="ID of the virtual machine"
-    )
-    nicid: str = Field(..., alias="nicId", description="ID of the NIC")
-
-
 class AssignVirtualMachineToBackupOfferingRequest(APIRequest):
     virtualmachineid: str = Field(..., description="ID of the virtual machine")
     backupofferingid: str = Field(..., description="ID of the backup offering to assign the VM to")
+
+
+class CleanVMReservationsRequest(APIRequest):
+    pass
 
 
 class CreateVMScheduleRequest(APIRequest):
@@ -198,29 +117,6 @@ class CreateVMScheduleRequest(APIRequest):
     action: str = Field(
         ...,
         description="Action to perform (e.g., 'start', 'stop', 'reboot', 'force_stop', 'force_reboot')",
-    )
-    description: Optional[str] = Field(None, description="Optional description for the schedule")
-    enabled: Optional[bool] = Field(
-        None, description="Whether the schedule is enabled (default: True)"
-    )
-    startdate: Optional[str] = Field(
-        None,
-        description="Start date for the schedule in ISO 8601 format (e.g., '2024-01-01T00:00:00Z')",
-    )
-    enddate: Optional[str] = Field(
-        None,
-        description="End date for the schedule in ISO 8601 format (e.g., '2024-12-31T23:59:59Z')",
-    )
-
-
-class UpdateVMScheduleRequest(APIRequest):
-    id: str = Field(..., description="ID of the virtual machine schedule to update")
-    schedule: str = Field(
-        ...,
-        description="Schedule in cron format (e.g., '0 0 * * *' for daily at midnight)",
-    )
-    timezone: Optional[str] = Field(
-        None, description="Timezone for the schedule (e.g., 'UTC', 'America/New_York')"
     )
     description: Optional[str] = Field(None, description="Optional description for the schedule")
     enabled: Optional[bool] = Field(
@@ -542,8 +438,16 @@ class DestroyVirtualMachineRequest(APIRequest):
         return ",".join(value)
 
 
-class CleanVMReservationsRequest(APIRequest):
-    pass
+class DhcpOptionNetworkEntry(APIRequest):
+    """Single entry for dhcpoptionsnetworklist."""
+
+    networkid: str = Field(..., description="Network ID to apply DHCP options to")
+    # DHCP options are dynamic keys like dhcp:66, dhcp:114 etc.
+    # carried as extra kwargs — stored as a plain dict alongside networkid
+    options: dict[str, str] = Field(
+        default_factory=dict,
+        description="DHCP option key-value pairs e.g. {'dhcp:66': 'www.test.com', 'dhcp:114': 'http://url'}",
+    )
 
 
 class ExpungeVirtualMachineRequest(APIRequest):
@@ -556,6 +460,84 @@ class GetVMPasswordRequest(APIRequest):
 
 class GetVMUserdataRequest(APIRequest):
     id: str = Field(..., description="ID of the virtual machine")
+
+
+class ListVirtualMachinesRequest(APIRequest, PaginationMixin):
+    # Filters
+    id: Optional[str] = Field(None, description="List VM by ID")
+    name: Optional[str] = Field(None, description="List VM by name")
+    keyword: Optional[str] = Field(None, description="Search keyword")
+
+    account: Optional[str] = Field(None, description="List VMs by account name")
+    accountid: Optional[str] = Field(None, description="List VMs by account ID")
+
+    domainid: Optional[str] = Field(None, description="Domain ID")
+    isrecursive: Optional[bool] = Field(None, description="Include subdomains (used with domainid)")
+
+    projectid: Optional[str] = Field(None, description="Project ID")
+
+    zoneid: Optional[str] = Field(None, description="Zone ID")
+    hostid: Optional[str] = Field(None, description="Host ID")
+
+    clusterid: Optional[str] = Field(None, description="Cluster ID")
+    podid: Optional[str] = Field(None, description="Pod ID")
+
+    networkid: Optional[str] = Field(None, description="Network ID")
+    vpcid: Optional[str] = Field(None, description="VPC ID")
+
+    serviceofferingid: Optional[str] = Field(None, description="Filter by service offering")
+
+    templateid: Optional[str] = Field(None, description="Template ID")
+    isoid: Optional[str] = Field(None, description="ISO ID")
+
+    state: Optional[str] = Field(None, description="VM state (Running, Stopped, Destroyed, etc.)")
+
+    haenable: Optional[bool] = Field(None, description="Filter HA-enabled VMs")
+
+    hypervisor: Optional[str] = Field(None, description="Filter by hypervisor type")
+
+    tags: Optional[str] = Field(None, description="List VMs by tags (key/value pairs)")
+
+    # Access / visibility
+    listall: Optional[bool] = Field(None, description="List all VMs available to the caller")
+
+    details: Optional[str] = Field(
+        None,
+        description="Comma-separated list of details (e.g., 'all', 'nics', 'stats')",
+    )
+
+    # Advanced filters
+    forvirtualnetwork: Optional[bool] = Field(None, description="List VMs for virtual network")
+
+    storageid: Optional[str] = Field(None, description="Filter by storage ID")
+
+
+class ListVMScheduleRequest(APIRequest, PaginationMixin):
+    virtualmachineid: str = Field(
+        ...,
+        alias="virtualMachineId",
+        description="ID of the VM for which schedule is defined",
+    )
+
+    action: Optional[str] = Field(
+        default=None,
+        description="Action taken by schedule",
+    )
+
+    enabled: Optional[bool] = Field(
+        default=None,
+        description="Filter by enabled state",
+    )
+
+    id: Optional[str] = Field(
+        default=None,
+        description="ID of VM schedule",
+    )
+
+    keyword: Optional[str] = Field(
+        default=None,
+        description="List by keyword",
+    )
 
 
 class RebootVirtualMachineRequest(APIRequest):
@@ -572,6 +554,13 @@ class RebootVirtualMachineRequest(APIRequest):
 
 class RecoverVirtualMachineRequest(APIRequest):
     id: str = Field(..., description="ID of the virtual machine")
+
+
+class RemoveNICFromVirtualMachineRequest(APIRequest):
+    virtualmachineid: str = Field(
+        ..., alias="virtualMachineId", description="ID of the virtual machine"
+    )
+    nicid: str = Field(..., alias="nicId", description="ID of the NIC")
 
 
 class RemoveVirtualMachineFromBackupOfferingRequest(APIRequest):
@@ -839,18 +828,6 @@ class UpdateDefaultNICForVirtualMachineRequest(APIRequest):
     virtualmachineid: str = Field(..., alias="virtualMachineId", description="Virtual Machine ID")
 
 
-class DhcpOptionNetworkEntry(APIRequest):
-    """Single entry for dhcpoptionsnetworklist."""
-
-    networkid: str = Field(..., description="Network ID to apply DHCP options to")
-    # DHCP options are dynamic keys like dhcp:66, dhcp:114 etc.
-    # carried as extra kwargs — stored as a plain dict alongside networkid
-    options: dict[str, str] = Field(
-        default_factory=dict,
-        description="DHCP option key-value pairs e.g. {'dhcp:66': 'www.test.com', 'dhcp:114': 'http://url'}",
-    )
-
-
 class UpdateVirtualMachineRequest(APIRequest):
     # -------------------------------------------------------------------------
     # REQUIRED
@@ -1021,3 +998,26 @@ class UpdateVirtualMachineRequest(APIRequest):
             for dhcp_key, dhcp_val in entry.options.items():
                 result[f"dhcpoptionsnetworklist[{i}].{dhcp_key}"] = dhcp_val
         return result
+
+
+class UpdateVMScheduleRequest(APIRequest):
+    id: str = Field(..., description="ID of the virtual machine schedule to update")
+    schedule: str = Field(
+        ...,
+        description="Schedule in cron format (e.g., '0 0 * * *' for daily at midnight)",
+    )
+    timezone: Optional[str] = Field(
+        None, description="Timezone for the schedule (e.g., 'UTC', 'America/New_York')"
+    )
+    description: Optional[str] = Field(None, description="Optional description for the schedule")
+    enabled: Optional[bool] = Field(
+        None, description="Whether the schedule is enabled (default: True)"
+    )
+    startdate: Optional[str] = Field(
+        None,
+        description="Start date for the schedule in ISO 8601 format (e.g., '2024-01-01T00:00:00Z')",
+    )
+    enddate: Optional[str] = Field(
+        None,
+        description="End date for the schedule in ISO 8601 format (e.g., '2024-12-31T23:59:59Z')",
+    )
