@@ -117,7 +117,7 @@ class Address(BaseService):
             "reserveIpAddress",
             payload,
             envelope="reserveipaddressresponse",
-            entity="publicipaddress",
+            entity="ipaddress",
         )
 
     async def reserve_ip_address_async(self, payload: ReserveIpAddressRequest) -> APIResponse[Dict]:
@@ -126,7 +126,7 @@ class Address(BaseService):
             "reserveIpAddress",
             payload,
             envelope="reserveipaddressresponse",
-            entity="publicipaddress",
+            entity="ipaddress",
         )
 
     def acquire_pod_ip_address(self, payload: AcquirePodIpAddressRequest) -> APIResponse[Dict]:
