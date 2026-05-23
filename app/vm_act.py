@@ -61,7 +61,7 @@ def handle(cmds: tuple[str, ...], vm_ids: tuple[str, ...]):
         for cmd in expanded_cmds:
             try:
                 response = _call_vm_action(acs_client, cmd, vm)
-                pprint.pp({"vm": vm, "cmd": cmd, "result": getattr(response, 'data', None)})
+                pprint.pp({"vm": vm, "cmd": cmd, "result": getattr(response, "data", None)})
             except Exception as e:
                 pprint.pp({"vm": vm, "cmd": cmd, "error": str(e)})
 

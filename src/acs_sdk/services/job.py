@@ -83,7 +83,9 @@ class Job(BaseService):
                     "entity": data.get("jobinstancetype"),
                     "entity_id": data.get("jobinstanceid"),
                     "result": data.get("jobresult") if success else {},
-                    "error": None if success else data.get("jobresult", {}).get("errortext") or "Job failed",
+                    "error": None
+                    if success
+                    else data.get("jobresult", {}).get("errortext") or "Job failed",
                     "elapsed_seconds": elapsed_seconds,
                     "attempts": attempts,
                 }
