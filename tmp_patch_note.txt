@@ -1,0 +1,1 @@
+Patch will modify ApacheCloudStackClient._build_params and ApacheCloudStackAsyncClient._build_params to flatten list-of-dict params into keys like 'iptonetworklist[0].networkid'.

@@ -3,7 +3,7 @@ from pydantic import ValidationError
 from acs_sdk import ApacheCloudStack
 import click
 
-from acs_sdk.schemas.request.service_offering import ListServiceOfferingsRequest
+from acs_sdk.schemas.request.service_offering import ListServiceOfferingRequest
 
 
 @click.command("list:service-offerings", help="List all service offerings available in CloudStack")
@@ -14,7 +14,7 @@ def list_service_offerings(ctx):
         config = ctx.obj["config"]
         acs = ApacheCloudStack(config)
         try:
-            payload = ListServiceOfferingsRequest()
+            payload = ListServiceOfferingRequest()
             response = acs.serviceoffering.list(payload)
             if len(response.data) > 0:
                 offerings = response.data
