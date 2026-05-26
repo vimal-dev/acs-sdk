@@ -44,8 +44,7 @@ class Address(BaseService):
         return self._execute(
             "associateIpAddress",
             payload,
-            envelope="associateipaddressresponse",
-            entity="publicipaddress",
+            envelope="associateipaddressresponse"
         )
 
     async def associate_ip_address_async(
@@ -55,8 +54,7 @@ class Address(BaseService):
         return await self._execute_async(
             "associateIpAddress",
             payload,
-            envelope="associateipaddressresponse",
-            entity="publicipaddress",
+            envelope="associateipaddressresponse"
         )
 
     def disassociate_ip_address(self, payload: DisassociateIpAddressRequest) -> APIResponse[Dict]:
