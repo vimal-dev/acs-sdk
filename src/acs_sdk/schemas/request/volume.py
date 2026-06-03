@@ -171,8 +171,8 @@ class DestroyVolumeRequest(APIRequest):
 class DetachVolumeRequest(APIRequest):
     id: str = Field(..., description="ID of the volume to be detached")
 
-    virtualmachineid: str = Field(
-        ...,
+    virtualmachineid: Optional[str] = Field(
+        None,
         alias="instanceId",
         description="ID of the compute instance to which the volume will be attached",
     )
@@ -182,6 +182,12 @@ class DetachVolumeRequest(APIRequest):
         alias="deviceId",
         description="The ID of the device to map the volume to the guest OS. If no deviceID is informed, the next available deviceID will be chosen. Use 0 when volume needs to be attached as ROOT.",
     )
+
+    @model_validator(mode="after")
+    def validate_vm_device_id(self):
+        if self.virtualmachineid and not self.deviceid:
+            raise ValueError("'deviceId' must be provided when 'instanceId' is used")
+        return self
 
 
 class ExtractVolumeRequest(APIRequest):
