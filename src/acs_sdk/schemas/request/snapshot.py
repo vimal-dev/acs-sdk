@@ -64,10 +64,12 @@ class CopySnapshotRequest(APIRequest):
 
     destzoneid: Optional[UUID4] = Field(
         default=None,
+        alias="destZoneId",
         description="Destination zone ID. Mutually exclusive with destzoneids.",
     )
     destzoneids: Optional[list[UUID4]] = Field(
         default=None,
+        alias="destZoneIds",
         description=(
             "Comma-separated destination zone IDs for multi-zone copying. "
             "Mutually exclusive with destzoneid."
@@ -75,6 +77,7 @@ class CopySnapshotRequest(APIRequest):
     )
     sourcezoneid: Optional[UUID4] = Field(
         default=None,
+        alias="sourceZoneId",
         description=(
             "Zone ID where the snapshot currently resides. "
             "Defaults to the snapshot volume's zone when omitted."
@@ -82,10 +85,12 @@ class CopySnapshotRequest(APIRequest):
     )
     storageids: Optional[list[UUID4]] = Field(
         default=None,
+        alias="storageIds",
         description="Storage pool IDs in other zones. Currently supported for StorPool only.",
     )
     usestoragereplication: Optional[bool] = Field(
         default=None,
+        alias="useStorageReplication",
         description="If True, copy the snapshot to supported primary storage via storage replication.",
     )
 
@@ -112,7 +117,7 @@ class CreateSnapshotRequest(APIRequest):
 
     # --- required -----------------------------------------------------------
 
-    volumeid: UUID4 = Field(..., description="UUID of the disk volume to snapshot.")
+    volumeid: UUID4 = Field(..., alias="volumeId", description="UUID of the disk volume to snapshot.")
 
     # --- optional -----------------------------------------------------------
 
@@ -122,6 +127,7 @@ class CreateSnapshotRequest(APIRequest):
     )
     asyncbackup: Optional[bool] = Field(
         default=None,
+        alias="asyncBackup",
         description=(
             "If True, perform the backup asynchronously. The snapshot is created on primary "
             "storage immediately and backed up to secondary storage in the background."
@@ -129,6 +135,7 @@ class CreateSnapshotRequest(APIRequest):
     )
     domainid: Optional[UUID4] = Field(
         default=None,
+        alias="domainId",
         description=(
             "Domain UUID for the snapshot. When combined with account, "
             "scopes the snapshot to that account's domain."
@@ -136,6 +143,7 @@ class CreateSnapshotRequest(APIRequest):
     )
     locationtype: Optional[LocationType] = Field(
         default=None,
+        alias="locationType",
         description=(
             "Storage location for the snapshot. Only applicable for managed storage. "
             "Allowed values: 'primary' (default), 'secondary'."
@@ -144,14 +152,17 @@ class CreateSnapshotRequest(APIRequest):
     name: Optional[str] = Field(default=None, description="Human-readable name for the snapshot.")
     policyid: Optional[UUID4] = Field(
         default=None,
+        alias="policyId",
         description="UUID of the snapshot policy to associate. Defaults to MANUAL_POLICY if omitted.",
     )
     quiescevm: Optional[bool] = Field(
         default=None,
+        alias="quiesceVm",
         description="If True, quiesce the VM before snapshotting for filesystem/application consistency.",
     )
     storageids: Optional[list[UUID4]] = Field(
         default=None,
+        alias="storageIds",
         description="Storage pool UUIDs in other zones where the snapshot should also be available.",
     )
     tags: Optional[dict[str, str]] = Field(
@@ -160,10 +171,12 @@ class CreateSnapshotRequest(APIRequest):
     )
     usestoragereplication: Optional[bool] = Field(
         default=None,
+        alias="useStorageReplication",
         description="If True, copy the snapshot to supported primary storage via storage replication.",
     )
     zoneids: Optional[list[UUID4]] = Field(
         default=None,
+        alias="zoneIds",
         description="Zone UUIDs where the snapshot should also be made available.",
     )
 
@@ -186,8 +199,8 @@ class CreateSnapshotFromVMSnapshotRequest(APIRequest):
     Reference: https://cloudstack.apache.org/api/apidocs-4.22/apis/createSnapshotFromVMSnapshot.html
     """
 
-    vmsnapshotid: UUID4 = Field(..., description="The ID of the VM snapshot.")
-    volumeid: UUID4 = Field(..., description="The ID of the disk volume.")
+    vmsnapshotid: UUID4 = Field(..., alias="vmSnapshotId", description="The ID of the VM snapshot.")
+    volumeid: UUID4 = Field(..., alias="volumeId", description="The ID of the disk volume.")
 
     name: Optional[str] = Field(default=None, description="Name for the resulting snapshot.")
 
@@ -202,10 +215,12 @@ class CreateSnapshotPolicyRequest(APIRequest):
 
     intervaltype: IntervalType = Field(
         ...,
+        alias="intervalType",
         description="Interval type: HOURLY, DAILY, WEEKLY, or MONTHLY.",
     )
     maxsnaps: int = Field(
         ...,
+        alias="maxSnaps",
         ge=1,
         description="Maximum number of snapshots to retain.",
     )
@@ -220,16 +235,18 @@ class CreateSnapshotPolicyRequest(APIRequest):
         ...,
         description="Timezone for this schedule (see CloudStack Time Zone Format).",
     )
-    volumeid: UUID4 = Field(..., description="The ID of the disk volume.")
+    volumeid: UUID4 = Field(..., alias="volumeId", description="The ID of the disk volume.")
 
     # --- optional -----------------------------------------------------------
 
     fordisplay: Optional[bool] = Field(
         default=None,
+        alias="forDisplay",
         description="Whether to display the policy to the end user.",
     )
     storageids: Optional[list[UUID4]] = Field(
         default=None,
+        alias="storageIds",
         description="Storage pool IDs in other zones where the snapshot will be made available.",
     )
     tags: Optional[dict[str, str]] = Field(
@@ -238,10 +255,12 @@ class CreateSnapshotPolicyRequest(APIRequest):
     )
     usestoragereplication: Optional[bool] = Field(
         default=None,
+        alias="useStorageReplication",
         description="If True, copy snapshots to supported primary storage via storage replication.",
     )
     zoneids: Optional[list[UUID4]] = Field(
         default=None,
+        alias="zoneIds",
         description="Zone IDs where snapshots will be made available.",
     )
 
@@ -258,16 +277,18 @@ class CreateVMSnapshotRequest(APIRequest):
     Reference: https://cloudstack.apache.org/api/apidocs-4.22/apis/createVMSnapshot.html
     """
 
-    virtualmachineid: UUID4 = Field(..., description="The ID of the VM.")
+    virtualmachineid: UUID4 = Field(..., alias="virtualMachineId", description="The ID of the VM.")
 
     description: Optional[str] = Field(default=None, description="Description of the snapshot.")
     name: Optional[str] = Field(default=None, description="Display name of the snapshot.")
     quiescevm: Optional[bool] = Field(
         default=None,
+        alias="quiesceVm",
         description="If True, quiesce the VM before taking the snapshot.",
     )
     snapshotmemory: Optional[bool] = Field(
         default=None,
+        alias="snapshotMemory",
         description="If True, include VM memory state in the snapshot.",
     )
 
@@ -319,7 +340,7 @@ class DeleteVMSnapshotRequest(APIRequest):
     Reference: https://cloudstack.apache.org/api/apidocs-4.22/apis/deleteVMSnapshot.html
     """
 
-    vmsnapshotid: UUID4 = Field(..., description="The ID of the VM snapshot to delete.")
+    vmsnapshotid: UUID4 = Field(..., alias="vmSnapshotId", description="The ID of the VM snapshot to delete.")
 
 
 class ExtractSnapshotRequest(APIRequest):
@@ -329,7 +350,7 @@ class ExtractSnapshotRequest(APIRequest):
     """
 
     id: UUID4 = Field(..., description="The ID of the snapshot.")
-    zoneid: UUID4 = Field(..., description="The ID of the zone where the snapshot is located.")
+    zoneid: UUID4 = Field(..., alias="zoneId", description="The ID of the zone where the snapshot is located.")
 
 
 class GetVolumeSnapshotDetailsRequest(APIRequest):
@@ -338,7 +359,7 @@ class GetVolumeSnapshotDetailsRequest(APIRequest):
     Reference: https://cloudstack.apache.org/api/apidocs-4.22/apis/getVolumeSnapshotDetails.html
     """
 
-    snapshotid: UUID4 = Field(..., description="CloudStack Snapshot UUID.")
+    snapshotid: UUID4 = Field(..., alias="snapshotId", description="CloudStack Snapshot UUID.")
 
 
 class ListSnapshotPoliciesRequest(APIRequest, PaginationMixin):
@@ -353,10 +374,12 @@ class ListSnapshotPoliciesRequest(APIRequest, PaginationMixin):
     )
     domainid: Optional[UUID4] = Field(
         default=None,
+        alias="domainId",
         description="List only resources belonging to this domain.",
     )
     fordisplay: Optional[bool] = Field(
         default=None,
+        alias="forDisplay",
         description="Filter by display flag. Only ROOT admins may use this parameter.",
     )
     id: Optional[UUID4] = Field(
@@ -365,6 +388,7 @@ class ListSnapshotPoliciesRequest(APIRequest, PaginationMixin):
     )
     isrecursive: Optional[bool] = Field(
         default=None,
+        alias="isRecursive",
         description=(
             "If True, list all resources from the domain specified by domainid "
             "down to every leaf subdomain."
@@ -373,6 +397,7 @@ class ListSnapshotPoliciesRequest(APIRequest, PaginationMixin):
     keyword: Optional[str] = Field(default=None, description="List by keyword.")
     listall: Optional[bool] = Field(
         default=None,
+        alias="listAll",
         description=(
             "If False, list only resources owned by the caller. "
             "If True, list all resources the caller is authorised to see."
@@ -380,10 +405,12 @@ class ListSnapshotPoliciesRequest(APIRequest, PaginationMixin):
     )
     projectid: Optional[str] = Field(
         default=None,
+        alias="projectId",
         description="List objects by project UUID. Pass '-1' to list across all projects.",
     )
     volumeid: Optional[UUID4] = Field(
         default=None,
+        alias="volumeId",
         description="Filter by disk volume ID.",
     )
 
@@ -409,6 +436,7 @@ class ListSnapshotsRequest(APIRequest, PaginationMixin):
     )
     domainid: Optional[UUID4] = Field(
         default=None,
+        alias="domainId",
         description="List only resources belonging to this domain.",
     )
     id: Optional[UUID4] = Field(
@@ -421,14 +449,17 @@ class ListSnapshotsRequest(APIRequest, PaginationMixin):
     )
     imagestoreid: Optional[UUID4] = Field(
         default=None,
+        alias="imageStoreId",
         description="Filter by image store or image cache store UUID.",
     )
     intervaltype: Optional[IntervalType] = Field(
         default=None,
+        alias="intervalType",
         description="Filter by snapshot schedule interval type.",
     )
     isrecursive: Optional[bool] = Field(
         default=None,
+        alias="isRecursive",
         description=(
             "If True, list all resources from the domain specified by domainid "
             "down to every leaf subdomain."
@@ -440,6 +471,7 @@ class ListSnapshotsRequest(APIRequest, PaginationMixin):
     )
     listall: Optional[bool] = Field(
         default=None,
+        alias="listAll",
         description=(
             "If False (default), list only resources owned by the caller. "
             "If True, list all resources the caller is authorised to see. "
@@ -448,23 +480,28 @@ class ListSnapshotsRequest(APIRequest, PaginationMixin):
     )
     locationtype: Optional[LocationType] = Field(
         default=None,
-        description=("Filter by storage location type. Only effective when showunique=False."),
+        alias="locationType",
+        description="Filter by storage location type. Only effective when showunique=False.",
     )
     name: Optional[str] = Field(default=None, description="Filter by snapshot name.")
     projectid: Optional[str] = Field(
         default=None,
+        alias="projectId",
         description="List snapshots for this project UUID. Pass '-1' to list across all projects.",
     )
     showunique: Optional[bool] = Field(
         default=None,
+        alias="showUnique",
         description="If False, list snapshots across all zones and their backing stores.",
     )
     snapshottype: Optional[SnapshotType] = Field(
         default=None,
+        alias="snapshotType",
         description="Filter by snapshot type: MANUAL or RECURRING.",
     )
     storageid: Optional[UUID4] = Field(
         default=None,
+        alias="storageId",
         description="Filter by storage pool UUID.",
     )
     tags: Optional[dict[str, str]] = Field(
@@ -473,10 +510,12 @@ class ListSnapshotsRequest(APIRequest, PaginationMixin):
     )
     volumeid: Optional[UUID4] = Field(
         default=None,
+        alias="volumeId",
         description="Filter by the UUID of the source disk volume.",
     )
     zoneid: Optional[UUID4] = Field(
         default=None,
+        alias="zoneId",
         description="Filter by availability zone UUID.",
     )
 
@@ -511,10 +550,12 @@ class ListVMSnapshotRequest(APIRequest, PaginationMixin):
     )
     domainid: Optional[UUID4] = Field(
         default=None,
+        alias="domainId",
         description="List only resources belonging to this domain.",
     )
     isrecursive: Optional[bool] = Field(
         default=None,
+        alias="isRecursive",
         description=(
             "If True, list all resources from the domain specified by domainid "
             "down to every leaf subdomain."
@@ -523,6 +564,7 @@ class ListVMSnapshotRequest(APIRequest, PaginationMixin):
     keyword: Optional[str] = Field(default=None, description="List by keyword.")
     listall: Optional[bool] = Field(
         default=None,
+        alias="listAll",
         description=(
             "If False, list only resources owned by the caller. "
             "If True, list all resources the caller is authorised to see."
@@ -534,6 +576,7 @@ class ListVMSnapshotRequest(APIRequest, PaginationMixin):
     )
     projectid: Optional[str] = Field(
         default=None,
+        alias="projectId",
         description="List objects by project UUID. Pass '-1' to list across all projects.",
     )
     state: Optional[VMSnapshotState] = Field(
@@ -546,14 +589,17 @@ class ListVMSnapshotRequest(APIRequest, PaginationMixin):
     )
     virtualmachineid: Optional[UUID4] = Field(
         default=None,
+        alias="virtualMachineId",
         description="Filter by VM ID.",
     )
     vmsnapshotid: Optional[UUID4] = Field(
         default=None,
+        alias="vmSnapshotId",
         description="Filter by VM snapshot ID. Mutually exclusive with vmsnapshotids.",
     )
     vmsnapshotids: Optional[list[UUID4]] = Field(
         default=None,
+        alias="vmSnapshotIds",
         description="Filter by multiple VM snapshot IDs. Mutually exclusive with vmsnapshotid.",
     )
 
@@ -593,10 +639,12 @@ class UpdateSnapshotPolicyRequest(APIRequest):
 
     customid: Optional[str] = Field(
         default=None,
+        alias="customId",
         description="Custom ID for the resource. Root Admins only.",
     )
     fordisplay: Optional[bool] = Field(
         default=None,
+        alias="forDisplay",
         description="Whether to display the snapshot policy to the end user.",
     )
     id: Optional[UUID4] = Field(
