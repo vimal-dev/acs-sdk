@@ -41,20 +41,14 @@ class Address(BaseService):
 
     def associate_ip_address(self, payload: AssociateIpAddressRequest) -> APIResponse[Dict]:
         """Associate an IP address."""
-        return self._execute(
-            "associateIpAddress",
-            payload,
-            envelope="associateipaddressresponse"
-        )
+        return self._execute("associateIpAddress", payload, envelope="associateipaddressresponse")
 
     async def associate_ip_address_async(
         self, payload: AssociateIpAddressRequest
     ) -> APIResponse[Dict]:
         """Asynchronously associate an IP address."""
         return await self._execute_async(
-            "associateIpAddress",
-            payload,
-            envelope="associateipaddressresponse"
+            "associateIpAddress", payload, envelope="associateipaddressresponse"
         )
 
     def disassociate_ip_address(self, payload: DisassociateIpAddressRequest) -> APIResponse[Dict]:
