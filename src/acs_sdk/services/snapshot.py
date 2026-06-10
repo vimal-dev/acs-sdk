@@ -2,12 +2,17 @@
 from typing import Dict, List
 
 from acs_sdk.schemas.request.snapshot import (
+    ArchiveSnapshotRequest,
+    CopySnapshotRequest,
+    CreateSnapshotFromVMSnapshotRequest,
     CreateSnapshotPolicyRequest,
     CreateSnapshotRequest,
     CreateVMSnapshotRequest,
     DeleteSnapshotPoliciesRequest,
     DeleteSnapshotRequest,
     DeleteVMSnapshotRequest,
+    ExtractSnapshotRequest,
+    GetVolumeSnapshotDetailsRequest,
     ListSnapshotPoliciesRequest,
     ListSnapshotsRequest,
     ListVMSnapshotRequest,
@@ -206,4 +211,92 @@ class Snapshot(BaseService):
             "updateSnapshotPolicy",
             payload,
             envelope="updatesnapshotpolicyresponse",
+        )
+
+    def archive(self, payload: ArchiveSnapshotRequest) -> APIResponse[Dict]:
+        """Archive a snapshot."""
+        return self._execute(
+            "archiveSnapshot",
+            payload,
+            envelope="archivesnapshotresponse",
+        )
+
+    async def archive_async(self, payload: ArchiveSnapshotRequest) -> APIResponse[Dict]:
+        """Asynchronously archive a snapshot."""
+        return await self._execute_async(
+            "archiveSnapshot",
+            payload,
+            envelope="archivesnapshotresponse",
+        )
+
+    def copy(self, payload: CopySnapshotRequest) -> APIResponse[Dict]:
+        """Copy a snapshot to one or more zones."""
+        return self._execute(
+            "copySnapshot",
+            payload,
+            envelope="copysnapshotresponse",
+        )
+
+    async def copy_async(self, payload: CopySnapshotRequest) -> APIResponse[Dict]:
+        """Asynchronously copy a snapshot to one or more zones."""
+        return await self._execute_async(
+            "copySnapshot",
+            payload,
+            envelope="copysnapshotresponse",
+        )
+
+    def create_from_vm_snapshot(
+        self, payload: CreateSnapshotFromVMSnapshotRequest
+    ) -> APIResponse[Dict]:
+        """Create a volume snapshot from a VM snapshot."""
+        return self._execute(
+            "createSnapshotFromVMSnapshot",
+            payload,
+            envelope="createsnapshotfromvmsnapshotresponse",
+        )
+
+    async def create_from_vm_snapshot_async(
+        self, payload: CreateSnapshotFromVMSnapshotRequest
+    ) -> APIResponse[Dict]:
+        """Asynchronously create a volume snapshot from a VM snapshot."""
+        return await self._execute_async(
+            "createSnapshotFromVMSnapshot",
+            payload,
+            envelope="createsnapshotfromvmsnapshotresponse",
+        )
+
+    def extract(self, payload: ExtractSnapshotRequest) -> APIResponse[Dict]:
+        """Extract a snapshot for download."""
+        return self._execute(
+            "extractSnapshot",
+            payload,
+            envelope="extractsnapshotresponse",
+        )
+
+    async def extract_async(self, payload: ExtractSnapshotRequest) -> APIResponse[Dict]:
+        """Asynchronously extract a snapshot for download."""
+        return await self._execute_async(
+            "extractSnapshot",
+            payload,
+            envelope="extractsnapshotresponse",
+        )
+
+    def get_volume_snapshot_details(
+        self, payload: GetVolumeSnapshotDetailsRequest
+    ) -> APIResponse[Dict]:
+        """Get CloudStack-managed details about a volume snapshot."""
+        return self._execute(
+            "getVolumeSnapshotDetails",
+            payload,
+            envelope="getvolumesnapshotdetailsresponse",
+        )
+
+    async def get_volume_snapshot_details_async(
+        self, payload: GetVolumeSnapshotDetailsRequest
+    ) -> APIResponse[Dict]:
+        """Asynchronously get CloudStack-managed details about a volume snapshot."""
+        return await self._execute_async(
+            "getVolumeSnapshotDetails",
+            payload,
+            envelope="getvolumesnapshotdetailsresponse",
         )

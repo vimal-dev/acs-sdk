@@ -8,5 +8,5 @@ class APIRequest(BaseModel):
 
 
 class PaginationMixin:
-    page: Optional[int] = Field(1, ge=1, description="Page number")
+    page: Optional[int] = Field(1, ge=1, description="Page number for paginated results (1-based)")
     pagesize: Optional[int] = Field(50, ge=1, le=500, description="Number of results per page")

@@ -21,9 +21,10 @@ class JobStatus(IntEnum):
 class AsyncCommandResponse(BaseModel):
     """
     Schema for async command response from Apache CloudStack API.
-    Returned immediately when an async operation is triggered 
+    Returned immediately when an async operation is triggered
     (e.g. associateIpAddress, deleteVolume, deployVirtualMachine).
     """
+
     jobId: uuid.UUID = Field(
         ...,
         alias="jobid",
@@ -43,6 +44,7 @@ class AsyncJobResultResponse(BaseModel):
     Polled by Celery tasks (e.g. poll_address_associate_status) until
     job_status is SUCCESS or FAILED.
     """
+
     job_id: uuid.UUID = Field(..., alias="jobid")
     job_status: JobStatus = Field(..., alias="jobstatus")
     job_result_code: int = Field(..., alias="jobresultcode")
