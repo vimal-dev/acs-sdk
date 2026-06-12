@@ -4,6 +4,7 @@ from acs_sdk.schemas.request.virtual_machine import DeployVirtualMachineRequest
 def test_deploy_virtual_machine_request_flattens_iptonetworklist():
     request = DeployVirtualMachineRequest(
         serviceofferingid="so-1",
+        templateId="unbutu",
         zoneid="zone-1",
         iptonetworklist=[
             {"networkid": "net-1", "ip": "10.0.0.5"},
@@ -23,6 +24,7 @@ def test_deploy_virtual_machine_request_flattens_iptonetworklist():
 def test_deploy_virtual_machine_request_flattens_datadisksdetails():
     request = DeployVirtualMachineRequest(
         serviceofferingid="so-1",
+        templateId="unbutu",
         zoneid="zone-1",
         datadisksdetails=[
             {"diskofferingid": "do-1", "size": "50"},
@@ -33,4 +35,4 @@ def test_deploy_virtual_machine_request_flattens_datadisksdetails():
 
     assert "datadisksdetails" not in dumped
     assert dumped["datadisksdetails[0].diskofferingid"] == "do-1"
-    assert dumped["datadisksdetails[0].size"] == "50"
+    assert dumped["datadisksdetails[0].size"] == 50

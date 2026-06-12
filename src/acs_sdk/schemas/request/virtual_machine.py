@@ -67,24 +67,33 @@ class MigrateToEntry(BaseModel):
     pool: str = Field(..., description="UUID of the destination storage pool")
 
 
-class DhcpOptionNetworkEntry(APIRequest):
-    """Single entry for dhcpoptionsnetworklist."""
-
-    networkid: str = Field(..., description="Network ID to apply DHCP options to")
-    options: dict[str, str] = Field(
-        default_factory=dict,
-        description=(
-            "DHCP option key-value pairs "
-            "e.g. {'dhcp:66': 'www.test.com', 'dhcp:114': 'http://url'}"
-        ),
-    )
-
-
+class IpToNetworkEntry(BaseModel):
+    """One entry in iptonetworklist[]"""
+    networkid: str  = Field(..., description="UUID of the network")
+    ip:        str | None = None
+    ipv6:      str | None = None
+    mac:       str | None = None
+ 
+ 
+class DhcpOptionNetworkEntry(BaseModel):
+    """One entry in dhcpoptionsnetworklist[]"""
+    networkid: str = Field(..., description="UUID of the network")
+    options:   dict[str, str] = Field(default_factory=dict,
+                                      description="dhcp:<code>=<value> pairs")
+ 
+ 
+class DataDiskDetail(BaseModel):
+    """One entry in datadisksdetails[]"""
+    diskofferingid: str = Field(..., description="UUID of the Disk Offering")
+    size:           int | None = Field(None, gt=0, description="GB")
+    miniops:        int | None = None
+    maxiops:        int | None = None
+ 
+ 
 class NicNetworkEntry(BaseModel):
-    """VMware-only — one entry in nicnetworklist[]."""
-
-    ip: str = Field(..., description="IP address for this NIC")
-    network: str = Field(..., description="Network UUID to connect the NIC to")
+    """VMware only — nicnetworklist[]"""
+    ip:      str
+    network: str
 
 
 # ---------------------------------------------------------------------------
@@ -263,7 +272,7 @@ class DeployVirtualMachineRequest(APIRequest):
         alias="networkIds",
         description="Network IDs to attach (CSV serialized, mutually exclusive with iptonetworklist)",
     )
-    iptonetworklist: Optional[List[Dict[str, str]]] = Field(
+    iptonetworklist: Optional[List[IpToNetworkEntry]] = Field(
         None,
         alias="ipToNetworkList",
         description=(
@@ -313,7 +322,7 @@ class DeployVirtualMachineRequest(APIRequest):
         alias="dataDiskOfferingList",
         description="Data disk offering IDs (mutually exclusive with diskofferingid)",
     )
-    datadisksdetails: Optional[list[dict[str, str]]] = Field(
+    datadisksdetails: Optional[list[DataDiskDetail]] = Field(
         None,
         alias="dataDiskDetails",
         description="Data disk details e.g. diskofferingid, size, miniops, maxiops per disk",
@@ -569,7 +578,7 @@ class ImportUnmanagedInstanceRequest(APIRequest):
         alias="nicIpAddressList",
         description="VM NIC to IP address mapping using keys nic, ip4Address",
     )
-    nicnetworklist: Optional[list[dict[str, str]]] = Field(
+    nicnetworklist: Optional[list[NicNetworkEntry]] = Field(
         None,
         alias="nicNetworkList",
         description="VM NIC to network ID mapping using keys nic and network",
@@ -631,7 +640,7 @@ class ImportVmRequest(APIRequest):
     migrateallowed: Optional[bool] = Field(None, alias="migrateAllowed", description="Allow VM and volumes to migrate to different host/pool for incompatible offerings")
     networkid: Optional[str] = Field(None, alias="networkId", description="The network ID")
     nicipaddresslist: Optional[list[dict[str, str]]] = Field(None, alias="nicIpAddressList", description="VM NIC to IP address mapping using keys nic, ip4Address")
-    nicnetworklist: Optional[list[dict[str, str]]] = Field(None, alias="nicNetworkList", description="VM NIC to network ID mapping using keys nic and network")
+    nicnetworklist: Optional[list[NicNetworkEntry]] = Field(None, alias="nicNetworkList", description="VM NIC to network ID mapping using keys nic and network")
     password: Optional[str] = Field(None, description="Password for the host")
     projectid: Optional[str] = Field(None, alias="projectId", description="Project ID for instance import")
     storageid: Optional[str] = Field(None, alias="storageId", description="Shared storage pool where disk is located")
