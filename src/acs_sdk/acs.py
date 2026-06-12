@@ -16,6 +16,7 @@ from acs_sdk.services.base import BaseService
 from acs_sdk.services.backup_and_recovery import BackupAndRecovery
 from acs_sdk.services.disk_offering import DiskOffering
 from acs_sdk.services.firewall import Firewall
+from acs_sdk.services.iso import ISO
 from acs_sdk.services.job import Job
 from acs_sdk.services.nat import NAT
 from acs_sdk.services.network import Network
@@ -60,6 +61,7 @@ class ApacheCloudStack:
 
     account: "Account"
     address: "Address"
+    iso: "ISO"
     backupandrecovery: "BackupAndRecovery"
     diskoffering: "DiskOffering"
     firewall: "Firewall"
@@ -83,6 +85,7 @@ class ApacheCloudStack:
 
     _service_map: Dict[str, Type["BaseService"]] = {
         "account": Account,
+        "iso": ISO,
         "address": Address,
         "backupandrecovery": BackupAndRecovery,
         "diskoffering": DiskOffering,
