@@ -85,6 +85,7 @@ class DhcpOptionNetworkEntry(BaseModel):
 class DataDiskDetail(BaseModel):
     """One entry in datadisksdetails[]"""
     diskofferingid: str = Field(..., description="UUID of the Disk Offering")
+    deviceid:       int | None = Field(None, gt=0, description="DATA DISK DEVICE ID")
     size:           int | None = Field(None, gt=0, description="GB")
     miniops:        int | None = None
     maxiops:        int | None = None
@@ -461,8 +462,8 @@ class DeployVirtualMachineRequest(APIRequest):
             errors.append("affinitygroupids and affinitygroupnames are mutually exclusive")
         if self.securitygroupids and self.securitygroupnames:
             errors.append("securitygroupids and securitygroupnames are mutually exclusive")
-        if self.diskofferingid and self.size:
-            errors.append("diskofferingid and size are mutually exclusive")
+        if self.diskofferingid and self.datadisksdetails:
+            errors.append("diskofferingid and datadisksdetails are mutually exclusive")
         if self.diskofferingid and self.datadisksdetails:
             errors.append("diskofferingid and datadisksdetails are mutually exclusive")
         if self.account and not self.domainid:
