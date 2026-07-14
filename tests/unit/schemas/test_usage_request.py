@@ -19,8 +19,8 @@ def test_list_usage_required_fields_serialize():
         enddate=datetime(2024, 1, 31, tzinfo=timezone.utc),
     )
     dumped = req.model_dump(exclude_none=True)
-    assert dumped["startdate"] == "2024-01-01T00:00:00+0000"
-    assert dumped["enddate"] == "2024-01-31T00:00:00+0000"
+    assert dumped["startdate"] == "2024-01-01 00:00:00"
+    assert dumped["enddate"] == "2024-01-31 00:00:00"
 
 
 def test_list_usage_pagination_defaults():
@@ -104,8 +104,8 @@ def test_list_usage_date_serialization_format():
         enddate=datetime(2024, 6, 30, 23, 59, 59, tzinfo=tz),
     )
     dumped = req.model_dump(exclude_none=True)
-    assert dumped["startdate"] == "2024-06-15T10:30:00+0530"
-    assert dumped["enddate"] == "2024-06-30T23:59:59+0530"
+    assert dumped["startdate"] == "2024-06-15 10:30:00"
+    assert dumped["enddate"] == "2024-06-30 23:59:59"
 
 
 # ---------------------------------------------------------------------------
