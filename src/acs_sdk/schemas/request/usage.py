@@ -1,11 +1,11 @@
-from pydantic import BaseModel, Field, field_validator, field_serializer
+from pydantic import Field, field_validator, field_serializer
 from typing import Optional
 from datetime import datetime
 
-from acs_sdk.schemas.request.base import PaginationMixin
+from acs_sdk.schemas.request.base import APIRequest, PaginationMixin
 
 
-class ListUsageRecordsRequest(BaseModel, PaginationMixin):
+class ListUsageRecordsRequest(APIRequest, PaginationMixin):
     # Required
     startdate: datetime = Field(
         ...,
@@ -75,10 +75,10 @@ class ListUsageRecordsRequest(BaseModel, PaginationMixin):
 
     @field_serializer("startdate", "enddate")
     def serialize_date(self, value: datetime, _info):
-        return value.strftime("%Y-%m-%dT%H:%M:%S%z")
+        return value.strftime("%Y-%m-%d %H:%M:%S")
 
 
-class GenerateUsageRecordsRequest(BaseModel):
+class GenerateUsageRecordsRequest(APIRequest):
     startdate: Optional[datetime] = Field(
         None,
         description="Start date range for usage record query. Use yyyy-MM-dd as the date format.",
@@ -113,7 +113,7 @@ class GenerateUsageRecordsRequest(BaseModel):
         return value
 
 
-class RemoveRawUsageRecordsRequest(BaseModel):
+class RemoveRawUsageRecordsRequest(APIRequest):
     interval: int = Field(
         ...,
         description="Specify the number of days (greater than zero) to remove records that are older than those number of days from today.",
