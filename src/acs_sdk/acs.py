@@ -12,6 +12,7 @@ from acs_sdk.schemas.config import ApacheCloudStackConfig
 from acs_sdk.client.client import ApacheCloudStackClient
 from acs_sdk.services.account import Account
 from acs_sdk.services.address import Address
+from acs_sdk.services.affinity_group import AffinityGroup
 from acs_sdk.services.base import BaseService
 from acs_sdk.services.backup_and_recovery import BackupAndRecovery
 from acs_sdk.services.console_session import ConsoleSession
@@ -64,6 +65,7 @@ class ApacheCloudStack:
 
     account: "Account"
     address: "Address"
+    affinitygroup: "AffinityGroup"
     instancegroup: "InstanceGroup"
     iso: "ISO"
     backupandrecovery: "BackupAndRecovery"
@@ -93,6 +95,7 @@ class ApacheCloudStack:
         "account": Account,
         "iso": ISO,
         "address": Address,
+        "affinitygroup": AffinityGroup,
         "instancegroup": InstanceGroup,
         "backupandrecovery": BackupAndRecovery,
         "consolesession": ConsoleSession,
