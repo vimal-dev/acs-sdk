@@ -21,6 +21,7 @@ from acs_sdk.services.firewall import Firewall
 from acs_sdk.services.instance_group import InstanceGroup
 from acs_sdk.services.iso import ISO
 from acs_sdk.services.job import Job
+from acs_sdk.services.kubernetes import Kubernetes
 from acs_sdk.services.nat import NAT
 from acs_sdk.services.network import Network
 from acs_sdk.services.network_acl import NetworkACL
@@ -74,6 +75,7 @@ class ApacheCloudStack:
     diskoffering: "DiskOffering"
     firewall: "Firewall"
     job: "Job"
+    kubernetes: "Kubernetes"
     template: "Template"
     nat: "NAT"
     network: "Network"
@@ -104,6 +106,7 @@ class ApacheCloudStack:
         "diskoffering": DiskOffering,
         "firewall": Firewall,
         "job": Job,
+        "kubernetes": Kubernetes,
         "nat": NAT,
         "network": Network,
         "networkacl": NetworkACL,
