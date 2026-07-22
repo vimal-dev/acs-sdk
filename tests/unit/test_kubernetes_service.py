@@ -27,6 +27,7 @@ from acs_sdk.services.kubernetes import Kubernetes
 # create_cluster
 # ---------------------------------------------------------------------------
 
+
 def test_kubernetes_create_cluster_parses_response():
     mock_client = Mock()
     mock_client.call.return_value = {
@@ -63,6 +64,7 @@ def test_kubernetes_create_cluster_async_parses_response():
 # delete_cluster
 # ---------------------------------------------------------------------------
 
+
 def test_kubernetes_delete_cluster_parses_response():
     mock_client = Mock()
     mock_client.call.return_value = {
@@ -94,6 +96,7 @@ def test_kubernetes_delete_cluster_async_parses_response():
 # ---------------------------------------------------------------------------
 # start_cluster
 # ---------------------------------------------------------------------------
+
 
 def test_kubernetes_start_cluster_parses_response():
     mock_client = Mock()
@@ -127,6 +130,7 @@ def test_kubernetes_start_cluster_async_parses_response():
 # stop_cluster
 # ---------------------------------------------------------------------------
 
+
 def test_kubernetes_stop_cluster_parses_response():
     mock_client = Mock()
     mock_client.call.return_value = {
@@ -158,6 +162,7 @@ def test_kubernetes_stop_cluster_async_parses_response():
 # ---------------------------------------------------------------------------
 # scale_cluster
 # ---------------------------------------------------------------------------
+
 
 def test_kubernetes_scale_cluster_parses_response():
     mock_client = Mock()
@@ -195,6 +200,7 @@ def test_kubernetes_scale_cluster_async_parses_response():
 # upgrade_cluster
 # ---------------------------------------------------------------------------
 
+
 def test_kubernetes_upgrade_cluster_parses_response():
     mock_client = Mock()
     mock_client.call.return_value = {
@@ -214,7 +220,9 @@ def test_kubernetes_upgrade_cluster_parses_response():
 def test_kubernetes_upgrade_cluster_async_parses_response():
     mock_client = Mock()
     mock_client.call_async = AsyncMock(
-        return_value={"upgradekubernetesclusterresponse": {"id": "k8s-1", "kubernetesversionid": "v-2"}}
+        return_value={
+            "upgradekubernetesclusterresponse": {"id": "k8s-1", "kubernetesversionid": "v-2"}
+        }
     )
 
     kube = Kubernetes(client=mock_client)
@@ -230,6 +238,7 @@ def test_kubernetes_upgrade_cluster_async_parses_response():
 # ---------------------------------------------------------------------------
 # list_clusters
 # ---------------------------------------------------------------------------
+
 
 def test_kubernetes_list_clusters_parses_list_response():
     mock_client = Mock()
@@ -277,6 +286,7 @@ def test_kubernetes_list_clusters_async_parses_list_response():
 # get_cluster_config
 # ---------------------------------------------------------------------------
 
+
 def test_kubernetes_get_cluster_config_parses_response():
     mock_client = Mock()
     mock_client.call.return_value = {
@@ -310,6 +320,7 @@ def test_kubernetes_get_cluster_config_async_parses_response():
 # ---------------------------------------------------------------------------
 # add_nodes / remove_nodes
 # ---------------------------------------------------------------------------
+
 
 def test_kubernetes_add_nodes_parses_response():
     mock_client = Mock()
@@ -379,6 +390,7 @@ def test_kubernetes_remove_nodes_async_parses_response():
 # add_virtual_machines / remove_virtual_machines
 # ---------------------------------------------------------------------------
 
+
 def test_kubernetes_add_virtual_machines_parses_response():
     mock_client = Mock()
     mock_client.call.return_value = {
@@ -418,7 +430,9 @@ def test_kubernetes_remove_virtual_machines_parses_response():
     }
 
     kube = Kubernetes(client=mock_client)
-    payload = RemoveVirtualMachinesFromKubernetesClusterRequest(id="k8s-1", virtualMachineIds=["vm-1"])
+    payload = RemoveVirtualMachinesFromKubernetesClusterRequest(
+        id="k8s-1", virtualMachineIds=["vm-1"]
+    )
     response = kube.remove_virtual_machines(payload)
 
     assert response.data == {"id": "k8s-1"}
@@ -435,7 +449,9 @@ def test_kubernetes_remove_virtual_machines_async_parses_response():
     )
 
     kube = Kubernetes(client=mock_client)
-    payload = RemoveVirtualMachinesFromKubernetesClusterRequest(id="k8s-1", virtualMachineIds=["vm-1"])
+    payload = RemoveVirtualMachinesFromKubernetesClusterRequest(
+        id="k8s-1", virtualMachineIds=["vm-1"]
+    )
     response = asyncio.run(kube.remove_virtual_machines_async(payload))
 
     assert response.data == {"id": "k8s-1"}
@@ -448,6 +464,7 @@ def test_kubernetes_remove_virtual_machines_async_parses_response():
 # ---------------------------------------------------------------------------
 # supported versions
 # ---------------------------------------------------------------------------
+
 
 def test_kubernetes_add_supported_version_parses_response():
     mock_client = Mock()
@@ -504,7 +521,9 @@ def test_kubernetes_update_supported_version_parses_response():
 def test_kubernetes_update_supported_version_async_parses_response():
     mock_client = Mock()
     mock_client.call_async = AsyncMock(
-        return_value={"updatekubernetessupportedversionresponse": {"id": "v-1", "state": "Disabled"}}
+        return_value={
+            "updatekubernetessupportedversionresponse": {"id": "v-1", "state": "Disabled"}
+        }
     )
 
     kube = Kubernetes(client=mock_client)
@@ -542,7 +561,9 @@ def test_kubernetes_delete_supported_version_async_parses_response():
     response = asyncio.run(kube.delete_supported_version_async(payload))
 
     assert response.data == {"success": "true"}
-    mock_client.call_async.assert_called_once_with("deleteKubernetesSupportedVersion", {"id": "v-1"})
+    mock_client.call_async.assert_called_once_with(
+        "deleteKubernetesSupportedVersion", {"id": "v-1"}
+    )
 
 
 def test_kubernetes_list_supported_versions_parses_list_response():
@@ -616,9 +637,7 @@ def test_kubernetes_get_upload_params_for_supported_version_parses_response():
 def test_kubernetes_get_upload_params_for_supported_version_async_parses_response():
     mock_client = Mock()
     mock_client.call_async = AsyncMock(
-        return_value={
-            "getuploadparamsforkubernetessupportedversionresponse": {"id": "v-1"}
-        }
+        return_value={"getuploadparamsforkubernetessupportedversionresponse": {"id": "v-1"}}
     )
 
     kube = Kubernetes(client=mock_client)

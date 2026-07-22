@@ -9,7 +9,8 @@ from acs_sdk.schemas.request.base import APIRequest, PaginationMixin
 class CreateAffinityGroupRequest(APIRequest):
     name: str = Field(..., description="Name of the affinity group")
     type: str = Field(
-        ..., description="Type of the affinity group from the available affinity/anti-affinity group types"
+        ...,
+        description="Type of the affinity group from the available affinity/anti-affinity group types",
     )
     account: Optional[str] = Field(
         None, description="An account for the affinity group. Must be used with domainId."
@@ -74,7 +75,9 @@ class ListAffinityGroupsRequest(APIRequest, PaginationMixin):
     )
     name: Optional[str] = Field(None, description="Lists affinity groups by name")
     projectid: Optional[str] = Field(
-        None, alias="projectId", description="List objects by project; if projectid=-1 lists All VMs"
+        None,
+        alias="projectId",
+        description="List objects by project; if projectid=-1 lists All VMs",
     )
     type: Optional[str] = Field(None, description="Lists affinity groups by type")
     virtualmachineid: Optional[str] = Field(

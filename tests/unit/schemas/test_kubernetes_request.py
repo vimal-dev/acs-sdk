@@ -21,6 +21,7 @@ from acs_sdk.schemas.request.kubernetes import (
 # CreateKubernetesClusterRequest
 # ---------------------------------------------------------------------------
 
+
 def test_create_kubernetes_cluster_required_fields_serialize():
     req = CreateKubernetesClusterRequest(name="cluster-1", zoneId="zone-1")
     dumped = req.model_dump(exclude_none=True)
@@ -74,6 +75,7 @@ def test_create_kubernetes_cluster_missing_required_fields_raises():
 # DeleteKubernetesClusterRequest
 # ---------------------------------------------------------------------------
 
+
 def test_delete_kubernetes_cluster_serializes():
     req = DeleteKubernetesClusterRequest(id="k8s-1", cleanup=True)
     dumped = req.model_dump(exclude_none=True)
@@ -88,6 +90,7 @@ def test_delete_kubernetes_cluster_missing_id_raises():
 # ---------------------------------------------------------------------------
 # ScaleKubernetesClusterRequest
 # ---------------------------------------------------------------------------
+
 
 def test_scale_kubernetes_cluster_serializes_nodeids_csv():
     req = ScaleKubernetesClusterRequest(id="k8s-1", nodeIds=["node-1", "node-2"])
@@ -112,6 +115,7 @@ def test_scale_kubernetes_cluster_missing_id_raises():
 # UpgradeKubernetesClusterRequest
 # ---------------------------------------------------------------------------
 
+
 def test_upgrade_kubernetes_cluster_required_fields_serialize():
     req = UpgradeKubernetesClusterRequest(id="k8s-1", kubernetesVersionId="v-2")
     dumped = req.model_dump(exclude_none=True)
@@ -126,6 +130,7 @@ def test_upgrade_kubernetes_cluster_missing_required_fields_raises():
 # ---------------------------------------------------------------------------
 # ListKubernetesClustersRequest
 # ---------------------------------------------------------------------------
+
 
 def test_list_kubernetes_clusters_defaults_from_pagination_mixin():
     req = ListKubernetesClustersRequest()
@@ -154,6 +159,7 @@ def test_list_kubernetes_clusters_aliases_serialize_to_snake_case():
 # AddNodesToKubernetesClusterRequest / RemoveNodesFromKubernetesClusterRequest
 # ---------------------------------------------------------------------------
 
+
 def test_add_nodes_serializes_nodeids_csv():
     req = AddNodesToKubernetesClusterRequest(id="k8s-1", nodeIds=["node-1", "node-2"])
     dumped = req.model_dump(exclude_none=True)
@@ -174,6 +180,7 @@ def test_remove_nodes_serializes_nodeids_csv():
 # ---------------------------------------------------------------------------
 # AddVirtualMachinesToKubernetesClusterRequest / RemoveVirtualMachinesFromKubernetesClusterRequest
 # ---------------------------------------------------------------------------
+
 
 def test_add_virtual_machines_serializes_ids_csv():
     req = AddVirtualMachinesToKubernetesClusterRequest(
@@ -200,6 +207,7 @@ def test_remove_virtual_machines_serializes_ids_csv_with_pagination_defaults():
 # AddKubernetesSupportedVersionRequest
 # ---------------------------------------------------------------------------
 
+
 def test_add_supported_version_required_fields_serialize():
     req = AddKubernetesSupportedVersionRequest(
         minCpuNumber=2, minMemory=2048, semanticVersion="1.30.0"
@@ -224,6 +232,7 @@ def test_add_supported_version_invalid_arch_raises():
 # UpdateKubernetesSupportedVersionRequest
 # ---------------------------------------------------------------------------
 
+
 def test_update_supported_version_required_fields_serialize():
     req = UpdateKubernetesSupportedVersionRequest(id="v-1", state="Disabled")
     dumped = req.model_dump(exclude_none=True)
@@ -238,6 +247,7 @@ def test_update_supported_version_missing_required_fields_raises():
 # ---------------------------------------------------------------------------
 # GetUploadParamsForKubernetesSupportedVersionRequest
 # ---------------------------------------------------------------------------
+
 
 def test_get_upload_params_required_fields_serialize():
     req = GetUploadParamsForKubernetesSupportedVersionRequest(

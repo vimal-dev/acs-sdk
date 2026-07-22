@@ -41,7 +41,6 @@ from ..schemas.response.base import APIResponse
 
 
 class LoadBalancer(BaseService):
-
     # -------------------------------------------------------------------------
     # Load balancer rules
     # -------------------------------------------------------------------------
@@ -71,7 +70,9 @@ class LoadBalancer(BaseService):
             entity="loadbalancerrule",
         )
 
-    async def list_rules_async(self, payload: ListLoadBalancerRulesRequest) -> APIResponse[List[Dict]]:
+    async def list_rules_async(
+        self, payload: ListLoadBalancerRulesRequest
+    ) -> APIResponse[List[Dict]]:
         """Asynchronously list load balancer rules."""
         return await self._execute_async(
             "listLoadBalancerRules",
@@ -120,7 +121,9 @@ class LoadBalancer(BaseService):
             envelope="assigntoloadbalancerruleresponse",
         )
 
-    async def assign_to_rule_async(self, payload: AssignToLoadBalancerRuleRequest) -> APIResponse[Dict]:
+    async def assign_to_rule_async(
+        self, payload: AssignToLoadBalancerRuleRequest
+    ) -> APIResponse[Dict]:
         """Asynchronously assign virtual machine(s) to a load balancer rule."""
         return await self._execute_async(
             "assignToLoadBalancerRule",
@@ -408,9 +411,7 @@ class LoadBalancer(BaseService):
     # Global (GSLB) load balancer rules
     # -------------------------------------------------------------------------
 
-    def create_global_rule(
-        self, payload: CreateGlobalLoadBalancerRuleRequest
-    ) -> APIResponse[Dict]:
+    def create_global_rule(self, payload: CreateGlobalLoadBalancerRuleRequest) -> APIResponse[Dict]:
         """Create a global load balancer rule."""
         return self._execute(
             "createGlobalLoadBalancerRule",
@@ -450,9 +451,7 @@ class LoadBalancer(BaseService):
             entity="globalloadbalancerrule",
         )
 
-    def update_global_rule(
-        self, payload: UpdateGlobalLoadBalancerRuleRequest
-    ) -> APIResponse[Dict]:
+    def update_global_rule(self, payload: UpdateGlobalLoadBalancerRuleRequest) -> APIResponse[Dict]:
         """Update a global load balancer rule."""
         return self._execute(
             "updateGlobalLoadBalancerRule",
@@ -470,9 +469,7 @@ class LoadBalancer(BaseService):
             envelope="updategloballoadbalancerruleresponse",
         )
 
-    def delete_global_rule(
-        self, payload: DeleteGlobalLoadBalancerRuleRequest
-    ) -> APIResponse[Dict]:
+    def delete_global_rule(self, payload: DeleteGlobalLoadBalancerRuleRequest) -> APIResponse[Dict]:
         """Delete a global load balancer rule."""
         return self._execute(
             "deleteGlobalLoadBalancerRule",
@@ -620,9 +617,7 @@ class LoadBalancer(BaseService):
             envelope="stopnetscalervpxresponse",
         )
 
-    async def stop_netscaler_vpx_async(
-        self, payload: StopNetScalerVpxRequest
-    ) -> APIResponse[Dict]:
+    async def stop_netscaler_vpx_async(self, payload: StopNetScalerVpxRequest) -> APIResponse[Dict]:
         """Asynchronously stop a NetScaler VPX VM."""
         return await self._execute_async(
             "stopNetScalerVpx",

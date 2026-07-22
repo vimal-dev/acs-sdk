@@ -84,9 +84,7 @@ class AffinityGroup(BaseService):
             entity="affinitygroup",
         )
 
-    def update_vm_affinity_group(
-        self, payload: UpdateVMAffinityGroupRequest
-    ) -> APIResponse[Dict]:
+    def update_vm_affinity_group(self, payload: UpdateVMAffinityGroupRequest) -> APIResponse[Dict]:
         """Update the affinity/anti-affinity group associations of a virtual machine."""
         return self._execute(
             "updateVMAffinityGroup",

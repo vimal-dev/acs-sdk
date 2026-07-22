@@ -13,6 +13,7 @@ from acs_sdk.schemas.request.console_session import (
 # CreateConsoleEndpointRequest
 # ---------------------------------------------------------------------------
 
+
 def test_create_console_endpoint_required_vm_id_serializes():
     req = CreateConsoleEndpointRequest(virtualMachineId="vm-1")
     dumped = req.model_dump(exclude_none=True)
@@ -33,6 +34,7 @@ def test_create_console_endpoint_missing_vm_id_raises():
 # ---------------------------------------------------------------------------
 # ListConsoleSessionsRequest
 # ---------------------------------------------------------------------------
+
 
 def test_list_console_sessions_defaults_from_pagination_mixin():
     req = ListConsoleSessionsRequest()

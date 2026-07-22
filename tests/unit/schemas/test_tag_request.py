@@ -13,6 +13,7 @@ from acs_sdk.schemas.request.tag import (
 # CreateTagsRequest
 # ---------------------------------------------------------------------------
 
+
 def test_create_tags_required_fields_serialize():
     req = CreateTagsRequest(
         resourceIds=["vm-1", "vm-2"],
@@ -61,6 +62,7 @@ def test_create_tags_missing_required_fields_raises():
 # DeleteTagsRequest
 # ---------------------------------------------------------------------------
 
+
 def test_delete_tags_required_fields_serialize():
     req = DeleteTagsRequest(resourceIds=["vm-1"], resourceType="UserVm")
     dumped = req.model_dump(exclude_none=True)
@@ -88,6 +90,7 @@ def test_delete_tags_missing_required_fields_raises():
 # ListStorageTagsRequest
 # ---------------------------------------------------------------------------
 
+
 def test_list_storage_tags_defaults_from_pagination_mixin():
     req = ListStorageTagsRequest()
     dumped = req.model_dump(exclude_none=True)
@@ -104,6 +107,7 @@ def test_list_storage_tags_keyword_serializes():
 # ---------------------------------------------------------------------------
 # ListTagsRequest
 # ---------------------------------------------------------------------------
+
 
 def test_list_tags_defaults_from_pagination_mixin():
     req = ListTagsRequest()

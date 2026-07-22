@@ -14,7 +14,9 @@ class CreateInstanceGroupRequest(APIRequest):
     domainid: Optional[str] = Field(
         None, alias="domainId", description="The domain ID of account owning the instance group"
     )
-    projectid: Optional[str] = Field(None, alias="projectId", description="The project of the instance group")
+    projectid: Optional[str] = Field(
+        None, alias="projectId", description="The project of the instance group"
+    )
 
 
 class UpdateInstanceGroupRequest(APIRequest):
@@ -47,5 +49,7 @@ class ListInstanceGroupsRequest(APIRequest, PaginationMixin):
     )
     name: Optional[str] = Field(None, description="List instance groups by name")
     projectid: Optional[str] = Field(
-        None, alias="projectId", description="List objects by project; if projectid=-1 lists All VMs"
+        None,
+        alias="projectId",
+        description="List objects by project; if projectid=-1 lists All VMs",
     )

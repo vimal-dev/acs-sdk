@@ -13,6 +13,7 @@ from acs_sdk.schemas.request.usage import (
 # ListUsageRecordsRequest
 # ---------------------------------------------------------------------------
 
+
 def test_list_usage_required_fields_serialize():
     req = ListUsageRecordsRequest(
         startdate=datetime(2024, 1, 1, tzinfo=timezone.utc),
@@ -112,6 +113,7 @@ def test_list_usage_date_serialization_format():
 # GenerateUsageRecordsRequest
 # ---------------------------------------------------------------------------
 
+
 def test_generate_usage_all_optional():
     req = GenerateUsageRecordsRequest()
     dumped = req.model_dump(exclude_none=True)
@@ -163,6 +165,7 @@ def test_generate_usage_date_format_is_yyyy_mm_dd():
 # ---------------------------------------------------------------------------
 # RemoveRawUsageRecordsRequest
 # ---------------------------------------------------------------------------
+
 
 def test_remove_raw_usage_required_interval():
     req = RemoveRawUsageRecordsRequest(interval=10)

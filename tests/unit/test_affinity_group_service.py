@@ -15,6 +15,7 @@ from acs_sdk.services.affinity_group import AffinityGroup
 # create
 # ---------------------------------------------------------------------------
 
+
 def test_affinity_group_create_parses_response():
     mock_client = Mock()
     mock_client.call.return_value = {
@@ -51,6 +52,7 @@ def test_affinity_group_create_async_parses_response():
 # delete
 # ---------------------------------------------------------------------------
 
+
 def test_affinity_group_delete_parses_response():
     mock_client = Mock()
     mock_client.call.return_value = {
@@ -82,6 +84,7 @@ def test_affinity_group_delete_async_parses_response():
 # ---------------------------------------------------------------------------
 # list_types
 # ---------------------------------------------------------------------------
+
 
 def test_affinity_group_list_types_parses_list_response():
     mock_client = Mock()
@@ -129,6 +132,7 @@ def test_affinity_group_list_types_async_parses_list_response():
 # list
 # ---------------------------------------------------------------------------
 
+
 def test_affinity_group_list_parses_list_response():
     mock_client = Mock()
     mock_client.call.return_value = {
@@ -174,6 +178,7 @@ def test_affinity_group_list_async_parses_list_response():
 # ---------------------------------------------------------------------------
 # update_vm_affinity_group
 # ---------------------------------------------------------------------------
+
 
 def test_affinity_group_update_vm_affinity_group_parses_response():
     mock_client = Mock()

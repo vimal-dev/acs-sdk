@@ -46,7 +46,6 @@ from ..schemas.response.base import APIResponse
 
 
 class VirtualMachine(BaseService):
-
     # -------------------------------------------------------------------------
     # List / query
     # -------------------------------------------------------------------------
@@ -185,9 +184,7 @@ class VirtualMachine(BaseService):
             envelope="createvmscheduleresponse",
         )
 
-    async def create_vm_schedule_async(
-        self, payload: CreateVMScheduleRequest
-    ) -> APIResponse[Dict]:
+    async def create_vm_schedule_async(self, payload: CreateVMScheduleRequest) -> APIResponse[Dict]:
         """Asynchronously create a VM schedule."""
         return await self._execute_async(
             "createVMSchedule",
@@ -203,9 +200,7 @@ class VirtualMachine(BaseService):
             envelope="updatevmscheduleresponse",
         )
 
-    async def update_vm_schedule_async(
-        self, payload: UpdateVMScheduleRequest
-    ) -> APIResponse[Dict]:
+    async def update_vm_schedule_async(self, payload: UpdateVMScheduleRequest) -> APIResponse[Dict]:
         """Asynchronously update a VM schedule."""
         return await self._execute_async(
             "updateVMSchedule",
@@ -221,9 +216,7 @@ class VirtualMachine(BaseService):
             envelope="deletevmscheduleresponse",
         )
 
-    async def delete_vm_schedule_async(
-        self, payload: DeleteVMScheduleRequest
-    ) -> APIResponse[Dict]:
+    async def delete_vm_schedule_async(self, payload: DeleteVMScheduleRequest) -> APIResponse[Dict]:
         """Asynchronously delete a VM schedule."""
         return await self._execute_async(
             "deleteVMSchedule",
@@ -339,9 +332,7 @@ class VirtualMachine(BaseService):
             envelope="expungevirtualmachineresponse",
         )
 
-    async def expunge_vm_async(
-        self, payload: ExpungeVirtualMachineRequest
-    ) -> APIResponse[Dict]:
+    async def expunge_vm_async(self, payload: ExpungeVirtualMachineRequest) -> APIResponse[Dict]:
         """Asynchronously expunge a virtual machine."""
         return await self._execute_async(
             "expungeVirtualMachine",
@@ -389,9 +380,7 @@ class VirtualMachine(BaseService):
             envelope="migratevirtualmachineresponse",
         )
 
-    async def migrate_vm_async(
-        self, payload: MigrateVirtualMachineRequest
-    ) -> APIResponse[Dict]:
+    async def migrate_vm_async(self, payload: MigrateVirtualMachineRequest) -> APIResponse[Dict]:
         """Asynchronously migrate a virtual machine."""
         return await self._execute_async(
             "migrateVirtualMachine",
@@ -427,9 +416,7 @@ class VirtualMachine(BaseService):
             envelope="unmanagervirtualmachineresponse",
         )
 
-    async def unmanage_vm_async(
-        self, payload: UnmanageVirtualMachineRequest
-    ) -> APIResponse[Dict]:
+    async def unmanage_vm_async(self, payload: UnmanageVirtualMachineRequest) -> APIResponse[Dict]:
         """Asynchronously unmanage a virtual machine from CloudStack."""
         return await self._execute_async(
             "unmanageVirtualMachine",
@@ -481,9 +468,7 @@ class VirtualMachine(BaseService):
     # Ownership / assignment
     # -------------------------------------------------------------------------
 
-    def assign_virtual_machine(
-        self, payload: AssignVirtualMachineRequest
-    ) -> APIResponse[Dict]:
+    def assign_virtual_machine(self, payload: AssignVirtualMachineRequest) -> APIResponse[Dict]:
         """Change ownership of a VM from one account to another."""
         return self._execute(
             "assignVirtualMachine",
@@ -642,7 +627,8 @@ class VirtualMachine(BaseService):
         )
 
     def reset_password_for_vm(
-        self, payload: ResetPasswordForVirtualMachineRequest  # FIX: was wrong type
+        self,
+        payload: ResetPasswordForVirtualMachineRequest,  # FIX: was wrong type
     ) -> APIResponse[Dict]:
         """Reset the password for a virtual machine."""
         return self._execute(
@@ -652,7 +638,8 @@ class VirtualMachine(BaseService):
         )
 
     async def reset_password_for_vm_async(
-        self, payload: ResetPasswordForVirtualMachineRequest  # FIX: was wrong type
+        self,
+        payload: ResetPasswordForVirtualMachineRequest,  # FIX: was wrong type
     ) -> APIResponse[Dict]:
         """Asynchronously reset the password for a virtual machine."""
         return await self._execute_async(
@@ -706,7 +693,8 @@ class VirtualMachine(BaseService):
     # -------------------------------------------------------------------------
 
     def revert_to_vm_snapshot(
-        self, payload: RevertToVMSnapshotRequest  # FIX: renamed from revert_to_vm_sanpshot
+        self,
+        payload: RevertToVMSnapshotRequest,  # FIX: renamed from revert_to_vm_sanpshot
     ) -> APIResponse[Dict]:
         """Revert a VM to a VM snapshot."""
         return self._execute(
@@ -716,7 +704,8 @@ class VirtualMachine(BaseService):
         )
 
     async def revert_to_vm_snapshot_async(
-        self, payload: RevertToVMSnapshotRequest  # FIX: renamed from revert_to_vm_sanpshot_async
+        self,
+        payload: RevertToVMSnapshotRequest,  # FIX: renamed from revert_to_vm_sanpshot_async
     ) -> APIResponse[Dict]:
         """Asynchronously revert a VM to a VM snapshot."""
         return await self._execute_async(

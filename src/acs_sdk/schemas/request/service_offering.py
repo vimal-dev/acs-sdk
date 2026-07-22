@@ -16,32 +16,50 @@ class CreateServiceOfferingRequest(APIRequest):
     # --- compute ------------------------------------------------------------
 
     displaytext: Optional[str] = Field(
-        None, alias="displayText", description="The display text of the service offering, defaults to 'name'"
+        None,
+        alias="displayText",
+        description="The display text of the service offering, defaults to 'name'",
     )
-    cpunumber: Optional[int] = Field(None, alias="cpuNumber", description="The CPU number of the service offering")
+    cpunumber: Optional[int] = Field(
+        None, alias="cpuNumber", description="The CPU number of the service offering"
+    )
     cpuspeed: Optional[int] = Field(None, alias="cpuSpeed", description="CPU speed in MHz")
     memory: Optional[int] = Field(None, description="Total memory of the service offering in MB")
-    customized: Optional[bool] = Field(None, description="Whether service offering size is custom or not")
+    customized: Optional[bool] = Field(
+        None, description="Whether service offering size is custom or not"
+    )
     customizediops: Optional[bool] = Field(
         None, alias="customizedIops", description="Whether compute offering IOPS is custom or not"
     )
     mincpunumber: Optional[int] = Field(
-        None, alias="minCpuNumber", description="The minimum number of CPUs for a custom compute offering"
+        None,
+        alias="minCpuNumber",
+        description="The minimum number of CPUs for a custom compute offering",
     )
     maxcpunumber: Optional[int] = Field(
-        None, alias="maxCpuNumber", description="The maximum number of CPUs for a custom compute offering"
+        None,
+        alias="maxCpuNumber",
+        description="The maximum number of CPUs for a custom compute offering",
     )
     minmemory: Optional[int] = Field(
-        None, alias="minMemory", description="The minimum memory size (MB) for a custom service offering"
+        None,
+        alias="minMemory",
+        description="The minimum memory size (MB) for a custom service offering",
     )
     maxmemory: Optional[int] = Field(
-        None, alias="maxMemory", description="The maximum memory size (MB) for a custom service offering"
+        None,
+        alias="maxMemory",
+        description="The maximum memory size (MB) for a custom service offering",
     )
     dynamicscalingenabled: Optional[bool] = Field(
-        None, alias="dynamicScalingEnabled", description="True if virtual machine needs to be dynamically scalable"
+        None,
+        alias="dynamicScalingEnabled",
+        description="True if virtual machine needs to be dynamically scalable",
     )
     limitcpuuse: Optional[bool] = Field(
-        None, alias="limitCpuUse", description="Restrict the CPU usage to committed service offering"
+        None,
+        alias="limitCpuUse",
+        description="Restrict the CPU usage to committed service offering",
     )
 
     # --- storage / disk -----------------------------------------------------
@@ -52,60 +70,96 @@ class CreateServiceOfferingRequest(APIRequest):
     provisioningtype: Optional[str] = Field(
         None, alias="provisioningType", description="Provisioning type: 'thin', 'sparse', or 'fat'"
     )
-    rootdisksize: Optional[int] = Field(None, alias="rootDiskSize", description="Root disk size in GB")
+    rootdisksize: Optional[int] = Field(
+        None, alias="rootDiskSize", description="Root disk size in GB"
+    )
     diskofferingid: Optional[str] = Field(
-        None, alias="diskOfferingId", description="ID of the disk offering to map to this service offering"
+        None,
+        alias="diskOfferingId",
+        description="ID of the disk offering to map to this service offering",
     )
     diskofferingstrictness: Optional[bool] = Field(
-        None, alias="diskOfferingStrictness", description="If true, disk offering override is not permitted during VM deployment"
+        None,
+        alias="diskOfferingStrictness",
+        description="If true, disk offering override is not permitted during VM deployment",
     )
     encryptroot: Optional[bool] = Field(
-        None, alias="encryptRoot", description="VMs using this offering require root volume encryption"
+        None,
+        alias="encryptRoot",
+        description="VMs using this offering require root volume encryption",
     )
     isvolatile: Optional[bool] = Field(
-        None, alias="isVolatile", description="VM root disk is destroyed and recreated on each reboot"
+        None,
+        alias="isVolatile",
+        description="VM root disk is destroyed and recreated on each reboot",
     )
     cachemode: Optional[str] = Field(
-        None, alias="cacheMode", description="Cache mode: none, writeback, writethrough, or hypervisor default"
+        None,
+        alias="cacheMode",
+        description="Cache mode: none, writeback, writethrough, or hypervisor default",
     )
     hypervisorsnapshotreserve: Optional[int] = Field(
-        None, alias="hypervisorSnapshotReserve", description="Hypervisor snapshot reserve space as a percent of a volume"
+        None,
+        alias="hypervisorSnapshotReserve",
+        description="Hypervisor snapshot reserve space as a percent of a volume",
     )
     storagepolicy: Optional[str] = Field(
-        None, alias="storagePolicy", description="Name of the storage policy defined at vCenter (VMware only)"
+        None,
+        alias="storagePolicy",
+        description="Name of the storage policy defined at vCenter (VMware only)",
     )
 
     # --- IOPS / throughput --------------------------------------------------
 
-    miniops: Optional[int] = Field(None, alias="minIops", description="Min IOPS of the compute offering")
-    maxiops: Optional[int] = Field(None, alias="maxIops", description="Max IOPS of the compute offering")
-    bytesreadrate: Optional[int] = Field(None, alias="bytesReadRate", description="Bytes read rate of the disk offering")
+    miniops: Optional[int] = Field(
+        None, alias="minIops", description="Min IOPS of the compute offering"
+    )
+    maxiops: Optional[int] = Field(
+        None, alias="maxIops", description="Max IOPS of the compute offering"
+    )
+    bytesreadrate: Optional[int] = Field(
+        None, alias="bytesReadRate", description="Bytes read rate of the disk offering"
+    )
     bytesreadratemax: Optional[int] = Field(
         None, alias="bytesReadRateMax", description="Burst bytes read rate of the disk offering"
     )
     bytesreadratemaxlength: Optional[int] = Field(
         None, alias="bytesReadRateMaxLength", description="Length (in seconds) of the read burst"
     )
-    byteswriterate: Optional[int] = Field(None, alias="bytesWriteRate", description="Bytes write rate of the disk offering")
+    byteswriterate: Optional[int] = Field(
+        None, alias="bytesWriteRate", description="Bytes write rate of the disk offering"
+    )
     byteswriteratemax: Optional[int] = Field(
         None, alias="bytesWriteRateMax", description="Burst bytes write rate of the disk offering"
     )
     byteswriteratemaxlength: Optional[int] = Field(
         None, alias="bytesWriteRateMaxLength", description="Length (in seconds) of the write burst"
     )
-    iopsreadrate: Optional[int] = Field(None, alias="iopsReadRate", description="IO requests read rate of the disk offering")
+    iopsreadrate: Optional[int] = Field(
+        None, alias="iopsReadRate", description="IO requests read rate of the disk offering"
+    )
     iopsreadratemax: Optional[int] = Field(
-        None, alias="iopsReadRateMax", description="Burst IO requests read rate of the disk offering"
+        None,
+        alias="iopsReadRateMax",
+        description="Burst IO requests read rate of the disk offering",
     )
     iopsreadratemaxlength: Optional[int] = Field(
-        None, alias="iopsReadRateMaxLength", description="Length (in seconds) of the read IOPS burst"
+        None,
+        alias="iopsReadRateMaxLength",
+        description="Length (in seconds) of the read IOPS burst",
     )
-    iopswriterate: Optional[int] = Field(None, alias="iopsWriteRate", description="IO requests write rate of the disk offering")
+    iopswriterate: Optional[int] = Field(
+        None, alias="iopsWriteRate", description="IO requests write rate of the disk offering"
+    )
     iopswriteratemax: Optional[int] = Field(
-        None, alias="iopsWriteRateMax", description="Burst IO requests write rate of the disk offering"
+        None,
+        alias="iopsWriteRateMax",
+        description="Burst IO requests write rate of the disk offering",
     )
     iopswriteratemaxlength: Optional[int] = Field(
-        None, alias="iopsWriteRateMaxLength", description="Length (in seconds) of the write IOPS burst"
+        None,
+        alias="iopsWriteRateMaxLength",
+        description="Length (in seconds) of the write IOPS burst",
     )
 
     # --- network ------------------------------------------------------------
@@ -116,25 +170,39 @@ class CreateServiceOfferingRequest(APIRequest):
 
     # --- HA / system --------------------------------------------------------
 
-    offerha: Optional[bool] = Field(None, alias="offerHa", description="Enable HA for this service offering")
-    issystem: Optional[bool] = Field(None, alias="isSystem", description="Is this a system VM offering")
+    offerha: Optional[bool] = Field(
+        None, alias="offerHa", description="Enable HA for this service offering"
+    )
+    issystem: Optional[bool] = Field(
+        None, alias="isSystem", description="Is this a system VM offering"
+    )
     systemvmtype: Optional[str] = Field(
-        None, alias="systemVmType", description="System VM type: 'domainrouter', 'consoleproxy', 'secondarystoragevm'"
+        None,
+        alias="systemVmType",
+        description="System VM type: 'domainrouter', 'consoleproxy', 'secondarystoragevm'",
     )
 
     # --- GPU ----------------------------------------------------------------
 
     vgpuprofileid: Optional[str] = Field(
-        None, alias="vgpuProfileId", description="ID of the vGPU profile to map to this service offering"
+        None,
+        alias="vgpuProfileId",
+        description="ID of the vGPU profile to map to this service offering",
     )
-    gpucount: Optional[int] = Field(None, alias="gpuCount", description="Count of GPUs for this service offering")
+    gpucount: Optional[int] = Field(
+        None, alias="gpuCount", description="Count of GPUs for this service offering"
+    )
     gpudisplay: Optional[bool] = Field(
-        None, alias="gpuDisplay", description="Whether to enable GPU display for this service offering"
+        None,
+        alias="gpuDisplay",
+        description="Whether to enable GPU display for this service offering",
     )
 
     # --- lease --------------------------------------------------------------
 
-    leaseduration: Optional[int] = Field(None, alias="leaseDuration", description="Number of days instance is leased for")
+    leaseduration: Optional[int] = Field(
+        None, alias="leaseDuration", description="Number of days instance is leased for"
+    )
     leaseexpiryaction: Optional[str] = Field(
         None, alias="leaseExpiryAction", description="Lease expiry action: STOP or DESTROY"
     )
@@ -144,13 +212,19 @@ class CreateServiceOfferingRequest(APIRequest):
 
     # --- placement / tags ---------------------------------------------------
 
-    hosttags: Optional[str] = Field(None, alias="hostTags", description="Host tag for this service offering")
+    hosttags: Optional[str] = Field(
+        None, alias="hostTags", description="Host tag for this service offering"
+    )
     tags: Optional[str] = Field(None, description="Storage tags for this service offering")
     deploymentplanner: Optional[str] = Field(
-        None, alias="deploymentPlanner", description="Deployment planner heuristic used to deploy a VM"
+        None,
+        alias="deploymentPlanner",
+        description="Deployment planner heuristic used to deploy a VM",
     )
     serviceofferingdetails: Optional[str] = Field(
-        None, alias="serviceOfferingDetails", description="Details for planner (key/value parameters)"
+        None,
+        alias="serviceOfferingDetails",
+        description="Details for planner (key/value parameters)",
     )
     externaldetails: Optional[str] = Field(
         None, alias="externalDetails", description="External key/value pair details"
@@ -159,7 +233,9 @@ class CreateServiceOfferingRequest(APIRequest):
     # --- scope --------------------------------------------------------------
 
     domainid: Optional[str] = Field(
-        None, alias="domainId", description="ID of the containing domain(s); null for public offerings"
+        None,
+        alias="domainId",
+        description="ID of the containing domain(s); null for public offerings",
     )
     zoneid: Optional[str] = Field(
         None, alias="zoneId", description="ID of the containing zone(s); null for public offerings"
@@ -188,26 +264,44 @@ class UpdateServiceOfferingRequest(APIRequest):
     # --- optional -----------------------------------------------------------
 
     name: Optional[str] = Field(None, description="New name for the service offering")
-    displaytext: Optional[str] = Field(None, alias="displayText", description="New display text for the service offering")
+    displaytext: Optional[str] = Field(
+        None, alias="displayText", description="New display text for the service offering"
+    )
     domainid: Optional[str] = Field(
-        None, alias="domainId", description="Containing domain ID(s) as comma-separated string; 'public' for public offerings"
+        None,
+        alias="domainId",
+        description="Containing domain ID(s) as comma-separated string; 'public' for public offerings",
     )
     zoneid: Optional[str] = Field(
-        None, alias="zoneId", description="Containing zone ID(s) as comma-separated string; 'all' for all zones"
+        None,
+        alias="zoneId",
+        description="Containing zone ID(s) as comma-separated string; 'all' for all zones",
     )
-    hosttags: Optional[str] = Field(None, alias="hostTags", description="Host tag for this service offering")
+    hosttags: Optional[str] = Field(
+        None, alias="hostTags", description="Host tag for this service offering"
+    )
     storagetags: Optional[str] = Field(
-        None, alias="storageTags", description="Comma-separated storage tags matching existing storage pool tags"
+        None,
+        alias="storageTags",
+        description="Comma-separated storage tags matching existing storage pool tags",
     )
     state: Optional[str] = Field(None, description="State of the service offering")
-    sortkey: Optional[int] = Field(None, alias="sortKey", description="Sort key of the service offering")
+    sortkey: Optional[int] = Field(
+        None, alias="sortKey", description="Sort key of the service offering"
+    )
     purgeresources: Optional[bool] = Field(
-        None, alias="purgeResources", description="Whether to cleanup VM and its associated resources upon expunge"
+        None,
+        alias="purgeResources",
+        description="Whether to cleanup VM and its associated resources upon expunge",
     )
     cleanupexternaldetails: Optional[bool] = Field(
-        None, alias="cleanupExternalDetails", description="Whether external details should be cleaned up"
+        None,
+        alias="cleanupExternalDetails",
+        description="Whether external details should be cleaned up",
     )
-    externaldetails: Optional[str] = Field(None, alias="externalDetails", description="External key/value pair details")
+    externaldetails: Optional[str] = Field(
+        None, alias="externalDetails", description="External key/value pair details"
+    )
 
 
 class ListServiceOfferingRequest(APIRequest, PaginationMixin):

@@ -117,7 +117,9 @@ class CreateSnapshotRequest(APIRequest):
 
     # --- required -----------------------------------------------------------
 
-    volumeid: UUID4 = Field(..., alias="volumeId", description="UUID of the disk volume to snapshot.")
+    volumeid: UUID4 = Field(
+        ..., alias="volumeId", description="UUID of the disk volume to snapshot."
+    )
 
     # --- optional -----------------------------------------------------------
 
@@ -340,7 +342,9 @@ class DeleteVMSnapshotRequest(APIRequest):
     Reference: https://cloudstack.apache.org/api/apidocs-4.22/apis/deleteVMSnapshot.html
     """
 
-    vmsnapshotid: UUID4 = Field(..., alias="vmSnapshotId", description="The ID of the VM snapshot to delete.")
+    vmsnapshotid: UUID4 = Field(
+        ..., alias="vmSnapshotId", description="The ID of the VM snapshot to delete."
+    )
 
 
 class ExtractSnapshotRequest(APIRequest):
@@ -350,7 +354,9 @@ class ExtractSnapshotRequest(APIRequest):
     """
 
     id: UUID4 = Field(..., description="The ID of the snapshot.")
-    zoneid: UUID4 = Field(..., alias="zoneId", description="The ID of the zone where the snapshot is located.")
+    zoneid: UUID4 = Field(
+        ..., alias="zoneId", description="The ID of the zone where the snapshot is located."
+    )
 
 
 class GetVolumeSnapshotDetailsRequest(APIRequest):

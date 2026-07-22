@@ -22,6 +22,7 @@ from acs_sdk.schemas.request.load_balancer import (
 # CreateLoadBalancerRuleRequest
 # ---------------------------------------------------------------------------
 
+
 def test_create_lb_rule_required_fields_serialize():
     req = CreateLoadBalancerRuleRequest(
         algorithm="roundrobin", name="rule-1", privatePort=80, publicPort=8080
@@ -96,6 +97,7 @@ def test_create_lb_rule_invalid_protocol_raises():
 # UpdateLoadBalancerRuleRequest / DeleteLoadBalancerRuleRequest
 # ---------------------------------------------------------------------------
 
+
 def test_update_lb_rule_serializes():
     req = UpdateLoadBalancerRuleRequest(id="rule-1", algorithm="leastconn", customId="custom-1")
     dumped = req.model_dump(exclude_none=True)
@@ -110,6 +112,7 @@ def test_delete_lb_rule_missing_id_raises():
 # ---------------------------------------------------------------------------
 # ListLoadBalancerRulesRequest
 # ---------------------------------------------------------------------------
+
 
 def test_list_lb_rules_defaults_from_pagination_mixin():
     req = ListLoadBalancerRulesRequest()
@@ -141,6 +144,7 @@ def test_list_lb_rules_aliases_serialize_to_snake_case():
 # AssignToLoadBalancerRuleRequest
 # ---------------------------------------------------------------------------
 
+
 def test_assign_to_lb_rule_serializes_virtualmachineids_csv():
     req = AssignToLoadBalancerRuleRequest(id="rule-1", virtualMachineIds=["vm-1", "vm-2"])
     dumped = req.model_dump(exclude_none=True)
@@ -167,10 +171,9 @@ def test_assign_to_lb_rule_missing_id_raises():
 # CreateLBStickinessPolicyRequest
 # ---------------------------------------------------------------------------
 
+
 def test_create_stickiness_policy_required_fields_serialize():
-    req = CreateLBStickinessPolicyRequest(
-        lbRuleId="rule-1", methodName="LbCookie", name="policy-1"
-    )
+    req = CreateLBStickinessPolicyRequest(lbRuleId="rule-1", methodName="LbCookie", name="policy-1")
     dumped = req.model_dump(exclude_none=True)
     assert dumped == {"lbruleid": "rule-1", "methodname": "LbCookie", "name": "policy-1"}
 
@@ -201,6 +204,7 @@ def test_create_stickiness_policy_missing_required_fields_raises():
 # ---------------------------------------------------------------------------
 # CreateLoadBalancerRequest (internal LB)
 # ---------------------------------------------------------------------------
+
 
 def test_create_load_balancer_required_fields_serialize():
     req = CreateLoadBalancerRequest(
@@ -246,6 +250,7 @@ def test_create_load_balancer_missing_required_fields_raises():
 # ListLoadBalancersRequest
 # ---------------------------------------------------------------------------
 
+
 def test_list_load_balancers_flattens_tags():
     req = ListLoadBalancersRequest(tags={"team": "net"})
     dumped = req.model_dump(exclude_none=True)
@@ -264,6 +269,7 @@ def test_list_load_balancers_defaults_from_pagination_mixin():
 # ---------------------------------------------------------------------------
 # CreateGlobalLoadBalancerRuleRequest
 # ---------------------------------------------------------------------------
+
 
 def test_create_global_lb_rule_required_fields_serialize():
     req = CreateGlobalLoadBalancerRuleRequest(
@@ -306,6 +312,7 @@ def test_create_global_lb_rule_invalid_lbmethod_raises():
 # ListGlobalLoadBalancerRulesRequest
 # ---------------------------------------------------------------------------
 
+
 def test_list_global_lb_rules_flattens_tags():
     req = ListGlobalLoadBalancerRulesRequest(tags={"env": "prod"})
     dumped = req.model_dump(exclude_none=True)
@@ -316,6 +323,7 @@ def test_list_global_lb_rules_flattens_tags():
 # ---------------------------------------------------------------------------
 # AssignToGlobalLoadBalancerRuleRequest / RemoveFromGlobalLoadBalancerRuleRequest
 # ---------------------------------------------------------------------------
+
 
 def test_assign_to_global_lb_rule_serializes_loadbalancerrulelist_csv():
     req = AssignToGlobalLoadBalancerRuleRequest(
@@ -360,6 +368,7 @@ def test_remove_from_global_lb_rule_serializes_loadbalancerrulelist_csv():
 # ---------------------------------------------------------------------------
 # AssignCertToLoadBalancerRequest
 # ---------------------------------------------------------------------------
+
 
 def test_assign_cert_required_fields_serialize():
     req = AssignCertToLoadBalancerRequest(certId="cert-1", lbRuleId="rule-1")

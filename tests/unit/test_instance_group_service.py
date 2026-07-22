@@ -14,6 +14,7 @@ from acs_sdk.services.instance_group import InstanceGroup
 # list
 # ---------------------------------------------------------------------------
 
+
 def test_instance_group_list_parses_list_response():
     mock_client = Mock()
     mock_client.call.return_value = {
@@ -60,6 +61,7 @@ def test_instance_group_list_async_parses_list_response():
 # create
 # ---------------------------------------------------------------------------
 
+
 def test_instance_group_create_parses_response():
     mock_client = Mock()
     mock_client.call.return_value = {
@@ -98,6 +100,7 @@ def test_instance_group_create_async_parses_response():
 # update
 # ---------------------------------------------------------------------------
 
+
 def test_instance_group_update_parses_response():
     mock_client = Mock()
     mock_client.call.return_value = {
@@ -135,6 +138,7 @@ def test_instance_group_update_async_parses_response():
 # ---------------------------------------------------------------------------
 # delete
 # ---------------------------------------------------------------------------
+
 
 def test_instance_group_delete_parses_response():
     mock_client = Mock()

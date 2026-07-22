@@ -21,6 +21,7 @@ from acs_sdk.services.iso import ISO
 # list
 # ---------------------------------------------------------------------------
 
+
 def test_iso_list_parses_list_response():
     mock_client = Mock()
     mock_client.call.return_value = {
@@ -43,6 +44,7 @@ def test_iso_list_parses_list_response():
 # list_permissions
 # ---------------------------------------------------------------------------
 
+
 def test_iso_list_permissions_parses_response():
     mock_client = Mock()
     mock_client.call.return_value = {
@@ -63,6 +65,7 @@ def test_iso_list_permissions_parses_response():
 # register
 # ---------------------------------------------------------------------------
 
+
 def test_iso_register_parses_response():
     mock_client = Mock()
     mock_client.call.return_value = {
@@ -72,7 +75,9 @@ def test_iso_register_parses_response():
     }
 
     iso = ISO(client=mock_client)
-    payload = RegisterIsoRequest(name="ubuntu", url="http://example.com/ubuntu.iso", zoneId="zone-1")
+    payload = RegisterIsoRequest(
+        name="ubuntu", url="http://example.com/ubuntu.iso", zoneId="zone-1"
+    )
     response = iso.register(payload)
 
     assert response.data == {"id": "iso-new", "name": "ubuntu", "zoneid": "zone-1"}
@@ -82,6 +87,7 @@ def test_iso_register_parses_response():
 # ---------------------------------------------------------------------------
 # update
 # ---------------------------------------------------------------------------
+
 
 def test_iso_update_parses_response():
     mock_client = Mock()
@@ -103,11 +109,10 @@ def test_iso_update_parses_response():
 # delete
 # ---------------------------------------------------------------------------
 
+
 def test_iso_delete_parses_response():
     mock_client = Mock()
-    mock_client.call.return_value = {
-        "deleteisoresponse": {}
-    }
+    mock_client.call.return_value = {"deleteisoresponse": {}}
 
     iso = ISO(client=mock_client)
     payload = DeleteIsoRequest(id="iso-1")
@@ -132,11 +137,10 @@ def test_iso_delete_with_zone_passes_correct_params():
 # update_permissions
 # ---------------------------------------------------------------------------
 
+
 def test_iso_update_permissions_parses_response():
     mock_client = Mock()
-    mock_client.call.return_value = {
-        "updateisopermissionsresponse": {}
-    }
+    mock_client.call.return_value = {"updateisopermissionsresponse": {}}
 
     iso = ISO(client=mock_client)
     payload = UpdateIsoPermissionsRequest(id="iso-1", isPublic=True, op="add")
@@ -151,6 +155,7 @@ def test_iso_update_permissions_parses_response():
 # ---------------------------------------------------------------------------
 # attach
 # ---------------------------------------------------------------------------
+
 
 def test_iso_attach_parses_vm_response():
     mock_client = Mock()
@@ -172,6 +177,7 @@ def test_iso_attach_parses_vm_response():
 # detach
 # ---------------------------------------------------------------------------
 
+
 def test_iso_detach_parses_vm_response():
     mock_client = Mock()
     mock_client.call.return_value = {
@@ -191,6 +197,7 @@ def test_iso_detach_parses_vm_response():
 # ---------------------------------------------------------------------------
 # copy
 # ---------------------------------------------------------------------------
+
 
 def test_iso_copy_parses_response():
     mock_client = Mock()
@@ -212,6 +219,7 @@ def test_iso_copy_parses_response():
 # extract
 # ---------------------------------------------------------------------------
 
+
 def test_iso_extract_parses_response():
     mock_client = Mock()
     mock_client.call.return_value = {
@@ -231,6 +239,7 @@ def test_iso_extract_parses_response():
 # ---------------------------------------------------------------------------
 # get_upload_params
 # ---------------------------------------------------------------------------
+
 
 def test_iso_get_upload_params_parses_response():
     mock_client = Mock()
@@ -261,14 +270,17 @@ def test_iso_get_upload_params_parses_response():
 # list_async (async variant)
 # ---------------------------------------------------------------------------
 
+
 def test_iso_list_async_parses_list_response():
     mock_client = Mock()
-    mock_client.call_async = AsyncMock(return_value={
-        "listisosresponse": {
-            "iso": [{"id": "iso-2", "name": "centos"}],
-            "count": 1,
+    mock_client.call_async = AsyncMock(
+        return_value={
+            "listisosresponse": {
+                "iso": [{"id": "iso-2", "name": "centos"}],
+                "count": 1,
+            }
         }
-    })
+    )
 
     iso = ISO(client=mock_client)
     payload = ListIsosRequest(isoFilter="featured")

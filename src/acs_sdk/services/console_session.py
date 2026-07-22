@@ -19,7 +19,9 @@ class ConsoleSession(BaseService):
             envelope="createconsoleendpointresponse",
         )
 
-    async def create_endpoint_async(self, payload: CreateConsoleEndpointRequest) -> APIResponse[Dict]:
+    async def create_endpoint_async(
+        self, payload: CreateConsoleEndpointRequest
+    ) -> APIResponse[Dict]:
         """Asynchronously create a console endpoint for a virtual machine."""
         return await self._execute_async(
             "createConsoleEndpoint",

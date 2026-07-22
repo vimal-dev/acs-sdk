@@ -18,6 +18,7 @@ from acs_sdk.services.security_group import SecurityGroup
 # list
 # ---------------------------------------------------------------------------
 
+
 def test_security_group_list_parses_list_response():
     mock_client = Mock()
     mock_client.call.return_value = {
@@ -64,6 +65,7 @@ def test_security_group_list_async_parses_list_response():
 # create
 # ---------------------------------------------------------------------------
 
+
 def test_security_group_create_parses_response():
     mock_client = Mock()
     mock_client.call.return_value = {
@@ -101,6 +103,7 @@ def test_security_group_create_async_parses_response():
 # ---------------------------------------------------------------------------
 # update
 # ---------------------------------------------------------------------------
+
 
 def test_security_group_update_parses_response():
     mock_client = Mock()
@@ -140,6 +143,7 @@ def test_security_group_update_async_parses_response():
 # delete
 # ---------------------------------------------------------------------------
 
+
 def test_security_group_delete_parses_response():
     mock_client = Mock()
     mock_client.call.return_value = {
@@ -171,6 +175,7 @@ def test_security_group_delete_async_parses_response():
 # ---------------------------------------------------------------------------
 # authorize_ingress
 # ---------------------------------------------------------------------------
+
 
 def test_security_group_authorize_ingress_parses_response():
     mock_client = Mock()
@@ -212,6 +217,7 @@ def test_security_group_authorize_ingress_async_parses_response():
 # authorize_egress
 # ---------------------------------------------------------------------------
 
+
 def test_security_group_authorize_egress_parses_response():
     mock_client = Mock()
     mock_client.call.return_value = {
@@ -250,6 +256,7 @@ def test_security_group_authorize_egress_async_parses_response():
 # revoke_ingress
 # ---------------------------------------------------------------------------
 
+
 def test_security_group_revoke_ingress_parses_response():
     mock_client = Mock()
     mock_client.call.return_value = {
@@ -281,6 +288,7 @@ def test_security_group_revoke_ingress_async_parses_response():
 # ---------------------------------------------------------------------------
 # revoke_egress
 # ---------------------------------------------------------------------------
+
 
 def test_security_group_revoke_egress_parses_response():
     mock_client = Mock()

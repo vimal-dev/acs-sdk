@@ -125,7 +125,9 @@ class ISO(BaseService):
             envelope="updateisopermissionsresponse",
         )
 
-    async def update_permissions_async(self, payload: UpdateIsoPermissionsRequest) -> APIResponse[Dict]:
+    async def update_permissions_async(
+        self, payload: UpdateIsoPermissionsRequest
+    ) -> APIResponse[Dict]:
         """Asynchronously update permissions for an ISO."""
         return await self._execute_async(
             "updateIsoPermissions",
@@ -222,7 +224,9 @@ class ISO(BaseService):
             entity="getuploadparams",
         )
 
-    async def get_upload_params_async(self, payload: GetUploadParamsForIsoRequest) -> APIResponse[Dict]:
+    async def get_upload_params_async(
+        self, payload: GetUploadParamsForIsoRequest
+    ) -> APIResponse[Dict]:
         """Asynchronously retrieve upload parameters for registering an ISO via direct upload."""
         return await self._execute_async(
             "getUploadParamsForIso",

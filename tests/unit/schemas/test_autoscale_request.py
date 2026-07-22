@@ -31,8 +31,11 @@ from acs_sdk.schemas.request.autoscale import (
 # AutoScale policies
 # ---------------------------------------------------------------------------
 
+
 def test_create_autoscale_policy_required_fields_serialize():
-    req = CreateAutoScalePolicyRequest(action="scaleup", conditionIds=["cond-1", "cond-2"], duration=60)
+    req = CreateAutoScalePolicyRequest(
+        action="scaleup", conditionIds=["cond-1", "cond-2"], duration=60
+    )
     dumped = req.model_dump(exclude_none=True)
     assert dumped == {"action": "scaleup", "conditionids": "cond-1,cond-2", "duration": 60}
 
@@ -75,7 +78,9 @@ def test_list_autoscale_policies_all_fields_optional():
 
 
 def test_list_autoscale_policies_aliases_serialize_to_snake_case():
-    req = ListAutoScalePoliciesRequest(conditionId="cond-1", domainId="dom-1", vmGroupId="grp-1", projectId="proj-1")
+    req = ListAutoScalePoliciesRequest(
+        conditionId="cond-1", domainId="dom-1", vmGroupId="grp-1", projectId="proj-1"
+    )
     dumped = req.model_dump(exclude_none=True)
     assert dumped["conditionid"] == "cond-1"
     assert dumped["domainid"] == "dom-1"
@@ -87,8 +92,11 @@ def test_list_autoscale_policies_aliases_serialize_to_snake_case():
 # AutoScale VM profiles
 # ---------------------------------------------------------------------------
 
+
 def test_create_autoscale_vm_profile_required_fields_serialize():
-    req = CreateAutoScaleVmProfileRequest(serviceOfferingId="so-1", templateId="tpl-1", zoneId="zone-1")
+    req = CreateAutoScaleVmProfileRequest(
+        serviceOfferingId="so-1", templateId="tpl-1", zoneId="zone-1"
+    )
     dumped = req.model_dump(exclude_none=True)
     assert dumped == {"serviceofferingid": "so-1", "templateid": "tpl-1", "zoneid": "zone-1"}
 
@@ -147,6 +155,7 @@ def test_list_autoscale_vm_profiles_all_fields_optional():
 # AutoScale VM groups
 # ---------------------------------------------------------------------------
 
+
 def test_create_autoscale_vm_group_required_fields_serialize():
     req = CreateAutoScaleVmGroupRequest(
         lbRuleId="lb-1",
@@ -179,7 +188,9 @@ def test_update_autoscale_vm_group_required_id_serializes():
 
 
 def test_update_autoscale_vm_group_policyids_serialize_to_csv():
-    req = UpdateAutoScaleVmGroupRequest(id="group-1", scaleDownPolicyIds=["d1", "d2"], scaleUpPolicyIds=["u1"])
+    req = UpdateAutoScaleVmGroupRequest(
+        id="group-1", scaleDownPolicyIds=["d1", "d2"], scaleUpPolicyIds=["u1"]
+    )
     dumped = req.model_dump(exclude_none=True)
     assert dumped["scaledownpolicyids"] == "d1,d2"
     assert dumped["scaleuppolicyids"] == "u1"
@@ -213,7 +224,9 @@ def test_list_autoscale_vm_groups_all_fields_optional():
 
 
 def test_list_autoscale_vm_groups_aliases_serialize_to_snake_case():
-    req = ListAutoScaleVmGroupsRequest(lbRuleId="lb-1", policyId="policy-1", vmProfileId="profile-1", zoneId="zone-1")
+    req = ListAutoScaleVmGroupsRequest(
+        lbRuleId="lb-1", policyId="policy-1", vmProfileId="profile-1", zoneId="zone-1"
+    )
     dumped = req.model_dump(exclude_none=True)
     assert dumped["lbruleid"] == "lb-1"
     assert dumped["policyid"] == "policy-1"
@@ -224,6 +237,7 @@ def test_list_autoscale_vm_groups_aliases_serialize_to_snake_case():
 # ---------------------------------------------------------------------------
 # Conditions
 # ---------------------------------------------------------------------------
+
 
 def test_create_condition_required_fields_serialize():
     req = CreateConditionRequest(counterId="counter-1", relationalOperator="GT", threshold=80)
@@ -264,8 +278,11 @@ def test_list_conditions_aliases_serialize_to_snake_case():
 # Counters
 # ---------------------------------------------------------------------------
 
+
 def test_create_counter_required_fields_serialize():
-    req = CreateCounterRequest(name="cpu-usage", provider="VirtualRouter", source="cpu", value="1.3.6.1.4.1")
+    req = CreateCounterRequest(
+        name="cpu-usage", provider="VirtualRouter", source="cpu", value="1.3.6.1.4.1"
+    )
     dumped = req.model_dump(exclude_none=True)
     assert dumped == {
         "name": "cpu-usage",

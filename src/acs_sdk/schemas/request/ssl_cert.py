@@ -10,9 +10,7 @@ class UploadSslCertRequest(APIRequest):
     certificate: str = Field(..., description="SSL certificate")
     name: str = Field(..., description="Name for the uploaded certificate")
     privatekey: str = Field(..., alias="privateKey", description="Private key")
-    account: Optional[str] = Field(
-        None, description="Account that will own the SSL certificate"
-    )
+    account: Optional[str] = Field(None, description="Account that will own the SSL certificate")
     certchain: Optional[str] = Field(
         None, alias="certChain", description="Certificate chain of trust"
     )
@@ -37,9 +35,7 @@ class DeleteSslCertRequest(APIRequest):
 class ListSslCertsRequest(APIRequest):
     accountid: Optional[str] = Field(None, alias="accountId", description="Account ID")
     certid: Optional[str] = Field(None, alias="certId", description="ID of SSL certificate")
-    lbruleid: Optional[str] = Field(
-        None, alias="lbRuleId", description="Load balancer rule ID"
-    )
+    lbruleid: Optional[str] = Field(None, alias="lbRuleId", description="Load balancer rule ID")
     projectid: Optional[str] = Field(
         None, alias="projectId", description="Project that owns the SSL certificate"
     )

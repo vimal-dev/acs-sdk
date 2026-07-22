@@ -26,7 +26,6 @@ from ..schemas.response.base import APIResponse
 
 
 class Kubernetes(BaseService):
-
     # -------------------------------------------------------------------------
     # Cluster lifecycle
     # -------------------------------------------------------------------------
@@ -39,7 +38,9 @@ class Kubernetes(BaseService):
             envelope="createkubernetesclusterresponse",
         )
 
-    async def create_cluster_async(self, payload: CreateKubernetesClusterRequest) -> APIResponse[Dict]:
+    async def create_cluster_async(
+        self, payload: CreateKubernetesClusterRequest
+    ) -> APIResponse[Dict]:
         """Asynchronously create a Kubernetes cluster."""
         return await self._execute_async(
             "createKubernetesCluster",
@@ -55,7 +56,9 @@ class Kubernetes(BaseService):
             envelope="deletekubernetesclusterresponse",
         )
 
-    async def delete_cluster_async(self, payload: DeleteKubernetesClusterRequest) -> APIResponse[Dict]:
+    async def delete_cluster_async(
+        self, payload: DeleteKubernetesClusterRequest
+    ) -> APIResponse[Dict]:
         """Asynchronously delete a Kubernetes cluster."""
         return await self._execute_async(
             "deleteKubernetesCluster",
@@ -71,7 +74,9 @@ class Kubernetes(BaseService):
             envelope="startkubernetesclusterresponse",
         )
 
-    async def start_cluster_async(self, payload: StartKubernetesClusterRequest) -> APIResponse[Dict]:
+    async def start_cluster_async(
+        self, payload: StartKubernetesClusterRequest
+    ) -> APIResponse[Dict]:
         """Asynchronously start a stopped CloudManaged Kubernetes cluster."""
         return await self._execute_async(
             "startKubernetesCluster",
@@ -103,7 +108,9 @@ class Kubernetes(BaseService):
             envelope="scalekubernetesclusterresponse",
         )
 
-    async def scale_cluster_async(self, payload: ScaleKubernetesClusterRequest) -> APIResponse[Dict]:
+    async def scale_cluster_async(
+        self, payload: ScaleKubernetesClusterRequest
+    ) -> APIResponse[Dict]:
         """Asynchronously scale a created, running or stopped CloudManaged Kubernetes cluster."""
         return await self._execute_async(
             "scaleKubernetesCluster",
@@ -119,7 +126,9 @@ class Kubernetes(BaseService):
             envelope="upgradekubernetesclusterresponse",
         )
 
-    async def upgrade_cluster_async(self, payload: UpgradeKubernetesClusterRequest) -> APIResponse[Dict]:
+    async def upgrade_cluster_async(
+        self, payload: UpgradeKubernetesClusterRequest
+    ) -> APIResponse[Dict]:
         """Asynchronously upgrade a running CloudManaged Kubernetes cluster."""
         return await self._execute_async(
             "upgradeKubernetesCluster",
@@ -140,7 +149,9 @@ class Kubernetes(BaseService):
             entity="kubernetescluster",
         )
 
-    async def list_clusters_async(self, payload: ListKubernetesClustersRequest) -> APIResponse[List[Dict]]:
+    async def list_clusters_async(
+        self, payload: ListKubernetesClustersRequest
+    ) -> APIResponse[List[Dict]]:
         """Asynchronously list Kubernetes clusters."""
         return await self._execute_async(
             "listKubernetesClusters",
@@ -179,7 +190,9 @@ class Kubernetes(BaseService):
             envelope="addnodestokubernetesclusterresponse",
         )
 
-    async def add_nodes_async(self, payload: AddNodesToKubernetesClusterRequest) -> APIResponse[Dict]:
+    async def add_nodes_async(
+        self, payload: AddNodesToKubernetesClusterRequest
+    ) -> APIResponse[Dict]:
         """Asynchronously add nodes as workers to an existing CKS cluster."""
         return await self._execute_async(
             "addNodesToKubernetesCluster",

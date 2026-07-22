@@ -20,6 +20,7 @@ from acs_sdk.schemas.request.iso import (
 # AttachIsoRequest
 # ---------------------------------------------------------------------------
 
+
 def test_attach_iso_required_fields_serialize_correctly():
     req = AttachIsoRequest(id="iso-1", virtualMachineId="vm-1")
     dumped = req.model_dump(exclude_none=True)
@@ -53,6 +54,7 @@ def test_attach_iso_missing_required_raises():
 # CopyIsoRequest
 # ---------------------------------------------------------------------------
 
+
 def test_copy_iso_required_id_only():
     req = CopyIsoRequest(id="iso-1")
     dumped = req.model_dump(exclude_none=True)
@@ -82,6 +84,7 @@ def test_copy_iso_missing_id_raises():
 # DeleteIsoRequest
 # ---------------------------------------------------------------------------
 
+
 def test_delete_iso_required_id_serializes():
     req = DeleteIsoRequest(id="iso-1")
     dumped = req.model_dump(exclude_none=True)
@@ -109,6 +112,7 @@ def test_delete_iso_missing_id_raises():
 # DetachIsoRequest
 # ---------------------------------------------------------------------------
 
+
 def test_detach_iso_required_field_via_alias():
     req = DetachIsoRequest(virtualMachineId="vm-1")
     dumped = req.model_dump(exclude_none=True)
@@ -135,6 +139,7 @@ def test_detach_iso_missing_required_raises():
 # ---------------------------------------------------------------------------
 # ExtractIsoRequest
 # ---------------------------------------------------------------------------
+
 
 def test_extract_iso_required_fields_serialize():
     req = ExtractIsoRequest(id="iso-1", mode="HTTP_DOWNLOAD")
@@ -171,6 +176,7 @@ def test_extract_iso_optional_fields_included_when_set():
 # GetUploadParamsForIsoRequest
 # ---------------------------------------------------------------------------
 
+
 def test_get_upload_params_required_trio_serializes():
     req = GetUploadParamsForIsoRequest(format="QCOW2", name="my-iso", zoneId="zone-1")
     dumped = req.model_dump(exclude_none=True)
@@ -200,8 +206,12 @@ def test_get_upload_params_optional_fields_excluded_when_none():
 
 def test_get_upload_params_optional_fields_included_when_set():
     req = GetUploadParamsForIsoRequest(
-        format="OVA", name="iso", zoneId="z1",
-        bootable=True, osTypeId="os-1", isPublic=True,
+        format="OVA",
+        name="iso",
+        zoneId="z1",
+        bootable=True,
+        osTypeId="os-1",
+        isPublic=True,
     )
     dumped = req.model_dump(exclude_none=True)
     assert dumped["bootable"] is True
@@ -212,6 +222,7 @@ def test_get_upload_params_optional_fields_included_when_set():
 # ---------------------------------------------------------------------------
 # ListIsoPermissionsRequest
 # ---------------------------------------------------------------------------
+
 
 def test_list_iso_permissions_required_id_serializes():
     req = ListIsoPermissionsRequest(id="iso-1")
@@ -228,6 +239,7 @@ def test_list_iso_permissions_missing_id_raises():
 # ListIsosRequest
 # ---------------------------------------------------------------------------
 
+
 def test_list_isos_all_optional_with_pagination_defaults():
     req = ListIsosRequest()
     dumped = req.model_dump(exclude_none=True)
@@ -236,7 +248,15 @@ def test_list_isos_all_optional_with_pagination_defaults():
 
 
 def test_list_isos_isofilter_valid_values_accepted():
-    for f in ["featured", "self", "selfexecutable", "sharedexecutable", "executable", "community", "all"]:
+    for f in [
+        "featured",
+        "self",
+        "selfexecutable",
+        "sharedexecutable",
+        "executable",
+        "community",
+        "all",
+    ]:
         req = ListIsosRequest(isoFilter=f)
         assert req.isofilter == f
 
@@ -278,6 +298,7 @@ def test_list_isos_optional_fields_included_when_set():
 # RegisterIsoRequest
 # ---------------------------------------------------------------------------
 
+
 def test_register_iso_required_fields_serialize():
     req = RegisterIsoRequest(name="ubuntu", url="http://example.com/ubuntu.iso", zoneId="zone-1")
     dumped = req.model_dump(exclude_none=True)
@@ -297,9 +318,14 @@ def test_register_iso_optional_fields_excluded_when_none():
 
 def test_register_iso_optional_fields_included_when_set():
     req = RegisterIsoRequest(
-        name="iso", url="http://example.com/iso", zoneId="z1",
-        bootable=True, osTypeId="os-1", isPublic=False,
-        domainId="dom-1", passwordEnabled=True,
+        name="iso",
+        url="http://example.com/iso",
+        zoneId="z1",
+        bootable=True,
+        osTypeId="os-1",
+        isPublic=False,
+        domainId="dom-1",
+        passwordEnabled=True,
     )
     dumped = req.model_dump(exclude_none=True)
     assert dumped["bootable"] is True
@@ -323,6 +349,7 @@ def test_register_iso_missing_required_raises():
 # ---------------------------------------------------------------------------
 # UpdateIsoRequest
 # ---------------------------------------------------------------------------
+
 
 def test_update_iso_required_id_serializes():
     req = UpdateIsoRequest(id="iso-1")
@@ -355,8 +382,12 @@ def test_update_iso_invalid_format_raises():
 
 def test_update_iso_optional_fields_included_when_set():
     req = UpdateIsoRequest(
-        id="iso-1", name="new-name", displayText="New Display",
-        bootable=True, passwordEnabled=False, sshKeyEnabled=True,
+        id="iso-1",
+        name="new-name",
+        displayText="New Display",
+        bootable=True,
+        passwordEnabled=False,
+        sshKeyEnabled=True,
     )
     dumped = req.model_dump(exclude_none=True)
     assert dumped["name"] == "new-name"
@@ -374,6 +405,7 @@ def test_update_iso_missing_id_raises():
 # ---------------------------------------------------------------------------
 # UpdateIsoPermissionsRequest
 # ---------------------------------------------------------------------------
+
 
 def test_update_iso_permissions_required_id_serializes():
     req = UpdateIsoPermissionsRequest(id="iso-1")
@@ -402,8 +434,12 @@ def test_update_iso_permissions_optional_fields_excluded_when_none():
 
 def test_update_iso_permissions_optional_fields_included_when_set():
     req = UpdateIsoPermissionsRequest(
-        id="iso-1", accounts="acc1,acc2", isPublic=True,
-        isFeatured=False, op="add", projectIds="proj-1",
+        id="iso-1",
+        accounts="acc1,acc2",
+        isPublic=True,
+        isFeatured=False,
+        op="add",
+        projectIds="proj-1",
     )
     dumped = req.model_dump(exclude_none=True)
     assert dumped["accounts"] == "acc1,acc2"

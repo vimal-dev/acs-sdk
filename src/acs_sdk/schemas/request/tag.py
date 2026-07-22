@@ -40,9 +40,7 @@ class DeleteTagsRequest(APIRequest):
         ..., alias="resourceIds", description="Delete tags for resource id(s)"
     )
     resourcetype: str = Field(..., alias="resourceType", description="Delete tag by resource type")
-    tags: Optional[Dict[str, str]] = Field(
-        None, description="Delete tags matching key/value pairs"
-    )
+    tags: Optional[Dict[str, str]] = Field(None, description="Delete tags matching key/value pairs")
 
     @field_serializer("resourceids")
     def serialize_csv(self, value: List[str]) -> str:
@@ -78,8 +76,12 @@ class ListTagsRequest(APIRequest, PaginationMixin):
         description="If set to false, list only resources belonging to the command's caller; if set to true - list resources that the caller is authorized to see.",
     )
     projectid: Optional[str] = Field(
-        None, alias="projectId", description="List objects by project; if projectid=-1 lists All VMs"
+        None,
+        alias="projectId",
+        description="List objects by project; if projectid=-1 lists All VMs",
     )
     resourceid: Optional[str] = Field(None, alias="resourceId", description="List by resource id")
-    resourcetype: Optional[str] = Field(None, alias="resourceType", description="List by resource type")
+    resourcetype: Optional[str] = Field(
+        None, alias="resourceType", description="List by resource type"
+    )
     value: Optional[str] = Field(None, description="List by value")

@@ -16,7 +16,9 @@ class CreateConsoleEndpointRequest(APIRequest):
 
 class ListConsoleSessionsRequest(APIRequest, PaginationMixin):
     accountid: Optional[str] = Field(
-        None, alias="accountId", description="The ID of the account that created the console endpoint."
+        None,
+        alias="accountId",
+        description="The ID of the account that created the console endpoint.",
     )
     acquired: Optional[bool] = Field(
         False,
@@ -36,7 +38,9 @@ class ListConsoleSessionsRequest(APIRequest, PaginationMixin):
         ),
     )
     clientaddress: Optional[str] = Field(
-        None, alias="clientAddress", description="IP address of the client that accessed the console session."
+        None,
+        alias="clientAddress",
+        description="IP address of the client that accessed the console session.",
     )
     consoleendpointcreatoraddress: Optional[str] = Field(
         None,
@@ -44,7 +48,9 @@ class ListConsoleSessionsRequest(APIRequest, PaginationMixin):
         description="IP address of the creator of the console endpoint.",
     )
     domainid: Optional[str] = Field(
-        None, alias="domainId", description="The domain ID of the account that created the console endpoint."
+        None,
+        alias="domainId",
+        description="The domain ID of the account that created the console endpoint.",
     )
     enddate: Optional[datetime] = Field(
         None, alias="endDate", description="Lists console sessions generated up until this date."
@@ -63,7 +69,9 @@ class ListConsoleSessionsRequest(APIRequest, PaginationMixin):
     )
     keyword: Optional[str] = Field(None, description="List by keyword")
     startdate: Optional[datetime] = Field(
-        None, alias="startDate", description="Lists console sessions generated from this date onwards."
+        None,
+        alias="startDate",
+        description="Lists console sessions generated from this date onwards.",
     )
     userid: Optional[str] = Field(
         None, alias="userId", description="The ID of the user that created the console endpoint."

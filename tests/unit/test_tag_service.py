@@ -14,6 +14,7 @@ from acs_sdk.services.tag import Tag
 # create
 # ---------------------------------------------------------------------------
 
+
 def test_tag_create_parses_response():
     mock_client = Mock()
     mock_client.call.return_value = {
@@ -25,16 +26,12 @@ def test_tag_create_parses_response():
     response = tag.create(payload)
 
     assert response.data == {"success": "true"}
-    mock_client.call.assert_called_once_with(
-        "createTags", payload.model_dump(exclude_none=True)
-    )
+    mock_client.call.assert_called_once_with("createTags", payload.model_dump(exclude_none=True))
 
 
 def test_tag_create_async_parses_response():
     mock_client = Mock()
-    mock_client.call_async = AsyncMock(
-        return_value={"createtagsresponse": {"success": "true"}}
-    )
+    mock_client.call_async = AsyncMock(return_value={"createtagsresponse": {"success": "true"}})
 
     tag = Tag(client=mock_client)
     payload = CreateTagsRequest(resourceIds=["vm-1"], resourceType="UserVm", tags={"env": "prod"})
@@ -49,6 +46,7 @@ def test_tag_create_async_parses_response():
 # ---------------------------------------------------------------------------
 # delete
 # ---------------------------------------------------------------------------
+
 
 def test_tag_delete_parses_response():
     mock_client = Mock()
@@ -68,9 +66,7 @@ def test_tag_delete_parses_response():
 
 def test_tag_delete_async_parses_response():
     mock_client = Mock()
-    mock_client.call_async = AsyncMock(
-        return_value={"deletetagsresponse": {"success": "true"}}
-    )
+    mock_client.call_async = AsyncMock(return_value={"deletetagsresponse": {"success": "true"}})
 
     tag = Tag(client=mock_client)
     payload = DeleteTagsRequest(resourceIds=["vm-1"], resourceType="UserVm")
@@ -85,6 +81,7 @@ def test_tag_delete_async_parses_response():
 # ---------------------------------------------------------------------------
 # list_storage_tags
 # ---------------------------------------------------------------------------
+
 
 def test_tag_list_storage_tags_parses_list_response():
     mock_client = Mock()
@@ -132,6 +129,7 @@ def test_tag_list_storage_tags_async_parses_list_response():
 # list
 # ---------------------------------------------------------------------------
 
+
 def test_tag_list_parses_list_response():
     mock_client = Mock()
     mock_client.call.return_value = {
@@ -147,9 +145,7 @@ def test_tag_list_parses_list_response():
 
     assert response.data == [{"key": "env", "value": "prod", "resourceid": "vm-1"}]
     assert response.count == 1
-    mock_client.call.assert_called_once_with(
-        "listTags", payload.model_dump(exclude_none=True)
-    )
+    mock_client.call.assert_called_once_with("listTags", payload.model_dump(exclude_none=True))
 
 
 def test_tag_list_async_parses_list_response():

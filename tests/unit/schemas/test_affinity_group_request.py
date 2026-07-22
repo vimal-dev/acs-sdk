@@ -14,6 +14,7 @@ from acs_sdk.schemas.request.affinity_group import (
 # CreateAffinityGroupRequest
 # ---------------------------------------------------------------------------
 
+
 def test_create_affinity_group_required_fields_serialize():
     req = CreateAffinityGroupRequest(name="ag-1", type="host anti-affinity")
     dumped = req.model_dump(exclude_none=True)
@@ -45,6 +46,7 @@ def test_create_affinity_group_missing_required_fields_raises():
 # DeleteAffinityGroupRequest
 # ---------------------------------------------------------------------------
 
+
 def test_delete_affinity_group_by_id_serializes():
     req = DeleteAffinityGroupRequest(id="ag-1")
     dumped = req.model_dump(exclude_none=True)
@@ -66,6 +68,7 @@ def test_delete_affinity_group_id_and_name_mutually_exclusive_raises():
 # ListAffinityGroupTypesRequest
 # ---------------------------------------------------------------------------
 
+
 def test_list_affinity_group_types_defaults_from_pagination_mixin():
     req = ListAffinityGroupTypesRequest()
     dumped = req.model_dump(exclude_none=True)
@@ -82,6 +85,7 @@ def test_list_affinity_group_types_keyword_serializes():
 # ---------------------------------------------------------------------------
 # ListAffinityGroupsRequest
 # ---------------------------------------------------------------------------
+
 
 def test_list_affinity_groups_defaults_from_pagination_mixin():
     req = ListAffinityGroupsRequest()
@@ -118,6 +122,7 @@ def test_list_affinity_groups_optional_fields_excluded_when_none():
 # UpdateVMAffinityGroupRequest
 # ---------------------------------------------------------------------------
 
+
 def test_update_vm_affinity_group_required_id_serializes():
     req = UpdateVMAffinityGroupRequest(id="vm-1")
     dumped = req.model_dump(exclude_none=True)
@@ -138,9 +143,7 @@ def test_update_vm_affinity_group_names_serializes():
 
 def test_update_vm_affinity_group_ids_and_names_mutually_exclusive_raises():
     with pytest.raises(ValidationError):
-        UpdateVMAffinityGroupRequest(
-            id="vm-1", affinityGroupIds="ag-1", affinityGroupNames="ag-2"
-        )
+        UpdateVMAffinityGroupRequest(id="vm-1", affinityGroupIds="ag-1", affinityGroupNames="ag-2")
 
 
 def test_update_vm_affinity_group_missing_id_raises():

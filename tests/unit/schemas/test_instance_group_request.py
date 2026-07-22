@@ -13,6 +13,7 @@ from acs_sdk.schemas.request.instance_group import (
 # CreateInstanceGroupRequest
 # ---------------------------------------------------------------------------
 
+
 def test_create_instance_group_required_name_serializes():
     req = CreateInstanceGroupRequest(name="web")
     dumped = req.model_dump(exclude_none=True)
@@ -20,7 +21,9 @@ def test_create_instance_group_required_name_serializes():
 
 
 def test_create_instance_group_optional_scoping_fields_serialize():
-    req = CreateInstanceGroupRequest(name="web", account="acct1", domainId="dom-1", projectId="proj-1")
+    req = CreateInstanceGroupRequest(
+        name="web", account="acct1", domainId="dom-1", projectId="proj-1"
+    )
     dumped = req.model_dump(exclude_none=True)
     assert dumped["account"] == "acct1"
     assert dumped["domainid"] == "dom-1"
@@ -35,6 +38,7 @@ def test_create_instance_group_missing_name_raises():
 # ---------------------------------------------------------------------------
 # UpdateInstanceGroupRequest
 # ---------------------------------------------------------------------------
+
 
 def test_update_instance_group_required_id_serializes():
     req = UpdateInstanceGroupRequest(id="grp-1")
@@ -57,6 +61,7 @@ def test_update_instance_group_missing_id_raises():
 # DeleteInstanceGroupRequest
 # ---------------------------------------------------------------------------
 
+
 def test_delete_instance_group_required_id_serializes():
     req = DeleteInstanceGroupRequest(id="grp-1")
     dumped = req.model_dump(exclude_none=True)
@@ -71,6 +76,7 @@ def test_delete_instance_group_missing_id_raises():
 # ---------------------------------------------------------------------------
 # ListInstanceGroupsRequest
 # ---------------------------------------------------------------------------
+
 
 def test_list_instance_groups_defaults_from_pagination_mixin():
     req = ListInstanceGroupsRequest()

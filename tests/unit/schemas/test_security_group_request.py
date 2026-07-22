@@ -18,6 +18,7 @@ from acs_sdk.schemas.request.security_group import (
 # ListSecurityGroupRequest
 # ---------------------------------------------------------------------------
 
+
 def test_list_security_group_defaults_from_pagination_mixin():
     req = ListSecurityGroupRequest()
     dumped = req.model_dump(exclude_none=True)
@@ -42,6 +43,7 @@ def test_list_security_group_optional_fields_excluded_when_none():
 # ---------------------------------------------------------------------------
 # CreateSecurityGroupRequest
 # ---------------------------------------------------------------------------
+
 
 def test_create_security_group_required_name_serializes():
     req = CreateSecurityGroupRequest(name="web")
@@ -69,6 +71,7 @@ def test_create_security_group_missing_name_raises():
 # UpdateSecurityGroupRequest
 # ---------------------------------------------------------------------------
 
+
 def test_update_security_group_required_id_serializes():
     req = UpdateSecurityGroupRequest(id="sg-1")
     dumped = req.model_dump(exclude_none=True)
@@ -90,6 +93,7 @@ def test_update_security_group_missing_id_raises():
 # DeleteSecurityGroupRequest
 # ---------------------------------------------------------------------------
 
+
 def test_delete_security_group_by_id():
     req = DeleteSecurityGroupRequest(id="sg-1")
     dumped = req.model_dump(exclude_none=True)
@@ -108,7 +112,9 @@ def test_delete_security_group_id_and_name_mutually_exclusive():
 
 
 def test_delete_security_group_optional_scoping_fields_serialize():
-    req = DeleteSecurityGroupRequest(id="sg-1", account="acct1", domainId="dom-1", projectId="proj-1")
+    req = DeleteSecurityGroupRequest(
+        id="sg-1", account="acct1", domainId="dom-1", projectId="proj-1"
+    )
     dumped = req.model_dump(exclude_none=True)
     assert dumped["account"] == "acct1"
     assert dumped["domainid"] == "dom-1"
@@ -119,8 +125,11 @@ def test_delete_security_group_optional_scoping_fields_serialize():
 # AuthorizeSecurityGroupIngressRequest
 # ---------------------------------------------------------------------------
 
+
 def test_authorize_ingress_by_securitygroupid():
-    req = AuthorizeSecurityGroupIngressRequest(securityGroupId="sg-1", protocol="TCP", cidrList="0.0.0.0/0")
+    req = AuthorizeSecurityGroupIngressRequest(
+        securityGroupId="sg-1", protocol="TCP", cidrList="0.0.0.0/0"
+    )
     dumped = req.model_dump(exclude_none=True)
     assert dumped["securitygroupid"] == "sg-1"
     assert dumped["protocol"] == "TCP"
@@ -171,8 +180,11 @@ def test_authorize_ingress_projectid_alias():
 # AuthorizeSecurityGroupEgressRequest
 # ---------------------------------------------------------------------------
 
+
 def test_authorize_egress_by_securitygroupid():
-    req = AuthorizeSecurityGroupEgressRequest(securityGroupId="sg-1", protocol="TCP", cidrList="10.0.0.0/8")
+    req = AuthorizeSecurityGroupEgressRequest(
+        securityGroupId="sg-1", protocol="TCP", cidrList="10.0.0.0/8"
+    )
     dumped = req.model_dump(exclude_none=True)
     assert dumped["securitygroupid"] == "sg-1"
     assert dumped["cidrlist"] == "10.0.0.0/8"
@@ -203,6 +215,7 @@ def test_authorize_egress_usersecuritygrouplist_flattens_to_indexed_keys():
 # ---------------------------------------------------------------------------
 # RevokeSecurityGroupIngressRequest / RevokeSecurityGroupEgressRequest
 # ---------------------------------------------------------------------------
+
 
 def test_revoke_ingress_required_id_serializes():
     req = RevokeSecurityGroupIngressRequest(id="rule-1")

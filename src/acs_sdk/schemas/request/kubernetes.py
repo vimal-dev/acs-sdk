@@ -28,33 +28,49 @@ def _flatten_kv_maps(data: Dict[str, Any], fields: List[str]) -> Dict[str, Any]:
 class CreateKubernetesClusterRequest(APIRequest):
     name: str = Field(..., description="Name for the Kubernetes cluster")
     zoneid: str = Field(
-        ..., alias="zoneId", description="Availability zone in which the Kubernetes cluster is to be launched"
+        ...,
+        alias="zoneId",
+        description="Availability zone in which the Kubernetes cluster is to be launched",
     )
     account: Optional[str] = Field(
         None, description="An optional account for the virtual machine. Must be used with domainId."
     )
-    asnumber: Optional[str] = Field(None, alias="asNumber", description="The AS Number of the network")
+    asnumber: Optional[str] = Field(
+        None, alias="asNumber", description="The AS Number of the network"
+    )
     clustertype: Optional[ClusterType] = Field(
-        None, alias="clusterType", description="Type of the cluster: CloudManaged or ExternalManaged. Defaults to CloudManaged."
+        None,
+        alias="clusterType",
+        description="Type of the cluster: CloudManaged or ExternalManaged. Defaults to CloudManaged.",
     )
     cniconfigdetails: Optional[Dict[str, str]] = Field(
-        None, alias="cniConfigDetails", description="Parameter values for the variables in the CNI userdata"
+        None,
+        alias="cniConfigDetails",
+        description="Parameter values for the variables in the CNI userdata",
     )
     cniconfigurationid: Optional[str] = Field(
-        None, alias="cniConfigurationId", description="The ID of the Userdata used for CNI configuration"
+        None,
+        alias="cniConfigurationId",
+        description="The ID of the Userdata used for CNI configuration",
     )
     controlnodes: Optional[int] = Field(
-        None, alias="controlNodes", description="Number of Kubernetes cluster control nodes. Defaults to 1."
+        None,
+        alias="controlNodes",
+        description="Number of Kubernetes cluster control nodes. Defaults to 1.",
     )
     description: Optional[str] = Field(None, description="Description for the Kubernetes cluster")
     dockerregistrypassword: Optional[str] = Field(
-        None, alias="dockerRegistryPassword", description="Password for the docker image private registry"
+        None,
+        alias="dockerRegistryPassword",
+        description="Password for the docker image private registry",
     )
     dockerregistryurl: Optional[str] = Field(
         None, alias="dockerRegistryUrl", description="URL for the docker image private registry"
     )
     dockerregistryusername: Optional[str] = Field(
-        None, alias="dockerRegistryUsername", description="User name for the docker image private registry"
+        None,
+        alias="dockerRegistryUsername",
+        description="User name for the docker image private registry",
     )
     domainid: Optional[str] = Field(
         None,
@@ -78,9 +94,13 @@ class CreateKubernetesClusterRequest(APIRequest):
         None,
         description="The hypervisor on which the CKS cluster is to be deployed. Required if the zone has clusters with different hypervisor types.",
     )
-    keypair: Optional[str] = Field(None, description="Name of the SSH key pair used to log in to the virtual machines")
+    keypair: Optional[str] = Field(
+        None, description="Name of the SSH key pair used to log in to the virtual machines"
+    )
     kubernetesversionid: Optional[str] = Field(
-        None, alias="kubernetesVersionId", description="Kubernetes version with which the cluster is to be launched"
+        None,
+        alias="kubernetesVersionId",
+        description="Kubernetes version with which the cluster is to be launched",
     )
     masternodes: Optional[int] = Field(
         None,
@@ -88,7 +108,9 @@ class CreateKubernetesClusterRequest(APIRequest):
         description="Number of Kubernetes cluster master nodes. Deprecated, use controlnodes instead.",
     )
     networkid: Optional[str] = Field(
-        None, alias="networkId", description="Network in which the Kubernetes cluster is to be launched"
+        None,
+        alias="networkId",
+        description="Network in which the Kubernetes cluster is to be launched",
     )
     nodeofferings: Optional[Dict[str, str]] = Field(
         None,
@@ -103,9 +125,13 @@ class CreateKubernetesClusterRequest(APIRequest):
         alias="nodeTemplates",
         description="Node type to template ID mapping. Overrides the default System VM template if provided.",
     )
-    projectid: Optional[str] = Field(None, alias="projectId", description="Deploy the cluster for the project")
+    projectid: Optional[str] = Field(
+        None, alias="projectId", description="Deploy the cluster for the project"
+    )
     serviceofferingid: Optional[str] = Field(
-        None, alias="serviceOfferingId", description="The ID of the service offering for the virtual machines in the cluster"
+        None,
+        alias="serviceOfferingId",
+        description="The ID of the service offering for the virtual machines in the cluster",
     )
     size: Optional[int] = Field(None, description="Number of Kubernetes cluster worker nodes")
 
@@ -117,7 +143,8 @@ class CreateKubernetesClusterRequest(APIRequest):
 class DeleteKubernetesClusterRequest(APIRequest):
     id: str = Field(..., description="The ID of the Kubernetes cluster")
     cleanup: Optional[bool] = Field(
-        None, description="Destroy attached instances of the ExternalManaged cluster. Default: false"
+        None,
+        description="Destroy attached instances of the ExternalManaged cluster. Default: false",
     )
     expunge: Optional[bool] = Field(
         None,
@@ -136,7 +163,9 @@ class StopKubernetesClusterRequest(APIRequest):
 class ScaleKubernetesClusterRequest(APIRequest):
     id: str = Field(..., description="The ID of the Kubernetes cluster")
     autoscalingenabled: Optional[bool] = Field(
-        None, alias="autoscalingEnabled", description="Whether autoscaling is enabled for the cluster"
+        None,
+        alias="autoscalingEnabled",
+        description="Whether autoscaling is enabled for the cluster",
     )
     maxsize: Optional[int] = Field(
         None, alias="maxSize", description="Maximum number of worker nodes in the cluster"
@@ -144,14 +173,18 @@ class ScaleKubernetesClusterRequest(APIRequest):
     minsize: Optional[int] = Field(
         None, alias="minSize", description="Minimum number of worker nodes in the cluster"
     )
-    nodeids: Optional[List[str]] = Field(None, alias="nodeIds", description="The IDs of the nodes to be removed")
+    nodeids: Optional[List[str]] = Field(
+        None, alias="nodeIds", description="The IDs of the nodes to be removed"
+    )
     nodeofferings: Optional[Dict[str, str]] = Field(
         None,
         alias="nodeOfferings",
         description="Node type to service offering ID mapping. Overrides serviceofferingid if provided.",
     )
     serviceofferingid: Optional[str] = Field(
-        None, alias="serviceOfferingId", description="The ID of the service offering for the virtual machines in the cluster"
+        None,
+        alias="serviceOfferingId",
+        description="The ID of the service offering for the virtual machines in the cluster",
     )
     size: Optional[int] = Field(None, description="Number of Kubernetes cluster nodes")
 
@@ -183,7 +216,9 @@ class ListKubernetesClustersRequest(APIRequest, PaginationMixin):
         None, description="List resources by account. Must be used with the domainId parameter."
     )
     clustertype: Optional[ClusterType] = Field(
-        None, alias="clusterType", description="Type of the cluster: CloudManaged or ExternalManaged"
+        None,
+        alias="clusterType",
+        description="Type of the cluster: CloudManaged or ExternalManaged",
     )
     domainid: Optional[str] = Field(
         None, alias="domainId", description="List only resources belonging to the domain specified"
@@ -200,9 +235,13 @@ class ListKubernetesClustersRequest(APIRequest, PaginationMixin):
         alias="listAll",
         description="If set to false, list only resources belonging to the command's caller; if set to true - list resources that the caller is authorized to see.",
     )
-    name: Optional[str] = Field(None, description="Name of the Kubernetes cluster (substring match)")
+    name: Optional[str] = Field(
+        None, description="Name of the Kubernetes cluster (substring match)"
+    )
     projectid: Optional[str] = Field(
-        None, alias="projectId", description="List objects by project; if projectid=-1 lists All VMs"
+        None,
+        alias="projectId",
+        description="List objects by project; if projectid=-1 lists All VMs",
     )
     state: Optional[str] = Field(None, description="State of the Kubernetes cluster")
 
@@ -229,7 +268,9 @@ class AddNodesToKubernetesClusterRequest(APIRequest):
         description="Indicates if the node is marked for manual upgrade and excluded from the Kubernetes cluster upgrade operation",
     )
     mountcksisoonvr: Optional[bool] = Field(
-        None, alias="mountCksIsoOnVr", description="VMware only: uses the CKS cluster network VR to mount the CKS ISO"
+        None,
+        alias="mountCksIsoOnVr",
+        description="VMware only: uses the CKS cluster network VR to mount the CKS ISO",
     )
 
     @field_serializer("nodeids")
@@ -287,10 +328,14 @@ class RemoveVirtualMachinesFromKubernetesClusterRequest(APIRequest, PaginationMi
 
 class AddKubernetesSupportedVersionRequest(APIRequest):
     mincpunumber: int = Field(
-        ..., alias="minCpuNumber", description="The minimum number of CPUs to be set with the Kubernetes version"
+        ...,
+        alias="minCpuNumber",
+        description="The minimum number of CPUs to be set with the Kubernetes version",
     )
     minmemory: int = Field(
-        ..., alias="minMemory", description="The minimum RAM size in MB to be set with the Kubernetes version"
+        ...,
+        alias="minMemory",
+        description="The minimum RAM size in MB to be set with the Kubernetes version",
     )
     semanticversion: str = Field(
         ...,
@@ -307,15 +352,21 @@ class AddKubernetesSupportedVersionRequest(APIRequest):
         description="If true, the Kubernetes supported version ISO bypasses Secondary Storage and downloads directly to Primary Storage on deployment. Default is false.",
     )
     name: Optional[str] = Field(None, description="The name of the Kubernetes supported version")
-    url: Optional[str] = Field(None, description="The URL of the binaries ISO for the Kubernetes supported version")
+    url: Optional[str] = Field(
+        None, description="The URL of the binaries ISO for the Kubernetes supported version"
+    )
     zoneid: Optional[str] = Field(
-        None, alias="zoneId", description="The ID of the zone in which the Kubernetes supported version will be available"
+        None,
+        alias="zoneId",
+        description="The ID of the zone in which the Kubernetes supported version will be available",
     )
 
 
 class UpdateKubernetesSupportedVersionRequest(APIRequest):
     id: str = Field(..., description="The ID of the Kubernetes supported version")
-    state: str = Field(..., description="The enabled or disabled state of the Kubernetes supported version")
+    state: str = Field(
+        ..., description="The enabled or disabled state of the Kubernetes supported version"
+    )
 
 
 class DeleteKubernetesSupportedVersionRequest(APIRequest):
@@ -329,7 +380,9 @@ class ListKubernetesSupportedVersionsRequest(APIRequest, PaginationMixin):
     id: Optional[str] = Field(None, description="The ID of the Kubernetes supported version")
     keyword: Optional[str] = Field(None, description="List by keyword")
     minimumkubernetesversionid: Optional[str] = Field(
-        None, alias="minimumKubernetesVersionId", description="The ID of the minimum Kubernetes supported version"
+        None,
+        alias="minimumKubernetesVersionId",
+        description="The ID of the minimum Kubernetes supported version",
     )
     minimumsemanticversion: Optional[str] = Field(
         None,
@@ -337,17 +390,25 @@ class ListKubernetesSupportedVersionsRequest(APIRequest, PaginationMixin):
         description="The minimum semantic version for the Kubernetes supported version to be listed",
     )
     zoneid: Optional[str] = Field(
-        None, alias="zoneId", description="The ID of the zone in which the Kubernetes supported version will be available"
+        None,
+        alias="zoneId",
+        description="The ID of the zone in which the Kubernetes supported version will be available",
     )
 
 
 class GetUploadParamsForKubernetesSupportedVersionRequest(APIRequest):
-    format: UploadFormat = Field(..., description="The format for the volume/template/iso. Possible values: QCOW2, OVA, VHD.")
+    format: UploadFormat = Field(
+        ..., description="The format for the volume/template/iso. Possible values: QCOW2, OVA, VHD."
+    )
     mincpunumber: int = Field(
-        ..., alias="minCpuNumber", description="The minimum number of CPUs to be set with the Kubernetes version"
+        ...,
+        alias="minCpuNumber",
+        description="The minimum number of CPUs to be set with the Kubernetes version",
     )
     minmemory: int = Field(
-        ..., alias="minMemory", description="The minimum RAM size in MB to be set with the Kubernetes version"
+        ...,
+        alias="minMemory",
+        description="The minimum RAM size in MB to be set with the Kubernetes version",
     )
     name: str = Field(..., description="The name of the volume/template/iso")
     semanticversion: str = Field(
@@ -355,10 +416,20 @@ class GetUploadParamsForKubernetesSupportedVersionRequest(APIRequest):
         alias="semanticVersion",
         description="The semantic version of the Kubernetes version, specified in MAJOR.MINOR.PATCH format",
     )
-    zoneid: str = Field(..., alias="zoneId", description="The ID of the zone the volume/template/iso is to be hosted on")
-    account: Optional[str] = Field(None, description="An optional account name. Must be used with domainId.")
+    zoneid: str = Field(
+        ...,
+        alias="zoneId",
+        description="The ID of the zone the volume/template/iso is to be hosted on",
+    )
+    account: Optional[str] = Field(
+        None, description="An optional account name. Must be used with domainId."
+    )
     checksum: Optional[str] = Field(None, description="The checksum value of the binaries ISO")
     domainid: Optional[str] = Field(
-        None, alias="domainId", description="An optional domainId. If the account parameter is used, domainId must also be used."
+        None,
+        alias="domainId",
+        description="An optional domainId. If the account parameter is used, domainId must also be used.",
     )
-    projectid: Optional[str] = Field(None, alias="projectId", description="Upload the volume/template/iso for the project")
+    projectid: Optional[str] = Field(
+        None, alias="projectId", description="Upload the volume/template/iso for the project"
+    )

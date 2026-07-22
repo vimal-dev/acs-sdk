@@ -16,10 +16,14 @@ class CreateVPCOfferingRequest(APIRequest):
     # --- optional -----------------------------------------------------------
 
     displaytext: Optional[str] = Field(
-        None, alias="displayText", description="The display text of the VPC offering, defaults to 'name'"
+        None,
+        alias="displayText",
+        description="The display text of the VPC offering, defaults to 'name'",
     )
     domainid: Optional[str] = Field(
-        None, alias="domainId", description="ID of the containing domain(s); null for public offerings"
+        None,
+        alias="domainId",
+        description="ID of the containing domain(s); null for public offerings",
     )
     zoneid: Optional[str] = Field(
         None, alias="zoneId", description="ID of the containing zone(s); null for public offerings"
@@ -28,35 +32,51 @@ class CreateVPCOfferingRequest(APIRequest):
         None, description="Set to true to enable the offering during creation. Default is false"
     )
     supportedservices: Optional[str] = Field(
-        None, alias="supportedServices", description="Comma-separated services supported by the VPC offering"
+        None,
+        alias="supportedServices",
+        description="Comma-separated services supported by the VPC offering",
     )
     serviceofferingid: Optional[str] = Field(
-        None, alias="serviceOfferingId", description="ID of the service offering for the VPC router appliance"
+        None,
+        alias="serviceOfferingId",
+        description="ID of the service offering for the VPC router appliance",
     )
     serviceproviderlist: Optional[str] = Field(
-        None, alias="serviceProviderList", description="Provider-to-service mapping; defaults to the default provider"
+        None,
+        alias="serviceProviderList",
+        description="Provider-to-service mapping; defaults to the default provider",
     )
     servicecapabilitylist: Optional[str] = Field(
-        None, alias="serviceCapabilityList", description="Desired service capabilities as part of the VPC offering"
+        None,
+        alias="serviceCapabilityList",
+        description="Desired service capabilities as part of the VPC offering",
     )
     provider: Optional[str] = Field(None, description="Name of the provider supplying the service")
     routingmode: Optional[str] = Field(
-        None, alias="routingMode", description="Routing mode for the VPC offering: 'Static' or 'Dynamic'"
+        None,
+        alias="routingMode",
+        description="Routing mode for the VPC offering: 'Static' or 'Dynamic'",
     )
     networkmode: Optional[str] = Field(
         None, alias="networkMode", description="Network operation mode: 'NATTED' or 'ROUTED'"
     )
     internetprotocol: Optional[str] = Field(
-        None, alias="internetProtocol", description="Internet protocol: 'ipv4' (default) or 'dualstack'"
+        None,
+        alias="internetProtocol",
+        description="Internet protocol: 'ipv4' (default) or 'dualstack'",
     )
     fornsx: Optional[bool] = Field(
         None, alias="forNsx", description="True if the offering is for NSX, false otherwise"
     )
     nsxsupportlb: Optional[bool] = Field(
-        None, alias="nsxSupportLb", description="True if the NSX VPC offering supports load balancer service"
+        None,
+        alias="nsxSupportLb",
+        description="True if the NSX VPC offering supports load balancer service",
     )
     specifyasnumber: Optional[bool] = Field(
-        None, alias="specifyAsNumber", description="True if the VPC offering supports choosing an AS number"
+        None,
+        alias="specifyAsNumber",
+        description="True if the VPC offering supports choosing an AS number",
     )
 
 
@@ -86,13 +106,21 @@ class UpdateVPCOfferingRequest(APIRequest):
         None, alias="displayText", description="New display text for the VPC offering"
     )
     domainid: Optional[str] = Field(
-        None, alias="domainId", description="Containing domain ID(s) as comma-separated string; 'public' for public offerings"
+        None,
+        alias="domainId",
+        description="Containing domain ID(s) as comma-separated string; 'public' for public offerings",
     )
     zoneid: Optional[str] = Field(
-        None, alias="zoneId", description="Containing zone ID(s) as comma-separated string; 'all' for all zones"
+        None,
+        alias="zoneId",
+        description="Containing zone ID(s) as comma-separated string; 'all' for all zones",
     )
-    state: Optional[str] = Field(None, description="New state for the VPC offering: 'Enabled' or 'Disabled'")
-    sortkey: Optional[int] = Field(None, alias="sortKey", description="Sort key of the VPC offering")
+    state: Optional[str] = Field(
+        None, description="New state for the VPC offering: 'Enabled' or 'Disabled'"
+    )
+    sortkey: Optional[int] = Field(
+        None, alias="sortKey", description="Sort key of the VPC offering"
+    )
 
 
 class ListVPCOfferingRequest(APIRequest, PaginationMixin):

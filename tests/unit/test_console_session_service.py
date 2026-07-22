@@ -12,10 +12,14 @@ from acs_sdk.services.console_session import ConsoleSession
 # create_endpoint
 # ---------------------------------------------------------------------------
 
+
 def test_console_session_create_endpoint_parses_response():
     mock_client = Mock()
     mock_client.call.return_value = {
-        "createconsoleendpointresponse": {"success": "true", "url": "https://host/console?token=abc"},
+        "createconsoleendpointresponse": {
+            "success": "true",
+            "url": "https://host/console?token=abc",
+        },
     }
 
     cs = ConsoleSession(client=mock_client)
@@ -32,7 +36,10 @@ def test_console_session_create_endpoint_async_parses_response():
     mock_client = Mock()
     mock_client.call_async = AsyncMock(
         return_value={
-            "createconsoleendpointresponse": {"success": "true", "url": "https://host/console?token=abc"},
+            "createconsoleendpointresponse": {
+                "success": "true",
+                "url": "https://host/console?token=abc",
+            },
         }
     )
 
@@ -49,6 +56,7 @@ def test_console_session_create_endpoint_async_parses_response():
 # ---------------------------------------------------------------------------
 # list
 # ---------------------------------------------------------------------------
+
 
 def test_console_session_list_parses_list_response():
     mock_client = Mock()

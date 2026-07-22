@@ -38,12 +38,18 @@ class NameValueEntry(BaseModel):
 
 class CreateAutoScalePolicyRequest(APIRequest):
     action: AutoScaleAction = Field(
-        ..., description="The action to be executed if all the conditions evaluate to true for the specified duration"
+        ...,
+        description="The action to be executed if all the conditions evaluate to true for the specified duration",
     )
     conditionids: List[str] = Field(
-        ..., alias="conditionIds", description="The list of IDs of the conditions that are being evaluated on every interval"
+        ...,
+        alias="conditionIds",
+        description="The list of IDs of the conditions that are being evaluated on every interval",
     )
-    duration: int = Field(..., description="The duration in which the conditions have to be true before action is taken")
+    duration: int = Field(
+        ...,
+        description="The duration in which the conditions have to be true before action is taken",
+    )
     name: Optional[str] = Field(None, description="The name of the autoscale policy")
     quiettime: Optional[int] = Field(
         None,
@@ -59,9 +65,14 @@ class CreateAutoScalePolicyRequest(APIRequest):
 class UpdateAutoScalePolicyRequest(APIRequest):
     id: str = Field(..., description="The ID of the autoscale policy")
     conditionids: Optional[List[str]] = Field(
-        None, alias="conditionIds", description="The list of IDs of the conditions that are being evaluated on every interval"
+        None,
+        alias="conditionIds",
+        description="The list of IDs of the conditions that are being evaluated on every interval",
     )
-    duration: Optional[int] = Field(None, description="The duration in which the conditions have to be true before action is taken")
+    duration: Optional[int] = Field(
+        None,
+        description="The duration in which the conditions have to be true before action is taken",
+    )
     name: Optional[str] = Field(None, description="The name of the autoscale policy")
     quiettime: Optional[int] = Field(
         None,
@@ -81,12 +92,19 @@ class DeleteAutoScalePolicyRequest(APIRequest):
 
 
 class ListAutoScalePoliciesRequest(APIRequest, PaginationMixin):
-    account: Optional[str] = Field(None, description="List resources by account. Must be used with the domainId parameter.")
-    action: Optional[AutoScaleAction] = Field(
-        None, description="The action to be executed if all the conditions evaluate to true for the specified duration"
+    account: Optional[str] = Field(
+        None, description="List resources by account. Must be used with the domainId parameter."
     )
-    conditionid: Optional[str] = Field(None, alias="conditionId", description="The ID of the condition of the policy")
-    domainid: Optional[str] = Field(None, alias="domainId", description="List only resources belonging to the domain specified")
+    action: Optional[AutoScaleAction] = Field(
+        None,
+        description="The action to be executed if all the conditions evaluate to true for the specified duration",
+    )
+    conditionid: Optional[str] = Field(
+        None, alias="conditionId", description="The ID of the condition of the policy"
+    )
+    domainid: Optional[str] = Field(
+        None, alias="domainId", description="List only resources belonging to the domain specified"
+    )
     id: Optional[str] = Field(None, description="The ID of the autoscale policy")
     isrecursive: Optional[bool] = Field(
         None,
@@ -100,8 +118,14 @@ class ListAutoScalePoliciesRequest(APIRequest, PaginationMixin):
         description="If set to false, list only resources belonging to the command's caller; if set to true - list resources that the caller is authorized to see.",
     )
     name: Optional[str] = Field(None, description="The name of the autoscale policy")
-    projectid: Optional[str] = Field(None, alias="projectId", description="List objects by project; if projectid=-1 lists All VMs")
-    vmgroupid: Optional[str] = Field(None, alias="vmGroupId", description="The ID of the autoscale vm group")
+    projectid: Optional[str] = Field(
+        None,
+        alias="projectId",
+        description="List objects by project; if projectid=-1 lists All VMs",
+    )
+    vmgroupid: Optional[str] = Field(
+        None, alias="vmGroupId", description="The ID of the autoscale vm group"
+    )
 
 
 # ---------------------------------------------------------------------------
@@ -111,39 +135,61 @@ class ListAutoScalePoliciesRequest(APIRequest, PaginationMixin):
 
 class CreateAutoScaleVmProfileRequest(APIRequest):
     serviceofferingid: str = Field(
-        ..., alias="serviceOfferingId", description="The service offering of the auto deployed virtual machine"
+        ...,
+        alias="serviceOfferingId",
+        description="The service offering of the auto deployed virtual machine",
     )
-    templateid: str = Field(..., alias="templateId", description="The template of the auto deployed virtual machine")
-    zoneid: str = Field(..., alias="zoneId", description="Availability zone for the auto deployed virtual machine")
-    account: Optional[str] = Field(None, description="Account that will own the autoscale VM profile")
+    templateid: str = Field(
+        ..., alias="templateId", description="The template of the auto deployed virtual machine"
+    )
+    zoneid: str = Field(
+        ..., alias="zoneId", description="Availability zone for the auto deployed virtual machine"
+    )
+    account: Optional[str] = Field(
+        None, description="Account that will own the autoscale VM profile"
+    )
     autoscaleuserid: Optional[str] = Field(
-        None, alias="autoscaleUserId", description="The ID of the user used to launch and destroy the VMs"
+        None,
+        alias="autoscaleUserId",
+        description="The ID of the user used to launch and destroy the VMs",
     )
     counterparam: Optional[List[NameValueEntry]] = Field(
-        None, alias="counterParam", description="Counterparam list. Example: counterparam[0].name=snmpcommunity&counterparam[0].value=public"
+        None,
+        alias="counterParam",
+        description="Counterparam list. Example: counterparam[0].name=snmpcommunity&counterparam[0].value=public",
     )
-    domainid: Optional[str] = Field(None, alias="domainId", description="Domain ID of the account owning a autoscale VM profile")
+    domainid: Optional[str] = Field(
+        None, alias="domainId", description="Domain ID of the account owning a autoscale VM profile"
+    )
     expungevmgraceperiod: Optional[int] = Field(
         None,
         alias="expungeVmGracePeriod",
         description="The time allowed for existing connections to get closed before a vm is expunged",
     )
     fordisplay: Optional[bool] = Field(
-        None, alias="forDisplay", description="An optional field, whether to the display the profile to the end user or not"
+        None,
+        alias="forDisplay",
+        description="An optional field, whether to the display the profile to the end user or not",
     )
     otherdeployparams: Optional[List[NameValueEntry]] = Field(
         None,
         alias="otherDeployParams",
         description="Parameters beyond zone/service offering/template, including rootdisksize, diskofferingid, size, securitygroupids, keypairs, affinitygroupids, networkids",
     )
-    projectid: Optional[str] = Field(None, alias="projectId", description="An optional project for the autoscale VM profile")
+    projectid: Optional[str] = Field(
+        None, alias="projectId", description="An optional project for the autoscale VM profile"
+    )
     userdata: Optional[str] = Field(
         None, description="Base64 encoded userdata sent to the deployed virtual machine"
     )
     userdatadetails: Optional[List[NameValueEntry]] = Field(
-        None, alias="userdataDetails", description="Used to specify the parameters values for the variables in userdata"
+        None,
+        alias="userdataDetails",
+        description="Used to specify the parameters values for the variables in userdata",
     )
-    userdataid: Optional[str] = Field(None, alias="userdataId", description="The ID of the Userdata")
+    userdataid: Optional[str] = Field(
+        None, alias="userdataId", description="The ID of the Userdata"
+    )
 
     def model_dump(self, *args, **kwargs) -> Dict[str, Any]:
         data = super().model_dump(*args, **kwargs)
@@ -153,19 +199,29 @@ class CreateAutoScaleVmProfileRequest(APIRequest):
 class UpdateAutoScaleVmProfileRequest(APIRequest):
     id: str = Field(..., description="The ID of the autoscale vm profile")
     autoscaleuserid: Optional[str] = Field(
-        None, alias="autoscaleUserId", description="The ID of the user used to launch and destroy the VMs"
+        None,
+        alias="autoscaleUserId",
+        description="The ID of the user used to launch and destroy the VMs",
     )
     counterparam: Optional[List[NameValueEntry]] = Field(
-        None, alias="counterParam", description="Counterparam list using name-value pairs (e.g. snmpcommunity, snmpport)"
+        None,
+        alias="counterParam",
+        description="Counterparam list using name-value pairs (e.g. snmpcommunity, snmpport)",
     )
     customid: Optional[str] = Field(
-        None, alias="customId", description="An optional custom ID for the resource. Allowed to Root Admins only."
+        None,
+        alias="customId",
+        description="An optional custom ID for the resource. Allowed to Root Admins only.",
     )
     expungevmgraceperiod: Optional[int] = Field(
-        None, alias="expungeVmGracePeriod", description="The time allowed for existing connections to get closed before a vm is destroyed"
+        None,
+        alias="expungeVmGracePeriod",
+        description="The time allowed for existing connections to get closed before a vm is destroyed",
     )
     fordisplay: Optional[bool] = Field(
-        None, alias="forDisplay", description="An optional field, whether to the display the profile to the end user or not"
+        None,
+        alias="forDisplay",
+        description="An optional field, whether to the display the profile to the end user or not",
     )
     otherdeployparams: Optional[List[NameValueEntry]] = Field(
         None,
@@ -173,14 +229,24 @@ class UpdateAutoScaleVmProfileRequest(APIRequest):
         description="Additional VM deployment parameters (rootdisksize, diskofferingid, size, securitygroupids, keypairs, affinitygroupids, networkids)",
     )
     serviceofferingid: Optional[str] = Field(
-        None, alias="serviceOfferingId", description="The service offering of the auto deployed virtual machine"
+        None,
+        alias="serviceOfferingId",
+        description="The service offering of the auto deployed virtual machine",
     )
-    templateid: Optional[str] = Field(None, alias="templateId", description="The template of the auto deployed virtual machine")
-    userdata: Optional[str] = Field(None, description="Base64 encoded userdata sent to the deployed virtual machine")
+    templateid: Optional[str] = Field(
+        None, alias="templateId", description="The template of the auto deployed virtual machine"
+    )
+    userdata: Optional[str] = Field(
+        None, description="Base64 encoded userdata sent to the deployed virtual machine"
+    )
     userdatadetails: Optional[List[NameValueEntry]] = Field(
-        None, alias="userdataDetails", description="Parameter values for variables declared in userdata"
+        None,
+        alias="userdataDetails",
+        description="Parameter values for variables declared in userdata",
     )
-    userdataid: Optional[str] = Field(None, alias="userdataId", description="The ID of the userdata")
+    userdataid: Optional[str] = Field(
+        None, alias="userdataId", description="The ID of the userdata"
+    )
 
     def model_dump(self, *args, **kwargs) -> Dict[str, Any]:
         data = super().model_dump(*args, **kwargs)
@@ -192,10 +258,16 @@ class DeleteAutoScaleVmProfileRequest(APIRequest):
 
 
 class ListAutoScaleVmProfilesRequest(APIRequest, PaginationMixin):
-    account: Optional[str] = Field(None, description="List resources by account. Must be used with the domainId parameter.")
-    domainid: Optional[str] = Field(None, alias="domainId", description="List only resources belonging to the domain specified")
+    account: Optional[str] = Field(
+        None, description="List resources by account. Must be used with the domainId parameter."
+    )
+    domainid: Optional[str] = Field(
+        None, alias="domainId", description="List only resources belonging to the domain specified"
+    )
     fordisplay: Optional[bool] = Field(
-        None, alias="forDisplay", description="List resources by display flag; only ROOT admin is eligible to pass this parameter"
+        None,
+        alias="forDisplay",
+        description="List resources by display flag; only ROOT admin is eligible to pass this parameter",
     )
     id: Optional[str] = Field(None, description="The ID of the autoscale vm profile")
     isrecursive: Optional[bool] = Field(
@@ -210,12 +282,24 @@ class ListAutoScaleVmProfilesRequest(APIRequest, PaginationMixin):
         description="If set to false, list only resources belonging to the command's caller; if set to true - list resources that the caller is authorized to see.",
     )
     otherdeployparams: Optional[str] = Field(
-        None, alias="otherDeployParams", description="The otherdeployparameters of the autoscale vm profile"
+        None,
+        alias="otherDeployParams",
+        description="The otherdeployparameters of the autoscale vm profile",
     )
-    projectid: Optional[str] = Field(None, alias="projectId", description="List objects by project; if projectid=-1 lists All VMs")
-    serviceofferingid: Optional[str] = Field(None, alias="serviceOfferingId", description="List profiles by service offering id")
-    templateid: Optional[str] = Field(None, alias="templateId", description="The templateid of the autoscale vm profile")
-    zoneid: Optional[str] = Field(None, alias="zoneId", description="Availability zone for the auto deployed virtual machine")
+    projectid: Optional[str] = Field(
+        None,
+        alias="projectId",
+        description="List objects by project; if projectid=-1 lists All VMs",
+    )
+    serviceofferingid: Optional[str] = Field(
+        None, alias="serviceOfferingId", description="List profiles by service offering id"
+    )
+    templateid: Optional[str] = Field(
+        None, alias="templateId", description="The templateid of the autoscale vm profile"
+    )
+    zoneid: Optional[str] = Field(
+        None, alias="zoneId", description="Availability zone for the auto deployed virtual machine"
+    )
 
 
 # ---------------------------------------------------------------------------
@@ -238,14 +322,22 @@ class CreateAutoScaleVmGroupRequest(APIRequest):
     scaledownpolicyids: List[str] = Field(
         ..., alias="scaleDownPolicyIds", description="List of scaledown autoscale policies"
     )
-    scaleuppolicyids: List[str] = Field(..., alias="scaleUpPolicyIds", description="List of scaleup autoscale policies")
+    scaleuppolicyids: List[str] = Field(
+        ..., alias="scaleUpPolicyIds", description="List of scaleup autoscale policies"
+    )
     vmprofileid: str = Field(
-        ..., alias="vmProfileId", description="The autoscale profile that contains information about the vms in the vm group."
+        ...,
+        alias="vmProfileId",
+        description="The autoscale profile that contains information about the vms in the vm group.",
     )
     fordisplay: Optional[bool] = Field(
-        None, alias="forDisplay", description="An optional field, whether to the display the group to the end user or not"
+        None,
+        alias="forDisplay",
+        description="An optional field, whether to the display the group to the end user or not",
     )
-    interval: Optional[int] = Field(None, description="The frequency in which the performance counters to be collected")
+    interval: Optional[int] = Field(
+        None, description="The frequency in which the performance counters to be collected"
+    )
     name: Optional[str] = Field(None, description="The name of the autoscale vmgroup")
 
     @field_serializer("scaledownpolicyids", "scaleuppolicyids")
@@ -256,12 +348,18 @@ class CreateAutoScaleVmGroupRequest(APIRequest):
 class UpdateAutoScaleVmGroupRequest(APIRequest):
     id: str = Field(..., description="The ID of the autoscale group")
     customid: Optional[str] = Field(
-        None, alias="customId", description="An optional custom ID for the resource. Allowed to Root Admins only."
+        None,
+        alias="customId",
+        description="An optional custom ID for the resource. Allowed to Root Admins only.",
     )
     fordisplay: Optional[bool] = Field(
-        None, alias="forDisplay", description="An optional field, whether to the display the group to the end user or not"
+        None,
+        alias="forDisplay",
+        description="An optional field, whether to the display the group to the end user or not",
     )
-    interval: Optional[int] = Field(None, description="The frequency in which the performance counters to be collected")
+    interval: Optional[int] = Field(
+        None, description="The frequency in which the performance counters to be collected"
+    )
     maxmembers: Optional[int] = Field(
         None,
         alias="maxMembers",
@@ -289,7 +387,9 @@ class UpdateAutoScaleVmGroupRequest(APIRequest):
 
 class DeleteAutoScaleVmGroupRequest(APIRequest):
     id: str = Field(..., description="The ID of the autoscale group")
-    cleanup: Optional[bool] = Field(None, description="True if all VMs have to be cleaned up, false otherwise")
+    cleanup: Optional[bool] = Field(
+        None, description="True if all VMs have to be cleaned up, false otherwise"
+    )
 
 
 class EnableAutoScaleVmGroupRequest(APIRequest):
@@ -301,10 +401,16 @@ class DisableAutoScaleVmGroupRequest(APIRequest):
 
 
 class ListAutoScaleVmGroupsRequest(APIRequest, PaginationMixin):
-    account: Optional[str] = Field(None, description="List resources by account. Must be used with the domainId parameter.")
-    domainid: Optional[str] = Field(None, alias="domainId", description="List only resources belonging to the domain specified")
+    account: Optional[str] = Field(
+        None, description="List resources by account. Must be used with the domainId parameter."
+    )
+    domainid: Optional[str] = Field(
+        None, alias="domainId", description="List only resources belonging to the domain specified"
+    )
     fordisplay: Optional[bool] = Field(
-        None, alias="forDisplay", description="List resources by display flag; only ROOT admin is eligible to pass this parameter"
+        None,
+        alias="forDisplay",
+        description="List resources by display flag; only ROOT admin is eligible to pass this parameter",
     )
     id: Optional[str] = Field(None, description="The ID of the autoscale vm group")
     isrecursive: Optional[bool] = Field(
@@ -313,7 +419,9 @@ class ListAutoScaleVmGroupsRequest(APIRequest, PaginationMixin):
         description="Defaults to false, but if true, lists all resources from the parent specified by the domainId till leaves.",
     )
     keyword: Optional[str] = Field(None, description="List by keyword")
-    lbruleid: Optional[str] = Field(None, alias="lbRuleId", description="The ID of the loadbalancer")
+    lbruleid: Optional[str] = Field(
+        None, alias="lbRuleId", description="The ID of the loadbalancer"
+    )
     listall: Optional[bool] = Field(
         None,
         alias="listAll",
@@ -321,8 +429,14 @@ class ListAutoScaleVmGroupsRequest(APIRequest, PaginationMixin):
     )
     name: Optional[str] = Field(None, description="The name of the autoscale vmgroup")
     policyid: Optional[str] = Field(None, alias="policyId", description="The ID of the policy")
-    projectid: Optional[str] = Field(None, alias="projectId", description="List objects by project; if projectid=-1 lists All VMs")
-    vmprofileid: Optional[str] = Field(None, alias="vmProfileId", description="The ID of the profile")
+    projectid: Optional[str] = Field(
+        None,
+        alias="projectId",
+        description="List objects by project; if projectid=-1 lists All VMs",
+    )
+    vmprofileid: Optional[str] = Field(
+        None, alias="vmProfileId", description="The ID of the profile"
+    )
     zoneid: Optional[str] = Field(None, alias="zoneId", description="The availability zone ID")
 
 
@@ -334,22 +448,35 @@ class ListAutoScaleVmGroupsRequest(APIRequest, PaginationMixin):
 class CreateConditionRequest(APIRequest):
     counterid: str = Field(..., alias="counterId", description="ID of the Counter.")
     relationaloperator: RelationalOperator = Field(
-        ..., alias="relationalOperator", description="Relational Operator to be used with threshold. Valid values are EQ, GT, LT, GE, LE."
+        ...,
+        alias="relationalOperator",
+        description="Relational Operator to be used with threshold. Valid values are EQ, GT, LT, GE, LE.",
     )
-    threshold: float = Field(..., description="Value for which the Counter will be evaluated with the Operator selected.")
+    threshold: float = Field(
+        ..., description="Value for which the Counter will be evaluated with the Operator selected."
+    )
     account: Optional[str] = Field(
-        None, description="The account owning the condition. Must be used with the domainId parameter."
+        None,
+        description="The account owning the condition. Must be used with the domainId parameter.",
     )
-    domainid: Optional[str] = Field(None, alias="domainId", description="The domain ID of the account.")
-    projectid: Optional[str] = Field(None, alias="projectId", description="An optional project for condition")
+    domainid: Optional[str] = Field(
+        None, alias="domainId", description="The domain ID of the account."
+    )
+    projectid: Optional[str] = Field(
+        None, alias="projectId", description="An optional project for condition"
+    )
 
 
 class UpdateConditionRequest(APIRequest):
     id: str = Field(..., description="The ID of the condition.")
     relationaloperator: RelationalOperator = Field(
-        ..., alias="relationalOperator", description="Relational Operator to be used with threshold. Valid values are EQ, GT, LT, GE, LE."
+        ...,
+        alias="relationalOperator",
+        description="Relational Operator to be used with threshold. Valid values are EQ, GT, LT, GE, LE.",
     )
-    threshold: float = Field(..., description="Value for which the Counter will be evaluated with the Operator selected.")
+    threshold: float = Field(
+        ..., description="Value for which the Counter will be evaluated with the Operator selected."
+    )
 
 
 class DeleteConditionRequest(APIRequest):
@@ -357,9 +484,13 @@ class DeleteConditionRequest(APIRequest):
 
 
 class ListConditionsRequest(APIRequest, PaginationMixin):
-    account: Optional[str] = Field(None, description="List resources by account. Must be used with the domainId parameter.")
+    account: Optional[str] = Field(
+        None, description="List resources by account. Must be used with the domainId parameter."
+    )
     counterid: Optional[str] = Field(None, alias="counterId", description="ID of the Counter.")
-    domainid: Optional[str] = Field(None, alias="domainId", description="List only resources belonging to the domain specified")
+    domainid: Optional[str] = Field(
+        None, alias="domainId", description="List only resources belonging to the domain specified"
+    )
     id: Optional[str] = Field(None, description="The ID of the condition")
     isrecursive: Optional[bool] = Field(
         None,
@@ -373,7 +504,11 @@ class ListConditionsRequest(APIRequest, PaginationMixin):
         description="If set to false, list only resources belonging to the command's caller; if set to true - list resources that the caller is authorized to see.",
     )
     policyid: Optional[str] = Field(None, alias="policyId", description="The ID of the policy")
-    projectid: Optional[str] = Field(None, alias="projectId", description="List objects by project; if projectid=-1 lists All VMs")
+    projectid: Optional[str] = Field(
+        None,
+        alias="projectId",
+        description="List objects by project; if projectid=-1 lists All VMs",
+    )
 
 
 # ---------------------------------------------------------------------------

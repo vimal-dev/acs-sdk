@@ -42,6 +42,7 @@ from acs_sdk.services.load_balancer import LoadBalancer
 # create_rule
 # ---------------------------------------------------------------------------
 
+
 def test_lb_create_rule_parses_response():
     mock_client = Mock()
     mock_client.call.return_value = {
@@ -81,6 +82,7 @@ def test_lb_create_rule_async_parses_response():
 # ---------------------------------------------------------------------------
 # list_rules
 # ---------------------------------------------------------------------------
+
 
 def test_lb_list_rules_parses_list_response():
     mock_client = Mock()
@@ -127,6 +129,7 @@ def test_lb_list_rules_async_parses_list_response():
 # ---------------------------------------------------------------------------
 # update_rule / delete_rule
 # ---------------------------------------------------------------------------
+
 
 def test_lb_update_rule_parses_response():
     mock_client = Mock()
@@ -189,6 +192,7 @@ def test_lb_delete_rule_async_parses_response():
 # ---------------------------------------------------------------------------
 # assign_to_rule / remove_from_rule
 # ---------------------------------------------------------------------------
+
 
 def test_lb_assign_to_rule_parses_response():
     mock_client = Mock()
@@ -258,6 +262,7 @@ def test_lb_remove_from_rule_async_parses_response():
 # list_rule_instances
 # ---------------------------------------------------------------------------
 
+
 def test_lb_list_rule_instances_parses_response():
     mock_client = Mock()
     mock_client.call.return_value = {
@@ -300,6 +305,7 @@ def test_lb_list_rule_instances_async_parses_response():
 # health check policy
 # ---------------------------------------------------------------------------
 
+
 def test_lb_create_health_check_policy_parses_response():
     mock_client = Mock()
     mock_client.call.return_value = {
@@ -311,9 +317,7 @@ def test_lb_create_health_check_policy_parses_response():
     response = lb.create_health_check_policy(payload)
 
     assert response.data == {"healthcheckpolicy": [{"id": "hcp-1"}]}
-    mock_client.call.assert_called_once_with(
-        "createLBHealthCheckPolicy", {"lbruleid": "lb-rule-1"}
-    )
+    mock_client.call.assert_called_once_with("createLBHealthCheckPolicy", {"lbruleid": "lb-rule-1"})
 
 
 def test_lb_create_health_check_policy_async_parses_response():
@@ -425,6 +429,7 @@ def test_lb_list_health_check_policies_async_parses_response():
 # ---------------------------------------------------------------------------
 # stickiness policy
 # ---------------------------------------------------------------------------
+
 
 def test_lb_create_stickiness_policy_parses_response():
     mock_client = Mock()
@@ -554,6 +559,7 @@ def test_lb_list_stickiness_policies_async_parses_response():
 # internal load balancer
 # ---------------------------------------------------------------------------
 
+
 def test_lb_create_parses_response():
     mock_client = Mock()
     mock_client.call.return_value = {
@@ -580,9 +586,7 @@ def test_lb_create_parses_response():
 
 def test_lb_create_async_parses_response():
     mock_client = Mock()
-    mock_client.call_async = AsyncMock(
-        return_value={"createloadbalancerresponse": {"id": "ilb-1"}}
-    )
+    mock_client.call_async = AsyncMock(return_value={"createloadbalancerresponse": {"id": "ilb-1"}})
 
     lb = LoadBalancer(client=mock_client)
     payload = CreateLoadBalancerRequest(
@@ -625,9 +629,7 @@ def test_lb_list_parses_list_response():
 def test_lb_list_async_parses_list_response():
     mock_client = Mock()
     mock_client.call_async = AsyncMock(
-        return_value={
-            "listloadbalancersresponse": {"loadbalancer": [{"id": "ilb-2"}], "count": 1}
-        }
+        return_value={"listloadbalancersresponse": {"loadbalancer": [{"id": "ilb-2"}], "count": 1}}
     )
 
     lb = LoadBalancer(client=mock_client)
@@ -659,9 +661,7 @@ def test_lb_update_parses_response():
 
 def test_lb_update_async_parses_response():
     mock_client = Mock()
-    mock_client.call_async = AsyncMock(
-        return_value={"updateloadbalancerresponse": {"id": "ilb-1"}}
-    )
+    mock_client.call_async = AsyncMock(return_value={"updateloadbalancerresponse": {"id": "ilb-1"}})
 
     lb = LoadBalancer(client=mock_client)
     payload = UpdateLoadBalancerRequest(id="ilb-1")
@@ -702,6 +702,7 @@ def test_lb_delete_async_parses_response():
 # ---------------------------------------------------------------------------
 # global (GSLB) load balancer rules
 # ---------------------------------------------------------------------------
+
 
 def test_lb_create_global_rule_parses_response():
     mock_client = Mock()
@@ -814,9 +815,7 @@ def test_lb_update_global_rule_async_parses_response():
     response = asyncio.run(lb.update_global_rule_async(payload))
 
     assert response.data == {"id": "gslb-1"}
-    mock_client.call_async.assert_called_once_with(
-        "updateGlobalLoadBalancerRule", {"id": "gslb-1"}
-    )
+    mock_client.call_async.assert_called_once_with("updateGlobalLoadBalancerRule", {"id": "gslb-1"})
 
 
 def test_lb_delete_global_rule_parses_response():
@@ -844,9 +843,7 @@ def test_lb_delete_global_rule_async_parses_response():
     response = asyncio.run(lb.delete_global_rule_async(payload))
 
     assert response.data == {"success": "true"}
-    mock_client.call_async.assert_called_once_with(
-        "deleteGlobalLoadBalancerRule", {"id": "gslb-1"}
-    )
+    mock_client.call_async.assert_called_once_with("deleteGlobalLoadBalancerRule", {"id": "gslb-1"})
 
 
 def test_lb_assign_to_global_rule_parses_response():
@@ -891,7 +888,9 @@ def test_lb_remove_from_global_rule_parses_response():
     }
 
     lb = LoadBalancer(client=mock_client)
-    payload = RemoveFromGlobalLoadBalancerRuleRequest(id="gslb-1", loadBalancerRuleList=["lb-rule-1"])
+    payload = RemoveFromGlobalLoadBalancerRuleRequest(
+        id="gslb-1", loadBalancerRuleList=["lb-rule-1"]
+    )
     response = lb.remove_from_global_rule(payload)
 
     assert response.data == {"success": "true"}
@@ -907,7 +906,9 @@ def test_lb_remove_from_global_rule_async_parses_response():
     )
 
     lb = LoadBalancer(client=mock_client)
-    payload = RemoveFromGlobalLoadBalancerRuleRequest(id="gslb-1", loadBalancerRuleList=["lb-rule-1"])
+    payload = RemoveFromGlobalLoadBalancerRuleRequest(
+        id="gslb-1", loadBalancerRuleList=["lb-rule-1"]
+    )
     response = asyncio.run(lb.remove_from_global_rule_async(payload))
 
     assert response.data == {"success": "true"}
@@ -919,6 +920,7 @@ def test_lb_remove_from_global_rule_async_parses_response():
 # ---------------------------------------------------------------------------
 # SSL certificate
 # ---------------------------------------------------------------------------
+
 
 def test_lb_assign_cert_parses_response():
     mock_client = Mock()
@@ -964,7 +966,9 @@ def test_lb_remove_cert_parses_response():
     response = lb.remove_cert(payload)
 
     assert response.data == {"success": "true"}
-    mock_client.call.assert_called_once_with("removeCertFromLoadBalancer", {"lbruleid": "lb-rule-1"})
+    mock_client.call.assert_called_once_with(
+        "removeCertFromLoadBalancer", {"lbruleid": "lb-rule-1"}
+    )
 
 
 def test_lb_remove_cert_async_parses_response():
@@ -1008,14 +1012,13 @@ def test_lb_get_ssl_certificate_async_parses_response():
     response = asyncio.run(lb.get_ssl_certificate_async(payload))
 
     assert response.data == {"crt": "cert-data"}
-    mock_client.call_async.assert_called_once_with(
-        "getLoadBalancerSslCertificate", {"id": "ilb-1"}
-    )
+    mock_client.call_async.assert_called_once_with("getLoadBalancerSslCertificate", {"id": "ilb-1"})
 
 
 # ---------------------------------------------------------------------------
 # NetScaler VPX
 # ---------------------------------------------------------------------------
+
 
 def test_lb_deploy_netscaler_vpx_parses_response():
     mock_client = Mock()
@@ -1087,6 +1090,7 @@ def test_lb_stop_netscaler_vpx_async_parses_response():
 # service packages
 # ---------------------------------------------------------------------------
 
+
 def test_lb_list_registered_service_packages_parses_list_response():
     mock_client = Mock()
     mock_client.call.return_value = {
@@ -1154,6 +1158,4 @@ def test_lb_delete_service_package_offering_async_parses_response():
     response = asyncio.run(lb.delete_service_package_offering_async(payload))
 
     assert response.data == {"success": "true"}
-    mock_client.call_async.assert_called_once_with(
-        "deleteServicePackageOffering", {"id": "sp-1"}
-    )
+    mock_client.call_async.assert_called_once_with("deleteServicePackageOffering", {"id": "sp-1"})
