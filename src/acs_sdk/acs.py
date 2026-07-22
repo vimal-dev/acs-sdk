@@ -29,6 +29,7 @@ from acs_sdk.services.security_group import SecurityGroup
 from acs_sdk.services.service_offering import ServiceOffering
 from acs_sdk.services.snapshot import Snapshot
 from acs_sdk.services.ssh import SSH
+from acs_sdk.services.ssl_cert import SslCert
 from acs_sdk.services.template import Template
 from acs_sdk.services.usage import Usage
 from acs_sdk.services.virtual_machine import VirtualMachine
@@ -80,6 +81,7 @@ class ApacheCloudStack:
     serviceoffering: "ServiceOffering"
     snapshot: "Snapshot"
     ssh: "SSH"
+    sslcert: "SslCert"
     usage: "Usage"
     vm: "VirtualMachine"
     volume: "Volume"
@@ -106,6 +108,7 @@ class ApacheCloudStack:
         "serviceoffering": ServiceOffering,
         "snapshot": Snapshot,
         "ssh": SSH,
+        "sslcert": SslCert,
         "template": Template,
         "vm": VirtualMachine,
         "volume": Volume,
