@@ -22,6 +22,7 @@ from acs_sdk.services.instance_group import InstanceGroup
 from acs_sdk.services.iso import ISO
 from acs_sdk.services.job import Job
 from acs_sdk.services.kubernetes import Kubernetes
+from acs_sdk.services.load_balancer import LoadBalancer
 from acs_sdk.services.nat import NAT
 from acs_sdk.services.network import Network
 from acs_sdk.services.network_acl import NetworkACL
@@ -76,6 +77,7 @@ class ApacheCloudStack:
     firewall: "Firewall"
     job: "Job"
     kubernetes: "Kubernetes"
+    loadbalancer: "LoadBalancer"
     template: "Template"
     nat: "NAT"
     network: "Network"
@@ -107,6 +109,7 @@ class ApacheCloudStack:
         "firewall": Firewall,
         "job": Job,
         "kubernetes": Kubernetes,
+        "loadbalancer": LoadBalancer,
         "nat": NAT,
         "network": Network,
         "networkacl": NetworkACL,
