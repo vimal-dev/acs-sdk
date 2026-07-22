@@ -16,6 +16,7 @@ from acs_sdk.services.base import BaseService
 from acs_sdk.services.backup_and_recovery import BackupAndRecovery
 from acs_sdk.services.disk_offering import DiskOffering
 from acs_sdk.services.firewall import Firewall
+from acs_sdk.services.instance_group import InstanceGroup
 from acs_sdk.services.iso import ISO
 from acs_sdk.services.job import Job
 from acs_sdk.services.nat import NAT
@@ -61,6 +62,7 @@ class ApacheCloudStack:
 
     account: "Account"
     address: "Address"
+    instancegroup: "InstanceGroup"
     iso: "ISO"
     backupandrecovery: "BackupAndRecovery"
     diskoffering: "DiskOffering"
@@ -87,6 +89,7 @@ class ApacheCloudStack:
         "account": Account,
         "iso": ISO,
         "address": Address,
+        "instancegroup": InstanceGroup,
         "backupandrecovery": BackupAndRecovery,
         "diskoffering": DiskOffering,
         "firewall": Firewall,
