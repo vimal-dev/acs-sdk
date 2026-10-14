@@ -345,7 +345,7 @@ class VirtualMachine(BaseService):
         return self._execute(
             "restoreVirtualMachine",
             payload,
-            envelope="restorevirtualmachineresponse",
+            envelope="restorevmresponse",
         )
 
     async def restore_vm_async(self, payload: RestoreVirtualMachineRequest) -> APIResponse[Dict]:
@@ -353,7 +353,7 @@ class VirtualMachine(BaseService):
         return await self._execute_async(
             "restoreVirtualMachine",
             payload,
-            envelope="restorevirtualmachineresponse",
+            envelope="restorevmresponse",
         )
 
     def scale_vm(self, payload: ScaleVirtualMachineRequest) -> APIResponse[Dict]:
