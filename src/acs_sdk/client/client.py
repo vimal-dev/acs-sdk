@@ -44,7 +44,9 @@ class _BaseCloudStackClient(ClientContract):
     ):
         self.config = config
         self.signer = RequestSigner(config.api_key, config.api_secret)
-        self.retry = retry or RetryConfig()
+        self.retry = retry or RetryConfig(
+            retries=config.retries, backoff=config.backoff, retry_on=config.retry_on
+        )
         self.tracer = tracer or trace.get_tracer(__name__)
         self.logger = logger or logging.getLogger("cloudstack")
         self._async_client = async_client

@@ -7,7 +7,7 @@ def test_valid_config(config):
     assert config.api_endpoint == "https://api.cloudstack.example.com/client/api"
     assert config.api_key == "testkey"
     assert config.api_secret == "testsecret"
-    assert config.timeout == 30
+    assert config.timeout == 10
 
 
 def test_config_defaults():
@@ -98,3 +98,20 @@ def test_missing_required_fields(field):
 
     with pytest.raises(ValidationError):
         ApacheCloudStackConfig(**data)
+
+
+def test_retry_defaults(config):
+    assert config.retries == 3
+    assert config.backoff == 0.5
+    assert config.retry_on == (429, 502, 503)
+
+
+@pytest.mark.parametrize("field,value", [("retries", 0), ("backoff", -1)])
+def test_invalid_retry_settings(field, value):
+    with pytest.raises(ValidationError):
+        ApacheCloudStackConfig(
+            api_endpoint="https://api.cloudstack.example.com/client/api",
+            api_key="k",
+            api_secret="k",
+            **{field: value},
+        )
