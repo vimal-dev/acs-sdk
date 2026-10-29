@@ -7,7 +7,8 @@ and response parsing automatically.
 Main Components:
     - ApacheCloudStack: High-level entry point for SDK usage
     - ApacheCloudStackConfig: Configuration management
-    - ApacheCloudStackClient: Low-level HTTP client
+    - ApacheCloudStackClient: Low-level HTTP client (sync and async)
+    - ApacheCloudStackAsyncClient: Async-only low-level HTTP client
 
 Example:
     >>> from acs_sdk import ApacheCloudStack, ApacheCloudStackConfig
@@ -21,6 +22,12 @@ Example:
 """
 
 from .acs import ApacheCloudStack
+from .client.client import ApacheCloudStackAsyncClient, ApacheCloudStackClient
 from .schemas.config import ApacheCloudStackConfig
 
-__all__ = ["ApacheCloudStack", "ApacheCloudStackConfig"]
+__all__ = [
+    "ApacheCloudStack",
+    "ApacheCloudStackAsyncClient",
+    "ApacheCloudStackClient",
+    "ApacheCloudStackConfig",
+]

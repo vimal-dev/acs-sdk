@@ -92,6 +92,39 @@ class BaseService:
         #     ]
         # )
 
+    def _error_from_http(self, exc: HTTPStatusError, envelope: str) -> APIResponse:
+        """
+        Converts an HTTP error response into a CloudStackAPIError.
+
+        CloudStack reports errors as JSON inside the command envelope, but proxies
+        and load balancers may return HTML or plain-text bodies (e.g. a 502 page).
+        Those fall back to the HTTP status code and a truncated body.
+        Args:
+            exc (HTTPStatusError): The HTTP error raised by the client.
+            envelope (str): The expected envelope key in the API response.
+        Returns:
+            APIResponse: Never returns; always raises CloudStackAPIError.
+        """
+        http_response = exc.response
+        fallback_text = http_response.text[:500] or http_response.reason_phrase
+        try:
+            response = http_response.json()
+        except ValueError:
+            response = None
+        if not isinstance(response, dict):
+            raise CloudStackAPIError(
+                error_code=http_response.status_code,
+                error_text=fallback_text,
+                response=None,
+            )
+
+        response_data = self._extract_response(response, envelope)
+        if not (response_data.get("errorcode") or response_data.get("cserrorcode")):
+            response_data = {**response_data, "errorcode": http_response.status_code}
+        if not response_data.get("errortext"):
+            response_data = {**response_data, "errortext": http_response.reason_phrase}
+        return self._error(response_data)
+
     def _execute(
         self,
         command: str,
@@ -115,9 +148,7 @@ class BaseService:
             response_data = self._extract_response(response, envelope)
             return self._wrap(response_data, entity)
         except HTTPStatusError as e:
-            response = e.response.json()
-            response_data = self._extract_response(response, envelope)
-            return self._error(response_data)
+            return self._error_from_http(e, envelope)
 
     async def _execute_async(
         self,
@@ -141,6 +172,4 @@ class BaseService:
             response_data = self._extract_response(response, envelope)
             return self._wrap(response_data, entity)
         except HTTPStatusError as e:
-            response = e.response.json()
-            response_data = self._extract_response(response, envelope)
-            return self._error(response_data)
+            return self._error_from_http(e, envelope)

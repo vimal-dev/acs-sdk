@@ -1,10 +1,13 @@
 import asyncio
 from typing import Any, Dict, Optional
 
+import httpx
+import pytest
 from pydantic import BaseModel
 
 from acs_sdk.client.contract import ClientContract
 from acs_sdk.core.response_mapper import ResponseMapper
+from acs_sdk.exceptions import CloudStackAPIError
 from acs_sdk.services.base import BaseService
 
 
@@ -149,3 +152,65 @@ def test_execute_async_calls_client_and_wraps_single_entity():
     assert client.last_params == {"field": "async"}
     assert api_response.data == {"id": 3}
     assert api_response.count is None
+
+
+class RaisingClient(DummyClient):
+    def __init__(self, error):
+        super().__init__(sync_response={}, async_response={})
+        self.error = error
+
+    def call(self, command, params=None):
+        raise self.error
+
+    async def call_async(self, command, params=None):
+        raise self.error
+
+
+def _status_error(response: httpx.Response) -> httpx.HTTPStatusError:
+    response.request = httpx.Request("GET", "https://cs.example.com/client/api")
+    return httpx.HTTPStatusError("error", request=response.request, response=response)
+
+
+def test_execute_non_json_error_body_keeps_status_and_text():
+    error = _status_error(httpx.Response(502, text="<html>Bad Gateway</html>"))
+    service = BaseService(RaisingClient(error))
+
+    with pytest.raises(CloudStackAPIError) as exc_info:
+        service._execute("listZones", DummyPayload(), envelope="listzonesresponse")
+
+    assert exc_info.value.error_code == 502
+    assert "Bad Gateway" in exc_info.value.error_text
+
+
+def test_execute_async_non_json_error_body_keeps_status_and_text():
+    error = _status_error(httpx.Response(503, text="Service Unavailable"))
+    service = BaseService(RaisingClient(error))
+
+    with pytest.raises(CloudStackAPIError) as exc_info:
+        asyncio.run(
+            service._execute_async("listZones", DummyPayload(), envelope="listzonesresponse")
+        )
+
+    assert exc_info.value.error_code == 503
+    assert exc_info.value.error_text == "Service Unavailable"
+
+
+def test_execute_json_error_body_uses_cloudstack_error():
+    body = {"listzonesresponse": {"errorcode": 431, "cserrorcode": 9999, "errortext": "bad id"}}
+    service = BaseService(RaisingClient(_status_error(httpx.Response(431, json=body))))
+
+    with pytest.raises(CloudStackAPIError) as exc_info:
+        service._execute("listZones", DummyPayload(), envelope="listzonesresponse")
+
+    assert exc_info.value.error_code == 9999
+    assert exc_info.value.error_text == "bad id"
+
+
+def test_execute_json_error_without_details_falls_back_to_status():
+    service = BaseService(RaisingClient(_status_error(httpx.Response(500, json={}))))
+
+    with pytest.raises(CloudStackAPIError) as exc_info:
+        service._execute("listZones", DummyPayload(), envelope="listzonesresponse")
+
+    assert exc_info.value.error_code == 500
+    assert exc_info.value.error_text == "Internal Server Error"

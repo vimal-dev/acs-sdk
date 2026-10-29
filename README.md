@@ -31,26 +31,22 @@ from acs_sdk import ApacheCloudStackClient, ApacheCloudStackConfig
 
 # Create a configuration
 config = ApacheCloudStackConfig(
-    endpoint="https://your-cloudstack-endpoint/api",
+    api_endpoint="https://your-cloudstack-endpoint/api",
     api_key="your_api_key",
     api_secret="your_api_secret"
 )
-
-# Initialize the CloudStack client
-client = ApacheCloudStackClient(config)
 ```
 
 ### Making API Calls
 
 ```python
-# List users
-response = client.call('listUsers')
+# The context manager closes the connection pool when done
+with ApacheCloudStackClient(config) as client:
+    # List users
+    response = client.call('listUsers')
 
-# Get user with parameters
-user_response = client.call('getUser', {'userid': '123'})
-
-# Don't forget to close the client
-client.close()
+    # Get user with parameters
+    user_response = client.call('getUser', {'userid': '123'})
 ```
 
 ### Async API Calls
@@ -61,7 +57,7 @@ from acs_sdk import ApacheCloudStackAsyncClient, ApacheCloudStackConfig
 
 async def main():
     config = ApacheCloudStackConfig(
-        endpoint="https://your-cloudstack-endpoint/api",
+        api_endpoint="https://your-cloudstack-endpoint/api",
         api_key="your_api_key",
         api_secret="your_api_secret"
     )
