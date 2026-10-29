@@ -26,6 +26,30 @@ def _redact(text: str) -> str:
     return _SECRET_PARAMS.sub(r"\1***", text)
 
 
+def _describe_http_error(response: httpx.Response) -> str:
+    """Summarize a failed response as status plus CloudStack's ``errortext``.
+
+    CloudStack nests error details inside the command envelope
+    (``{"<command>response": {...}}``); non-JSON bodies such as proxy error
+    pages fall back to the reason phrase and a truncated body.
+    """
+    summary = f"HTTP {response.status_code}"
+    try:
+        body = response.json()
+    except ValueError:
+        body = None
+    if isinstance(body, dict):
+        details = next((v for v in body.values() if isinstance(v, dict)), body)
+        details = details if "errortext" in details else body
+        if details.get("errortext"):
+            if details.get("cserrorcode"):
+                summary += f" (cserrorcode {details['cserrorcode']})"
+            return _redact(f"{summary}: {details['errortext']}")
+    summary += f" {response.reason_phrase}".rstrip()
+    text = response.text[:200].strip()
+    return _redact(f"{summary}: {text}" if text else summary)
+
+
 class _BaseCloudStackClient(ClientContract):
     """Shared request building, tracing and async transport for CloudStack clients.
 
@@ -176,7 +200,12 @@ class _BaseCloudStackClient(ClientContract):
         if isinstance(exc, httpx.HTTPStatusError):
             span.set_attribute("http.status_code", exc.response.status_code)
             span.set_attribute("http.error_message", _redact(exc.response.text[:1000]))
-        self.logger.error("CloudStack %s failed: %s", command, message)
+        if isinstance(exc, httpx.HTTPStatusError):
+            self.logger.error(
+                "CloudStack %s failed: %s", command, _describe_http_error(exc.response)
+            )
+        else:
+            self.logger.error("CloudStack %s failed: %s", command, message)
         return sanitized
 
 
