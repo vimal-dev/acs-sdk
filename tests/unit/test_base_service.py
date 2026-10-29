@@ -179,6 +179,7 @@ def test_execute_non_json_error_body_keeps_status_and_text():
         service._execute("listZones", DummyPayload(), envelope="listzonesresponse")
 
     assert exc_info.value.error_code == 502
+    assert exc_info.value.status_code == 502
     assert "Bad Gateway" in exc_info.value.error_text
 
 
@@ -192,6 +193,7 @@ def test_execute_async_non_json_error_body_keeps_status_and_text():
         )
 
     assert exc_info.value.error_code == 503
+    assert exc_info.value.status_code == 503
     assert exc_info.value.error_text == "Service Unavailable"
 
 
@@ -203,6 +205,8 @@ def test_execute_json_error_body_uses_cloudstack_error():
         service._execute("listZones", DummyPayload(), envelope="listzonesresponse")
 
     assert exc_info.value.error_code == 9999
+    assert exc_info.value.status_code == 431
+    assert "(HTTP 431)" in str(exc_info.value)
     assert exc_info.value.error_text == "bad id"
 
 
@@ -213,4 +217,5 @@ def test_execute_json_error_without_details_falls_back_to_status():
         service._execute("listZones", DummyPayload(), envelope="listzonesresponse")
 
     assert exc_info.value.error_code == 500
+    assert exc_info.value.status_code == 500
     assert exc_info.value.error_text == "Internal Server Error"

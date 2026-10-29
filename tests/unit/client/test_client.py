@@ -469,3 +469,41 @@ def test_explicit_retry_overrides_config(config):
     retry = RetryConfig(retries=1)
     client = ApacheCloudStackAsyncClient(config, retry=retry)
     assert client.retry is retry
+
+
+def _error_log_for(config, caplog, response):
+    client = httpx.Client(
+        base_url=config.endpoint,
+        timeout=config.timeout,
+        transport=mock_transport(lambda request: response),
+    )
+    nc = ApacheCloudStackClient(config, client=client, retry=RetryConfig(retries=1))
+    with pytest.raises(httpx.HTTPStatusError):
+        nc.call("deployVirtualMachine")
+    (record,) = [r for r in caplog.records if r.levelname == "ERROR"]
+    return record.getMessage()
+
+
+def test_error_log_includes_cloudstack_errortext(config, caplog):
+    body = {
+        "deployvirtualmachineresponse": {
+            "errorcode": 431,
+            "cserrorcode": 4350,
+            "errortext": "Unable to find zone by id",
+        }
+    }
+    message = _error_log_for(config, caplog, httpx.Response(431, json=body))
+
+    assert message == (
+        "CloudStack deployVirtualMachine failed: "
+        "HTTP 431 (cserrorcode 4350): Unable to find zone by id"
+    )
+    assert "apikey" not in message and "url" not in message
+
+
+def test_error_log_falls_back_to_status_for_non_json_body(config, caplog):
+    message = _error_log_for(config, caplog, httpx.Response(502, text="<html>Bad Gateway</html>"))
+
+    assert message == (
+        "CloudStack deployVirtualMachine failed: HTTP 502 Bad Gateway: <html>Bad Gateway</html>"
+    )

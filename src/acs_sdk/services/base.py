@@ -71,11 +71,12 @@ class BaseService:
         return APIResponse[Dict](data=response_data)
 
     @staticmethod
-    def _error(response_data: Dict) -> APIResponse:
+    def _error(response_data: Dict, status_code: Optional[int] = None) -> APIResponse:
         """
         Wraps the error response data in an APIResponse object, handling both single items and lists.
         Args:
             response_data (Dict): The raw response data extracted from the API response.
+            status_code (Optional[int]): The HTTP status of the failed response.
         Returns:
             APIResponse: The API response wrapped in an APIResponse object.
         """
@@ -83,6 +84,7 @@ class BaseService:
             error_code=response_data.get("cserrorcode", response_data.get("errorcode", "")),
             error_text=response_data.get("errortext", ""),
             response=response_data,
+            status_code=status_code,
         )
         # return APIResponse[None](
         #     status="ERROR",
@@ -116,6 +118,7 @@ class BaseService:
                 error_code=http_response.status_code,
                 error_text=fallback_text,
                 response=None,
+                status_code=http_response.status_code,
             )
 
         response_data = self._extract_response(response, envelope)
@@ -123,7 +126,7 @@ class BaseService:
             response_data = {**response_data, "errorcode": http_response.status_code}
         if not response_data.get("errortext"):
             response_data = {**response_data, "errortext": http_response.reason_phrase}
-        return self._error(response_data)
+        return self._error(response_data, status_code=http_response.status_code)
 
     def _execute(
         self,
