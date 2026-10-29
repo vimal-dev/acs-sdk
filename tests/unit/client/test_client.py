@@ -448,3 +448,24 @@ def test_custom_retry_config(config, no_sleep):
         nc.call("test.command")
 
     assert len(calls) == 1
+
+
+def test_retry_settings_come_from_config():
+    cfg = ApacheCloudStackConfig(
+        api_endpoint="https://api.cloudstack.example.com/client/api",
+        api_key="k",
+        api_secret="s",
+        retries=5,
+        backoff=0.1,
+        retry_on=[503],
+    )
+    client = ApacheCloudStackClient(cfg)
+    assert client.retry.retries == 5
+    assert client.retry.backoff == 0.1
+    assert client.retry.retry_on == (503,)
+
+
+def test_explicit_retry_overrides_config(config):
+    retry = RetryConfig(retries=1)
+    client = ApacheCloudStackAsyncClient(config, retry=retry)
+    assert client.retry is retry
